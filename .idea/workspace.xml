@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="47842362-719d-47c5-9907-e44b28cdaaa4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/xd/cps2002/HelloWorld.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/xd/cps2002/HelloWorld_Test.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/xd/cps2002/HelloWorld.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xd/cps2002/HelloWorld.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/xd/cps2002/HelloWorld_Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/xd/cps2002/HelloWorld_Test.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,6 +41,59 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
   </component>
+  <component name="RunManager" selected="JUnit.HelloWorld_Test">
+    <configuration name="HelloWorld_Test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="cps2002" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.xd.cps2002.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.xd.cps2002" />
+      <option name="MAIN_CLASS_NAME" value="com.xd.cps2002.HelloWorld_Test" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="cps2002 [mvn,emma:emma,install]" type="MavenRunConfiguration" factoryName="Maven" nameIsGenerated="true">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list>
+                <option value="mvn" />
+                <option value="emma:emma" />
+                <option value="install" />
+              </list>
+            </option>
+            <option name="pomFileName" />
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Maven.cps2002 [mvn,emma:emma,install]" />
+      <item itemvalue="JUnit.HelloWorld_Test" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.HelloWorld_Test" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -59,5 +112,9 @@
       <screen x="0" y="23" width="1680" height="989" />
     </state>
     <state x="440" y="183" key="#Project_Structure/0.23.1680.989@0.23.1680.989" timestamp="1586188184282" />
+    <state x="304" y="179" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1586190899160">
+      <screen x="0" y="23" width="1680" height="989" />
+    </state>
+    <state x="304" y="179" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1680.989@0.23.1680.989" timestamp="1586190899160" />
   </component>
 </project>
