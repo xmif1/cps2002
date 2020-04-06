@@ -4,7 +4,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class HelloWorld_Test{
-    String hw = "HelloWorld!\n";
+    String hw = "Hello World!\n";
 
     // simple test to verify if the greeting function returns Hello World!\n exactly once
     @Test
