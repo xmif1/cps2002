@@ -100,9 +100,9 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Maven.cps2002 [mvn,emma:emma,install]" />
       <item itemvalue="JUnit.HelloWorld_Test" />
       <item itemvalue="JUnit.HelloWorld_Test.multi_greetingThrowsETest" />
+      <item itemvalue="Maven.cps2002 [mvn,emma:emma,install]" />
     </list>
     <recent_temporary>
       <list>
