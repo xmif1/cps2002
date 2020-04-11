@@ -3,7 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="47842362-719d-47c5-9907-e44b28cdaaa4" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/xd/cps2002/HelloWorld_Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/xd/cps2002/HelloWorld_Test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/xd/cps2002/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xd/cps2002/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/xd/cps2002/PlayerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/xd/cps2002/PlayerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/xd/cps2002/HelloWorld.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/xd/cps2002/HelloWorld_Test.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,7 +44,7 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
   </component>
-  <component name="RunManager" selected="JUnit.HelloWorld_Test">
+  <component name="RunManager" selected="JUnit.PlayerTest.autoincID_Test">
     <configuration name="HelloWorld_Test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="cps2002" />
       <extension name="coverage">
@@ -67,6 +71,53 @@
       <option name="PACKAGE_NAME" value="com.xd.cps2002" />
       <option name="MAIN_CLASS_NAME" value="com.xd.cps2002.HelloWorld_Test" />
       <option name="METHOD_NAME" value="multi_greetingThrowsETest" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PlayerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="cps2002" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.xd.cps2002.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.xd.cps2002" />
+      <option name="MAIN_CLASS_NAME" value="com.xd.cps2002.PlayerTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PlayerTest.autoincID_Test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="cps2002" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.xd.cps2002.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.xd.cps2002" />
+      <option name="MAIN_CLASS_NAME" value="com.xd.cps2002.PlayerTest" />
+      <option name="METHOD_NAME" value="autoincID_Test" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PlayerTest.requestMove_InvalidInputTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="cps2002" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.xd.cps2002.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.xd.cps2002" />
+      <option name="MAIN_CLASS_NAME" value="com.xd.cps2002.PlayerTest" />
+      <option name="METHOD_NAME" value="requestMove_InvalidInputTest" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -103,9 +154,15 @@
       <item itemvalue="JUnit.HelloWorld_Test" />
       <item itemvalue="JUnit.HelloWorld_Test.multi_greetingThrowsETest" />
       <item itemvalue="Maven.cps2002 [mvn,emma:emma,install]" />
+      <item itemvalue="JUnit.PlayerTest" />
+      <item itemvalue="JUnit.PlayerTest.autoincID_Test" />
+      <item itemvalue="JUnit.PlayerTest.requestMove_InvalidInputTest" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.PlayerTest.autoincID_Test" />
+        <item itemvalue="JUnit.PlayerTest" />
+        <item itemvalue="JUnit.PlayerTest.requestMove_InvalidInputTest" />
         <item itemvalue="JUnit.HelloWorld_Test" />
         <item itemvalue="JUnit.HelloWorld_Test.multi_greetingThrowsETest" />
       </list>
@@ -133,21 +190,41 @@
       <screen x="0" y="23" width="1680" height="989" />
     </state>
     <state x="304" y="179" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1680.989@0.23.1680.989" timestamp="1586190899160" />
-    <state width="1638" height="267" key="GridCell.Tab.0.bottom" timestamp="1586191970760">
+    <state x="100" y="123" width="1480" height="789" key="#com.intellij.execution.junit2.states.ComparisonFailureState$DiffDialog" timestamp="1586628724356">
       <screen x="0" y="23" width="1680" height="989" />
     </state>
-    <state width="1638" height="267" key="GridCell.Tab.0.bottom/0.23.1680.989@0.23.1680.989" timestamp="1586191970760" />
-    <state width="1638" height="267" key="GridCell.Tab.0.center" timestamp="1586191970759">
+    <state x="100" y="123" width="1480" height="789" key="#com.intellij.execution.junit2.states.ComparisonFailureState$DiffDialog/0.23.1680.989@0.23.1680.989" timestamp="1586628724356" />
+    <state width="1638" height="267" key="GridCell.Tab.0.bottom" timestamp="1586628726288">
       <screen x="0" y="23" width="1680" height="989" />
     </state>
-    <state width="1638" height="267" key="GridCell.Tab.0.center/0.23.1680.989@0.23.1680.989" timestamp="1586191970759" />
-    <state width="1638" height="267" key="GridCell.Tab.0.left" timestamp="1586191970758">
+    <state width="1638" height="267" key="GridCell.Tab.0.bottom/0.23.1680.989@0.23.1680.989" timestamp="1586628726288" />
+    <state width="1638" height="267" key="GridCell.Tab.0.center" timestamp="1586628726286">
       <screen x="0" y="23" width="1680" height="989" />
     </state>
-    <state width="1638" height="267" key="GridCell.Tab.0.left/0.23.1680.989@0.23.1680.989" timestamp="1586191970758" />
-    <state width="1638" height="267" key="GridCell.Tab.0.right" timestamp="1586191970759">
+    <state width="1638" height="267" key="GridCell.Tab.0.center/0.23.1680.989@0.23.1680.989" timestamp="1586628726286" />
+    <state width="1638" height="267" key="GridCell.Tab.0.left" timestamp="1586628726286">
       <screen x="0" y="23" width="1680" height="989" />
     </state>
-    <state width="1638" height="267" key="GridCell.Tab.0.right/0.23.1680.989@0.23.1680.989" timestamp="1586191970759" />
+    <state width="1638" height="267" key="GridCell.Tab.0.left/0.23.1680.989@0.23.1680.989" timestamp="1586628726286" />
+    <state width="1638" height="267" key="GridCell.Tab.0.right" timestamp="1586628726287">
+      <screen x="0" y="23" width="1680" height="989" />
+    </state>
+    <state width="1638" height="267" key="GridCell.Tab.0.right/0.23.1680.989@0.23.1680.989" timestamp="1586628726287" />
+    <state width="1638" height="330" key="GridCell.Tab.1.bottom" timestamp="1586628089156">
+      <screen x="0" y="23" width="1680" height="989" />
+    </state>
+    <state width="1638" height="330" key="GridCell.Tab.1.bottom/0.23.1680.989@0.23.1680.989" timestamp="1586628089156" />
+    <state width="1638" height="330" key="GridCell.Tab.1.center" timestamp="1586628089154">
+      <screen x="0" y="23" width="1680" height="989" />
+    </state>
+    <state width="1638" height="330" key="GridCell.Tab.1.center/0.23.1680.989@0.23.1680.989" timestamp="1586628089154" />
+    <state width="1638" height="330" key="GridCell.Tab.1.left" timestamp="1586628089152">
+      <screen x="0" y="23" width="1680" height="989" />
+    </state>
+    <state width="1638" height="330" key="GridCell.Tab.1.left/0.23.1680.989@0.23.1680.989" timestamp="1586628089152" />
+    <state width="1638" height="330" key="GridCell.Tab.1.right" timestamp="1586628089155">
+      <screen x="0" y="23" width="1680" height="989" />
+    </state>
+    <state width="1638" height="330" key="GridCell.Tab.1.right/0.23.1680.989@0.23.1680.989" timestamp="1586628089155" />
   </component>
 </project>
