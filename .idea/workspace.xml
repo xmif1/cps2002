@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="47842362-719d-47c5-9907-e44b28cdaaa4" name="Default Changelist" comment="Created Map interface for all of the map products">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/xd/cps2002/MapCreator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="47842362-719d-47c5-9907-e44b28cdaaa4" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/xd/cps2002/PlayerStatus.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/xd/cps2002/MapCreator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xd/cps2002/MapCreator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/xd/cps2002/TileType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xd/cps2002/TileType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/xd/cps2002/HelloWorld.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/xd/cps2002/HelloWorld_Test.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,8 +18,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
-        <option value="Class" />
         <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -146,7 +148,14 @@
       <option name="project" value="LOCAL" />
       <updated>1586707772253</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Created MapCreator class without creator method implementation.">
+      <created>1586711817558</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1586711817558</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -163,7 +172,9 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Created TileType enum" />
     <MESSAGE value="Created Map interface for all of the map products" />
-    <option name="LAST_COMMIT_MESSAGE" value="Created Map interface for all of the map products" />
+    <MESSAGE value="Created MapCreator class without creator implementation." />
+    <MESSAGE value="Created MapCreator class without creator method implementation." />
+    <option name="LAST_COMMIT_MESSAGE" value="Created MapCreator class without creator method implementation." />
   </component>
   <component name="WindowStateProjectService">
     <state x="440" y="183" key="#Project_Structure" timestamp="1586188184282">
@@ -178,10 +189,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="811" y="412" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1920.1040/1920.54.1280.984@0.0.1920.1040" timestamp="1586704946571" />
-    <state x="534" y="101" key="CommitChangelistDialog2" timestamp="1586711785697">
+    <state x="534" y="101" key="CommitChangelistDialog2" timestamp="1586711816169">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="534" y="101" key="CommitChangelistDialog2/0.0.1920.1040/1920.54.1280.984@0.0.1920.1040" timestamp="1586711785697" />
+    <state x="534" y="101" key="CommitChangelistDialog2/0.0.1920.1040/1920.54.1280.984@0.0.1920.1040" timestamp="1586711816169" />
     <state x="92" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1586704949778">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
