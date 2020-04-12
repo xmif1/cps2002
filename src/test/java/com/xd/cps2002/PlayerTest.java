@@ -17,9 +17,7 @@ public class PlayerTest{
     @Before
     public void setupPlayerTest(){
         player = new Player(); // initialising new player
-        // setting to origin
-        player.position.x = 0;
-        player.position.y = 0;
+        player.setPosition(new Position(0,0));// setting to origin
     }
 
     // testing that player_id is correctly auto-incremented whenever a new Player instance is created
@@ -50,6 +48,14 @@ public class PlayerTest{
     @Test(expected = Exception.class)
     public void move_NullCharInputTest() throws Exception{
         input = '\0'; // character is invalid, since it is not in {'u', 'd', 'r', 'l'}
+        player.move(input);
+    }
+
+    // testing exception is thrown when Player Position position is null
+    @Test(expected = Exception.class)
+    public void move_NullPositionTest() throws Exception{
+        player.setPosition(null);
+        input = 'u'; // providing valid input, beyond scope of this test
         player.move(input);
     }
 
