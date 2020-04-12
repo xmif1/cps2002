@@ -17,7 +17,7 @@ public class PlayerTest{
     @Before
     public void setupPlayerTest(){
         player = new Player(); // initialising new player
-        player.setPosition(new Position(0,0));// setting to origin
+        player.setStartPosition(new Position(0,0));// setting to origin
     }
 
     // testing that player_id is correctly auto-incremented whenever a new Player instance is created
@@ -38,22 +38,22 @@ public class PlayerTest{
     /* ---- This section is intended to test the failing scenarios of Player.move() ---- */
 
     // testing exception is thrown when a char outside of the set {'u', 'd', 'r', 'l'} is passed
-    @Test(expected = Exception.class)
-    public void move_InvalidInputTest() throws Exception{
+    @Test(expected = MoveException.class)
+    public void move_InvalidInputTest() throws MoveException, NullPositionException{
         input = 'i'; // character is invalid, since 'i' is not in {'u', 'd', 'r', 'l'}
         player.move(input);
     }
 
     // testing exception is thrown when the null char '\0' is passed
-    @Test(expected = Exception.class)
-    public void move_NullCharInputTest() throws Exception{
+    @Test(expected = MoveException.class)
+    public void move_NullCharInputTest() throws MoveException, NullPositionException{
         input = '\0'; // character is invalid, since it is not in {'u', 'd', 'r', 'l'}
         player.move(input);
     }
 
     // testing exception is thrown when Player Position position is null
-    @Test(expected = Exception.class)
-    public void move_NullPositionTest() throws Exception{
+    @Test(expected = NullPositionException.class)
+    public void move_NullPositionTest() throws MoveException, NullPositionException{
         player.setPosition(null);
         input = 'u'; // providing valid input, beyond scope of this test
         player.move(input);
@@ -69,7 +69,7 @@ public class PlayerTest{
 
     // testing if the 'u' character results in a decrement in the y-axis while the x-axis remains fixed
     @Test
-    public void move_UpPosCalcTest() throws Exception{
+    public void move_UpPosCalcTest() throws MoveException, NullPositionException{
         input = 'u';
 
         Position p = player.move(input);
@@ -79,7 +79,7 @@ public class PlayerTest{
 
     // testing if the 'd' character results in an increment in the y-axis while the x-axis remains fixed
     @Test
-    public void move_DownPosCalcTest() throws Exception{
+    public void move_DownPosCalcTest() throws MoveException, NullPositionException{
         input = 'd';
 
         Position p = player.move(input);
@@ -89,7 +89,7 @@ public class PlayerTest{
 
     // testing if the 'l' character results in a decrease in the x-axis while the y-axis remains fixed
     @Test
-    public void move_LeftPosCalcTest() throws Exception{
+    public void move_LeftPosCalcTest() throws MoveException, NullPositionException{
         input = 'l';
 
         Position p = player.move(input);
@@ -99,7 +99,7 @@ public class PlayerTest{
 
     // testing if the 'r' character results in an increment in the x-axis while the y-axis remains fixed
     @Test
-    public void move_RightPosCalcTest() throws Exception{
+    public void move_RightPosCalcTest() throws MoveException, NullPositionException{
         input = 'r';
 
         Position p = player.move(input);
