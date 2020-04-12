@@ -5,8 +5,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/xd/cps2002/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xd/cps2002/Player.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/xd/cps2002/PlayerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/xd/cps2002/PlayerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/xd/cps2002/Player.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/xd/cps2002/Player.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/xd/cps2002/PlayerTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/xd/cps2002/PlayerTest.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

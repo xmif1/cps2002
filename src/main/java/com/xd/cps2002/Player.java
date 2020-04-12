@@ -25,7 +25,7 @@ public class Player{
      * eg. by choosing to impose a limitation on the number of times a player is asked for input.
      *
      * If an invalid character is passed, a MoveException is thrown.*/
-    public boolean move(char input) throws Exception{
+    public int[] move(char input) throws Exception{
         switch(Character.toLowerCase(input)){ // test against cases to carry out necessary logic
             case 'u': return true; // [TO-DO]
             case 'd': return true; // [TO-DO]
