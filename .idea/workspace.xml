@@ -3,11 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="47842362-719d-47c5-9907-e44b28cdaaa4" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/xd/cps2002/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xd/cps2002/Player.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/com/xd/cps2002/PlayerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/xd/cps2002/PlayerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/xd/cps2002/HelloWorld.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/xd/cps2002/HelloWorld_Test.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/xd/cps2002/Player.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/xd/cps2002/Player.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/xd/cps2002/PlayerTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/xd/cps2002/PlayerTest.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,7 +43,7 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
   </component>
-  <component name="RunManager" selected="JUnit.PlayerTest.autoincID_Test">
+  <component name="RunManager" selected="JUnit.PlayerTest">
     <configuration name="HelloWorld_Test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="cps2002" />
       <extension name="coverage">
@@ -153,15 +152,15 @@
     <list>
       <item itemvalue="JUnit.HelloWorld_Test" />
       <item itemvalue="JUnit.HelloWorld_Test.multi_greetingThrowsETest" />
-      <item itemvalue="Maven.cps2002 [mvn,emma:emma,install]" />
       <item itemvalue="JUnit.PlayerTest" />
       <item itemvalue="JUnit.PlayerTest.autoincID_Test" />
       <item itemvalue="JUnit.PlayerTest.requestMove_InvalidInputTest" />
+      <item itemvalue="Maven.cps2002 [mvn,emma:emma,install]" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.PlayerTest.autoincID_Test" />
         <item itemvalue="JUnit.PlayerTest" />
+        <item itemvalue="JUnit.PlayerTest.autoincID_Test" />
         <item itemvalue="JUnit.PlayerTest.requestMove_InvalidInputTest" />
         <item itemvalue="JUnit.HelloWorld_Test" />
         <item itemvalue="JUnit.HelloWorld_Test.multi_greetingThrowsETest" />
@@ -194,37 +193,37 @@
       <screen x="0" y="23" width="1680" height="989" />
     </state>
     <state x="100" y="123" width="1480" height="789" key="#com.intellij.execution.junit2.states.ComparisonFailureState$DiffDialog/0.23.1680.989@0.23.1680.989" timestamp="1586628724356" />
-    <state width="1638" height="267" key="GridCell.Tab.0.bottom" timestamp="1586628726288">
+    <state width="1638" height="330" key="GridCell.Tab.0.bottom" timestamp="1586687574904">
       <screen x="0" y="23" width="1680" height="989" />
     </state>
-    <state width="1638" height="267" key="GridCell.Tab.0.bottom/0.23.1680.989@0.23.1680.989" timestamp="1586628726288" />
-    <state width="1638" height="267" key="GridCell.Tab.0.center" timestamp="1586628726286">
+    <state width="1638" height="330" key="GridCell.Tab.0.bottom/0.23.1680.989@0.23.1680.989" timestamp="1586687574904" />
+    <state width="1638" height="330" key="GridCell.Tab.0.center" timestamp="1586687574902">
       <screen x="0" y="23" width="1680" height="989" />
     </state>
-    <state width="1638" height="267" key="GridCell.Tab.0.center/0.23.1680.989@0.23.1680.989" timestamp="1586628726286" />
-    <state width="1638" height="267" key="GridCell.Tab.0.left" timestamp="1586628726286">
+    <state width="1638" height="330" key="GridCell.Tab.0.center/0.23.1680.989@0.23.1680.989" timestamp="1586687574902" />
+    <state width="1638" height="330" key="GridCell.Tab.0.left" timestamp="1586687574902">
       <screen x="0" y="23" width="1680" height="989" />
     </state>
-    <state width="1638" height="267" key="GridCell.Tab.0.left/0.23.1680.989@0.23.1680.989" timestamp="1586628726286" />
-    <state width="1638" height="267" key="GridCell.Tab.0.right" timestamp="1586628726287">
+    <state width="1638" height="330" key="GridCell.Tab.0.left/0.23.1680.989@0.23.1680.989" timestamp="1586687574902" />
+    <state width="1638" height="330" key="GridCell.Tab.0.right" timestamp="1586687574903">
       <screen x="0" y="23" width="1680" height="989" />
     </state>
-    <state width="1638" height="267" key="GridCell.Tab.0.right/0.23.1680.989@0.23.1680.989" timestamp="1586628726287" />
-    <state width="1638" height="330" key="GridCell.Tab.1.bottom" timestamp="1586628089156">
+    <state width="1638" height="330" key="GridCell.Tab.0.right/0.23.1680.989@0.23.1680.989" timestamp="1586687574903" />
+    <state width="1638" height="330" key="GridCell.Tab.1.bottom" timestamp="1586631712085">
       <screen x="0" y="23" width="1680" height="989" />
     </state>
-    <state width="1638" height="330" key="GridCell.Tab.1.bottom/0.23.1680.989@0.23.1680.989" timestamp="1586628089156" />
-    <state width="1638" height="330" key="GridCell.Tab.1.center" timestamp="1586628089154">
+    <state width="1638" height="330" key="GridCell.Tab.1.bottom/0.23.1680.989@0.23.1680.989" timestamp="1586631712085" />
+    <state width="1638" height="330" key="GridCell.Tab.1.center" timestamp="1586631712084">
       <screen x="0" y="23" width="1680" height="989" />
     </state>
-    <state width="1638" height="330" key="GridCell.Tab.1.center/0.23.1680.989@0.23.1680.989" timestamp="1586628089154" />
-    <state width="1638" height="330" key="GridCell.Tab.1.left" timestamp="1586628089152">
+    <state width="1638" height="330" key="GridCell.Tab.1.center/0.23.1680.989@0.23.1680.989" timestamp="1586631712084" />
+    <state width="1638" height="330" key="GridCell.Tab.1.left" timestamp="1586631712084">
       <screen x="0" y="23" width="1680" height="989" />
     </state>
-    <state width="1638" height="330" key="GridCell.Tab.1.left/0.23.1680.989@0.23.1680.989" timestamp="1586628089152" />
-    <state width="1638" height="330" key="GridCell.Tab.1.right" timestamp="1586628089155">
+    <state width="1638" height="330" key="GridCell.Tab.1.left/0.23.1680.989@0.23.1680.989" timestamp="1586631712084" />
+    <state width="1638" height="330" key="GridCell.Tab.1.right" timestamp="1586631712085">
       <screen x="0" y="23" width="1680" height="989" />
     </state>
-    <state width="1638" height="330" key="GridCell.Tab.1.right/0.23.1680.989@0.23.1680.989" timestamp="1586628089155" />
+    <state width="1638" height="330" key="GridCell.Tab.1.right/0.23.1680.989@0.23.1680.989" timestamp="1586631712085" />
   </component>
 </project>

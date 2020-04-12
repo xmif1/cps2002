@@ -10,25 +10,15 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /*
-Tester class for the Player class. Since the class mostly handles user input, it predominantly requires testing by
-supplying I/O to the console streams. Hence during setup and teardown, these necessary arrangements are made.
+Tester class for the Player class.
  */
 public class PlayerTest{
-    // streams to get output
-    private final ByteArrayOutputStream BAOutS = new ByteArrayOutputStream();
-
-    // maintaining of original console output stream, to restore after each unit test
-    private final PrintStream systemOut = System.out;
-
     // Player object to initialise on setup and de-reference on teardown
     private Player player;
-    private String input = null;
+    private char input = '\0';
 
     @Before
     public void setupPlayerTest(){
-        // setting streams to emulate user input, and fetch the console output
-        System.setOut(new PrintStream(BAOutS));
-
         player = new Player(); // initialising new player
     }
 
@@ -47,32 +37,23 @@ public class PlayerTest{
         assertEquals(Player.get_global_player_count() - 1, player3.get_pID());
     }
 
-    // testing if user is correctly told that invalid input was entered when input is null, and that false is returned
-    @Test
-    public void move_NullInputTest(){
-        input = null; // no input
-
-        boolean ret = player.move(input);
-        assertEquals("Invalid input entered.\n", BAOutS.toString());
-        assertFalse(ret);
+    // testing exception is thrown when a char outside of the set {'u', 'd', 'r', 'l'} is passed
+    @Test(expected = Exception.class)
+    public void move_InvalidInputTest() throws Exception{
+        input = 'i'; // character is invalid, since 'i' is not in {'u', 'd', 'r', 'l'}
+        player.move(input);
     }
 
-    // testing if user is correctly told that invalid input was entered, and that false is returned
-    @Test
-    public void move_InvalidInputTest(){
-        input = "up 2"; // first character is valid, but string length > 1 - should reject
-
-        boolean ret = player.move(input);
-        assertEquals("Invalid input entered.\n", BAOutS.toString());
-        assertFalse(ret);
+    // testing exception is thrown when the null char '\0' is passed
+    @Test(expected = Exception.class)
+    public void move_NullCharInputTest() throws Exception{
+        input = '\0'; // character is invalid, since it is not in {'u', 'd', 'r', 'l'}
+        player.move(input);
     }
 
     @After
     public void teardownPlayerTest(){
-        // restore console output stream
-        System.setOut(systemOut);
-
         player = null; // dereference
-        input = null; // dereference
+        input = '\0';
     }
 }
