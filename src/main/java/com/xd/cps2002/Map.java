@@ -6,7 +6,7 @@ public interface Map {
      * @param n dimension of the map (in map tiles)
      * @return true if the map size is valid and false otherwise.
      */
-    boolean setMapSize(int n);
+    boolean setSize(int n);
 
     /**
      * Method used to randomly generate the map.
