@@ -138,6 +138,21 @@ public class BasicMapTest {
         basicMap = new BasicMap(size);
     }
 
+    /**
+     * The {@link Map#getTileType(int, int)} method is only tested once on its own since it is already used in the test
+     * for the method {@code BasicMap_storesAnArrayOf2DObjects_IfGivenA2DArrayofTilesWithEqualDimensions}
+     */
+    @Test
+    public void getTileType_throwsIllegalArgumentException_IfGivenPositionIsInvalid() {
+        // Expect getTileType to throw an IllegalArgumentException
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("Given tile position is not valid.");
+
+        // Try to get a tile from a position which does not exist in the map
+        int x = -2, y = 5;
+        basicMap.getTileType(x,y);
+    }
+
     @Test
     public void isValidPosition_returnsTrue_ifPositionIsValid() {
         // Try to check if a valid position (x/y coordinates in range 0-4) exists within the 5x5 map

@@ -92,6 +92,12 @@ public abstract class Map {
      * @return the type of the tile at position (x,y)
      */
     TileType getTileType(int x, int y) {
+        // If the given position is invalid throw an exception
+        if(!isValidPosition(x,y)) {
+            throw new IllegalArgumentException("Given tile position is not valid.");
+        }
+
+        // Get the tile at the given position from the "tiles" 2D array
         return tiles[x][y];
     }
 }
