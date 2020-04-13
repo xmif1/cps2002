@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="47842362-719d-47c5-9907-e44b28cdaaa4" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/xd/cps2002/HelloWorld_Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/xd/cps2002/HelloWorld_Test.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/BasicMapTest.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,6 +19,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="develop" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MavenImportPreferences">
@@ -36,6 +42,8 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -100,12 +108,15 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="JUnit.BasicMapTest" />
       <item itemvalue="JUnit.HelloWorld_Test" />
       <item itemvalue="JUnit.HelloWorld_Test.multi_greetingThrowsETest" />
       <item itemvalue="Maven.cps2002 [mvn,emma:emma,install]" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.HelloWorld_Test.multi_greetingThrowsETest" />
+        <item itemvalue="JUnit.HelloWorld_Test" />
         <item itemvalue="JUnit.HelloWorld_Test" />
         <item itemvalue="JUnit.HelloWorld_Test.multi_greetingThrowsETest" />
       </list>
@@ -121,8 +132,23 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1586187953554</updated>
+      <workItem from="1586793346036" duration="277000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="WindowStateProjectService">
     <state x="440" y="183" key="#Project_Structure" timestamp="1586188184282">
@@ -133,6 +159,10 @@
       <screen x="0" y="23" width="1680" height="989" />
     </state>
     <state x="304" y="179" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1680.989@0.23.1680.989" timestamp="1586190899160" />
+    <state x="472" y="118" key="CommitChangelistDialog2" timestamp="1586793643599">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="472" y="118" key="CommitChangelistDialog2/0.0.1920.1040/1920.54.1280.984@0.0.1920.1040" timestamp="1586793643599" />
     <state width="1638" height="267" key="GridCell.Tab.0.bottom" timestamp="1586191970760">
       <screen x="0" y="23" width="1680" height="989" />
     </state>
@@ -149,5 +179,13 @@
       <screen x="0" y="23" width="1680" height="989" />
     </state>
     <state width="1638" height="267" key="GridCell.Tab.0.right/0.23.1680.989@0.23.1680.989" timestamp="1586191970759" />
+    <state x="672" y="237" key="MultipleFileMergeDialog" timestamp="1586793668783">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="672" y="237" key="MultipleFileMergeDialog/0.0.1920.1040/1920.54.1280.984@0.0.1920.1040" timestamp="1586793668783" />
+    <state x="625" y="236" key="git4idea.branch.GitSmartOperationDialog" timestamp="1586793660353">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="625" y="236" key="git4idea.branch.GitSmartOperationDialog/0.0.1920.1040/1920.54.1280.984@0.0.1920.1040" timestamp="1586793660353" />
   </component>
 </project>
