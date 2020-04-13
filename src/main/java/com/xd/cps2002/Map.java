@@ -44,13 +44,13 @@ public abstract class Map {
     abstract void generate();
 
     /**
-     * Function used to check if the given coordinate is a valid position in the map.
+     * Function used to check if the given coordinate is a valid position which exists in the map.
      * @param x x-coordinate in the map
      * @param y y-coordinate in the map
      * @return true if the given (x,y) coordinate is a valid tile position in the map and false otherwise.
      */
     boolean isValidPosition(int x, int y) {
-        return false;
+        return true;
     }
 
     /**

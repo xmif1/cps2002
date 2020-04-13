@@ -58,4 +58,13 @@ public class BasicMapTest {
         int size = 51;
         basicMap = new BasicMap(size);
     }
+
+    @Test
+    public void isValidPosition_returnsTrue_ifPositionIsValid() {
+        // Try to check if a valid position (x/y coordinates in range 0-4) exists within the 5x5 map
+        int x = 3, y = 2;
+
+        // Expect the function to return true
+        assertTrue(basicMap.isValidPosition(x,y));
+    }
 }
