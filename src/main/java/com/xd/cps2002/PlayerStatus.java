@@ -8,15 +8,15 @@ package com.xd.cps2002;
  */
 public enum PlayerStatus {
     /**
-     * The {@code Normal} status shows that nothing happened after the user moved.
+     * The Normal status shows that nothing happened after the user moved.
      */
     Normal,
     /**
-     * The {@code Death} status shows that the player need to restart the game.
+     * The Death status shows that the player need to restart the game.
      */
     Death,
     /**
-     * The {@code Win} status shows that the player has won the game after moving to a tile.
+     * The win status shows that the player has won the game after moving to a tile.
      */
     Win
 }
