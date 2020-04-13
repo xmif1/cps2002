@@ -10,22 +10,35 @@ public class Player{
         this.player_id = global_player_count++; // auto-incrementation
     }
 
-    // getter for private static int global_player_count
+    /**
+     * Getter for private static int global_player_count.
+     * @return Position global_player_count - the count of the number of Player instances created.
+     */
     public static int get_global_player_count(){
         return global_player_count;
     }
 
-    // getter for the unique player id
+    /**
+     * Getter for the unique player id.
+     * @return int this.player_id - the auto-incrementation derived unique player id.
+     */
     public int get_pID(){
         return this.player_id;
     }
 
-    // getter for the player Position position
+    /**
+     * Getter for the player Position position.
+     * @return Position position - the current player's position.
+     */
     public Position getPosition(){
         return position;
     }
 
-    // setter for the player Position position, only allowed if start_position has been set beforehand
+    /**
+     * Setter for the player Position position, only allowed if start_position has been set beforehand.
+     * @param position is a Position object to which the player's position will be set upon correct execution.
+     * @throws NullPositionException is thrown when Position start_position is null, i.e. when it has not been set.
+     */
     public void setPosition(Position position) throws NullPositionException{
         if(start_position == null){
             throw new NullPositionException(player_id);
@@ -35,18 +48,25 @@ public class Player{
         }
     }
 
-    // getter for the player Position start_position
+    /**
+     * Getter for the player Position start_position.
+     * @return Position start_position - the player's starting position.
+     */
     public Position getStartPosition(){
         return start_position;
     }
 
-    // setter for the player Position start_position, and hence also the position
+    /**
+     * Setter for the player Position start_position, and hence also the position.
+     * @param start_position is a Position object to which the player's starting and current positions will be set.
+     */
     public void setStartPosition(Position start_position){
         this.start_position = start_position;
         this.position = start_position;
     }
 
-    /* The boolean move(char input) function returns true if a character from the set {'u', 'd', 'r', 'l'} (case-
+    /**
+     * The boolean move(char input) function returns true if a character from the set {'u', 'd', 'r', 'l'} (case-
      * insensitive) is passed as input. Before doing so, the player position is updated accordingly, given that the
      * position has been set. If the position is null, a NullPositionException is thrown.
      *
@@ -56,7 +76,12 @@ public class Player{
      * If an invalid character is passed, a MoveException is thrown.
      *
      * While being agnostic from the map, it is assumed throughout this project that the (i,j) index of a map is the
-     * (i,j) cartesian coordinate. This is important to note when shifting indices to represent moves.*/
+     * (i,j) cartesian coordinate. This is important to note when shifting indices to represent moves.
+     * @param input is a char specifying the direction to shift the coordinates, if the char is in the set {'u', 'd', 'r', 'l'}.
+     * @return Position object derived from the player's current position and the coordinate shifts.
+     * @throws MoveException is thrown whenever the input is not a valid character.
+     * @throws NullPositionException is thrown whenever the Player.position is not set.
+     */
     public Position move(char input) throws NullPositionException, MoveException{
         // in case position is not set, throw exception
         if(position == null){
@@ -73,14 +98,18 @@ public class Player{
     }
 }
 
-// simple exception to handle when a player's Position position has not been set
+/**
+ * Simple exception to handle when a player's Position position has not been set.
+ */
 class NullPositionException extends Exception{
     public NullPositionException(int player_id){
         System.err.println("Player #" + player_id + " does not have position initialised.");
     }
 }
 
-// simple exception to handle when a character beyond {'u', 'd', 'l', r'} has been supplied to move()
+/**
+ * Simple exception to handle when a character beyond {'u', 'd', 'l', r'} has been supplied to move().
+ */
 class MoveException extends Exception{
     public MoveException(){
         System.err.println("Invalid input provided. Only the characters [U|D|L|R] allowed.");
