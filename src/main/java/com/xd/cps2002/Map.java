@@ -1,17 +1,47 @@
 package com.xd.cps2002;
 
-public interface Map {
+public abstract class Map {
     /**
-     * Setter method used to set the dimensions of the map.
-     * @param n dimension of the map (in map tiles)
-     * @return true if the map size is valid and false otherwise.
+     * The {@code size} member stores the dimension of the square map (size x size tiles).
      */
-    boolean setSize(int n);
+    int size;
+    /**
+     * The {@code tiles} member stores the actual types for each tile on the map that the player can walk on.
+     */
+    TileType[][] tiles;
 
     /**
-     * Method used to randomly generate the map.
+     * Constructor used to initialize an empty {@code Map} object.
+     * @param n size of the {@code n} x {@code n} square map
+     * @throws IllegalArgumentException if the method is given an invalid size parameter (outside of the range 5-50)
      */
-    void generate();
+    public Map(int n)
+    {
+        // If map size is invalid (not between 5-50) throw an exception
+        if(n < 5 || n > 50) {
+            throw new IllegalArgumentException("BasicMap was initialized with an invalid size argument.");
+        }
+
+        // Otherwise set the map size as normal
+        this.size=n;
+
+        // Initialize the "tiles" array to null
+        tiles = null;
+    }
+
+    /**
+     * Getter method used to get the {@code size} attribute of the {@code Map} object.
+     * @return the size of the map
+     */
+    public int getSize() {
+        return size;
+    }
+
+    /**
+     * Method used to randomly generate the map. This method should be implemented by each subclass of the Map class to
+     * allow different methods of map generation.
+     */
+    abstract void generate();
 
     /**
      * Function used to check if the given coordinate is a valid position in the map.
@@ -19,7 +49,9 @@ public interface Map {
      * @param y y-coordinate in the map
      * @return true if the given (x,y) coordinate is a valid tile position in the map and false otherwise.
      */
-    boolean isValidPosition(int x, int y);
+    boolean isValidPosition(int x, int y) {
+        return false;
+    }
 
     /**
      * Function used to check the type of the tile at the given coordinate in the map.
@@ -27,5 +59,7 @@ public interface Map {
      * @param y y-coordinate in the map
      * @return the type of the tile at position (x,y)
      */
-    TileType getTileType(int x, int y);
+    TileType getTileType(int x, int y) {
+        return null;
+    }
 }

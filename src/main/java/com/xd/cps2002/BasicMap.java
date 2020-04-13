@@ -1,45 +1,23 @@
 package com.xd.cps2002;
 
-public class BasicMap implements Map {
+public class BasicMap extends Map {
     private int size;
     private int noOfPlayers;
     private TileType[][] tiles;
 
     /**
-     * Constructor used to initialize an empty BasicMap object.
-     * @param n size of the n x n square map
+     * Constructor used to initialize an empty {@code BasicMap} object. Uses the constructor of the {@link Map} super
+     * class.
+     * @param n size of the {@code n} x {@code n} square map
+     * @throws IllegalArgumentException if the method is given an invalid size parameter (outside of the range 5-50)
      */
     public BasicMap(int n) {
-        // If map size is invalid (not between 5-50) throw an exception
-        if(n < 5 || n > 50) {
-            throw new IllegalArgumentException("BasicMap was initialized with an invalid size argument.");
-        }
-
-        // Otherwise set the map size as normal
-        this.size=n;
-    }
-
-    @Override
-    public boolean setSize(int n) {
-        return false;
-    }
-
-    public int getSize() {
-        return size;
+        // Initialize Map object using the Map class constructor
+        super(n);
     }
 
     @Override
     public void generate() {
-
-    }
-
-    @Override
-    public boolean isValidPosition(int x, int y) {
-        return false;
-    }
-
-    @Override
-    public TileType getTileType(int x, int y) {
-        return null;
+        // TODO add map generation
     }
 }

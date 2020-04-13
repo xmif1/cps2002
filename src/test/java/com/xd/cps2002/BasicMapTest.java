@@ -15,9 +15,16 @@ public class BasicMapTest {
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
+    @Before
+    public  void setup() {
+        // Create a new empty BasicMap object with size 5
+        basicMap = new BasicMap(5);
+    }
+
     @After
     public void teardown() {
         // Remove the reference to the previous BasicMap object.
+        basicMap = null;
     }
 
     @Test
