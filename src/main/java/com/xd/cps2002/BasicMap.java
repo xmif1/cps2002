@@ -11,10 +11,11 @@ public class BasicMap implements Map {
      */
     public BasicMap(int n) {
         // If map size is invalid (not between 5-50) throw an exception
-        if(n <= 5) {
+        if(n < 5 || n > 50) {
             throw new IllegalArgumentException("BasicMap was initialized with an invalid size argument.");
         }
 
+        // Otherwise set the map size as normal
         this.size=n;
     }
 

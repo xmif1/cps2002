@@ -40,4 +40,15 @@ public class BasicMapTest {
         int size = 4;
         basicMap = new BasicMap(size);
     }
+
+    @Test
+    public void BasicMap_throwsIllegalArgumentException_IfGivenMapSizeIsTooBig() {
+        // Expect BasicMap to throw an IllegalArgumentException
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("BasicMap was initialized with an invalid size argument.");
+
+        // Try to initialize the map with a size above the valid size range (between 5-50)
+        int size = 51;
+        basicMap = new BasicMap(size);
+    }
 }
