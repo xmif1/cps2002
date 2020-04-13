@@ -50,7 +50,8 @@ public abstract class Map {
      * @return true if the given (x,y) coordinate is a valid tile position in the map and false otherwise.
      */
     boolean isValidPosition(int x, int y) {
-        return true;
+        // Check if the x and y coordinates are within the ranges of the "tiles" array (from 0 to size)
+        return x >= 0 && x < size && y >= 0 && y < size;
     }
 
     /**
