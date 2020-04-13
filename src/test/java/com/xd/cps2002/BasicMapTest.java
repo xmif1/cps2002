@@ -14,15 +14,32 @@ import static org.junit.Assert.*;
  */
 public class BasicMapTest {
 
-    BasicMap basicMap;
+    // BasicMap object used to test different methods
+    private BasicMap basicMap;
+    private final int defaultSize = 5;
+    // Default pre-generated map used in tests requiring a priori knowledge of the tiles
+    private TileType[][] defaultTiles;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
     @Before
     public  void setup() {
-        // Create a new empty BasicMap object with size 5
-        basicMap = new BasicMap(5);
+        // Create a map alternating rows of grass and water tiles
+        defaultTiles = new TileType[defaultSize][defaultSize];
+        for(int i = 0; i < defaultSize; i++) {
+            TileType tile = (i % 2 == 0) ? TileType.Grass : TileType.Water;
+
+            for(int j = 0; j < defaultSize; j++) {
+                defaultTiles[i][j] = tile;
+            }
+        }
+
+        // Add a treasure tile at the very first tile
+        defaultTiles[0][0] = TileType.Treasure;
+
+        // Create a new empty BasicMap object with a pre-generated set of tiles
+        basicMap = new BasicMap(defaultTiles);
     }
 
     @After
@@ -50,6 +67,64 @@ public class BasicMapTest {
         // Try to initialize the map with a size below the valid size range (between 5-50)
         int size = 4;
         basicMap = new BasicMap(size);
+    }
+
+
+
+    @Test
+    public void BasicMap_storesAnArrayOf2DObjects_IfGivenA2DArrayofTilesWithEqualDimensions() {
+        // Try to initialize the map with a pre-generated 2D array of tiles with size 5x5 (both lists have equal length)
+        basicMap = new BasicMap(defaultTiles);
+
+        // Check that each tile in the map matches those in the "defaultTiles" array passed to the object
+        for(int i = 0; i < defaultSize; i++) {
+            for(int j = 0; j < defaultSize; j++) {
+                assertEquals(defaultTiles[i][j], basicMap.getTileType(i,j));
+            }
+        }
+    }
+
+    @Test
+    public void BasicMap_inferrsMapSizeCorrectly_IfGivenA2DArrayofTilesWithEqualDimensions() {
+        // Try to initialize the map with a pre-generated 2D array of tiles with size 5x5 (both lists have equal length)
+        basicMap = new BasicMap(defaultTiles);
+
+        // Check that the map size was set correctly
+        assertEquals(defaultSize, basicMap.getSize());
+    }
+
+    @Test
+    public void BasicMap__throwsIllegalArgumentException_IfGivenA2DArrayofTilesWithoutEqualDimensions() {
+        // Expect BasicMap to throw an IllegalArgumentException
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("The lists in the 2D array of tiles must have equal lengths " +
+                "(they must form a square).");
+
+        // Try to initialize the map with a 2D array of tiles with size 3x5 (the lists have unequal lengths)
+        TileType[][] tiles = new TileType[3][5];
+        basicMap = new BasicMap(tiles);
+    }
+
+    @Test
+    public void BasicMap__throwsIllegalArgumentException_IfGivenANull2DArray() {
+        // Expect BasicMap to throw an IllegalArgumentException
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("The lists in the 2D array of tiles cannot be null.");
+
+        // Try to initialize the map with a null 2D array
+        TileType[][] tiles = null;
+        basicMap = new BasicMap(tiles);
+    }
+
+    @Test
+    public void BasicMap__throwsIllegalArgumentException_IfGivenAnEmpty2DArray() {
+        // Expect BasicMap to throw an IllegalArgumentException
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("The lists in the 2D array of tiles cannot be empty.");
+
+        // Try to initialize the map with an empty 2D array (has 0 elements in the first list)
+        TileType[][] tiles = new TileType[0][0];
+        basicMap = new BasicMap(tiles);
     }
 
     @Test

@@ -16,6 +16,11 @@ public class BasicMap extends Map {
         super(n);
     }
 
+    public BasicMap(TileType[][] tiles) {
+        // Initialize Map object using the Map class constructor
+        super(tiles);
+    }
+
     @Override
     public void generate() {
         // TODO add map generation

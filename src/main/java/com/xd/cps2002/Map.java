@@ -30,6 +30,37 @@ public abstract class Map {
     }
 
     /**
+     * Constructor used to initialize a {@code Map} object with a pre-generated set of tiles.
+     * @param tiles a 2D array of {@link TileType} elements which represents the placement of the tiles in the map
+     * @throws IllegalArgumentException if {@code tiles} is null, empty or if the lists in the 2D array do not have the
+     * same lengths.
+     */
+    public Map(TileType[][] tiles) {
+        // If the given 2D tile array is actually null, throw an exception
+        if(tiles == null) {
+            throw new IllegalArgumentException("The lists in the 2D array of tiles cannot be null.");
+        }
+
+        // If the given 2D tile array is empty, throw an exception
+        if(tiles.length == 0) {
+            throw new IllegalArgumentException("The lists in the 2D array of tiles cannot be empty.");
+        }
+
+        // If the lists in the 2D tile array do not have equal lengths (i.e. it does not have dimensions n x n) throw an
+        // exception
+        if(tiles.length != tiles[0].length) {
+            throw new IllegalArgumentException("The lists in the 2D array of tiles must have equal lengths " +
+                    "(they must form a square).");
+        }
+
+        // Set the size of the map to the size of the array
+        size = tiles.length;
+
+        // Store the given 2D tile array in the "tiles" member
+        this.tiles = tiles;
+    }
+
+    /**
      * Getter method used to get the {@code size} attribute of the {@code Map} object.
      * @return the size of the map
      */
@@ -61,6 +92,6 @@ public abstract class Map {
      * @return the type of the tile at position (x,y)
      */
     TileType getTileType(int x, int y) {
-        return null;
+        return tiles[x][y];
     }
 }
