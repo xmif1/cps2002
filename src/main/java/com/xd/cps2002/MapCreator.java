@@ -13,6 +13,17 @@ public class MapCreator {
      * @return A Map object with the type represented by {@code mapType}
      * */
     public static Map createMap(String mapType, int size) {
-        return new BasicMap(size);
+        Map map;
+
+        // Change mapType to lowercase to avoid having case sensitivity
+        mapType = mapType.toLowerCase();
+
+        switch (mapType) {
+            case "basic":
+                map = new BasicMap(size); break;
+            default:
+                throw new IllegalArgumentException("Invalid map type.");
+        }
+        return map;
     }
 }

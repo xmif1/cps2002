@@ -4,11 +4,11 @@ public abstract class Map {
     /**
      * The {@code size} member stores the dimension of the square map (size x size tiles).
      */
-    int size;
+    private int size;
     /**
      * The {@code tiles} member stores the actual types for each tile on the map that the player can walk on.
      */
-    TileType[][] tiles;
+    private TileType[][] tiles;
 
     /**
      * Constructor used to initialize an empty {@code Map} object.
