@@ -72,7 +72,7 @@ public class Player{
 
     /**
      * Getter for the player's Position history (from start/reset state till the current state).
-     * @return ArrayList<Position> historical_positions is an ArrayList of all previously visited Position(s).
+     * @return ArrayList{@literal <}Position{@literal >} historical_positions is an ArrayList of all previously visited Position(s).
      */
     public ArrayList<Position> getPositionHistory(){
         return historical_positions;
