@@ -1,10 +1,13 @@
 package com.xd.cps2002;
 
+import java.util.ArrayList;
+
 public class Player{
     private static int global_player_count = 0; // maintains count of the number of Player instances created
     private int player_id; // auto-incrementing upon instantiation
     private Position position = null; // maintain the current player position
     private Position start_position = null; // maintain the start position of the player
+    private ArrayList<Position> historical_positions = new ArrayList<Position>(); // maintain record of visited coords
 
     public Player(){
         this.player_id = global_player_count++; // auto-incrementation
@@ -45,6 +48,7 @@ public class Player{
         }
         else{
             this.position = position;
+            historical_positions.add(position);
         }
     }
 
@@ -62,7 +66,30 @@ public class Player{
      */
     public void setStartPosition(Position start_position){
         this.start_position = start_position;
-        this.position = start_position;
+        position = start_position;
+        historical_positions.add(start_position);
+    }
+
+    /**
+     * Getter for the player's Position history (from start/reset state till the current state).
+     * @return ArrayList<Position> historical_positions is an ArrayList of all previously visited Position(s).
+     */
+    public ArrayList<Position> getPositionHistory(){
+        return historical_positions;
+    }
+
+    /**
+     * Resets the player's position to the starting position and truncates the position history (if any).
+     * @throws NullPositionException is thrown when Position start_position is null, i.e. when it has not been set.
+     */
+    public void reset() throws NullPositionException{
+        if(start_position == null){
+            throw new NullPositionException(player_id);
+        }
+        else {
+            position = start_position;
+            historical_positions.subList(1, historical_positions.size()).clear();
+        }
     }
 
     /**

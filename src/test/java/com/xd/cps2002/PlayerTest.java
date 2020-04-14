@@ -138,6 +138,43 @@ public class PlayerTest{
         assertEquals(0, p.y); // y remains at the origin
     }
 
+    /* ---- This section is intended to test the reset() functionality ---- */
+
+    /**
+     * Testing exception is thrown when reset() is called and Player Position start_position is null.
+     * @throws NullPositionException is expected to be thrown, since the Player.position is set to null.
+     */
+    @Test(expected = NullPositionException.class)
+    public void reset_NullStartPositionTest() throws NullPositionException{
+        Player player2 = new Player();
+        player2.reset();
+    }
+
+    /**
+     * Testing that history is not truncated when reset() is called and player is still at the starting position.
+     * @throws NullPositionException is expected to be thrown, since the Player.position is set to null (not expected).
+     */
+    @Test
+    public void reset_AtStart_NoHistoricalTruncationTest() throws NullPositionException{
+        player.reset();
+        assertEquals(player.getStartPosition(), player.getPositionHistory().get(0));
+    }
+
+    /**
+     * Testing that history is truncated when reset() is called and player has played a number of moves.
+     * @throws NullPositionException is expected to be thrown, since the Player.position is set to null (not expected).
+     */
+    @Test
+    public void reset_HistoricalTruncationTest() throws NullPositionException{
+        player.setPosition(new Position(1, 1));
+        player.setPosition(new Position(1, 2));
+        assertEquals(3, player.getPositionHistory().size());
+
+        player.reset();
+        assertEquals(player.getStartPosition(), player.getPositionHistory().get(0));
+        assertEquals(1, player.getPositionHistory().size());
+    }
+
     @After
     public void teardownPlayerTest(){
         player = null; // dereference
