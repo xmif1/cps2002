@@ -9,9 +9,10 @@ public class MapCreator {
 
     /** Factory method used to create different types of {@link Map} objects.
      * @param mapType A string representing the type of map to be created.
-     * @return A Map object with the type represented by {@code mapType} */
-    public static Map createMap(String mapType) {
-        // TODO implement creation of different map types when the concrete classes are created
-        return null;
+     * @param size size of the map to be created
+     * @return A Map object with the type represented by {@code mapType}
+     * */
+    public static Map createMap(String mapType, int size) {
+        return new BasicMap(size);
     }
 }
