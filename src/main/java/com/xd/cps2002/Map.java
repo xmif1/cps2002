@@ -75,6 +75,13 @@ public abstract class Map {
     abstract void generate();
 
     /**
+     * Method used to check if the given map can be played by a player from all possible starting positions. This
+     * method should also be implemented by the sub-class given that map generation is also handled there
+     * @return true if the player can reach the treasure starting from any point in the map.
+     */
+    abstract boolean isPlayable();
+
+    /**
      * Function used to check if the given coordinate is a valid position which exists in the map.
      * @param x x-coordinate in the map
      * @param y y-coordinate in the map
@@ -89,9 +96,16 @@ public abstract class Map {
      * Function used to check the type of the tile at the given coordinate in the map.
      * @param x x-coordinate in the map
      * @param y y-coordinate in the map
+     * @apiNote The function indexes tiles in the map starting from (0,0), which is the tile in the upper left corner
+     * of the map.
      * @return the type of the tile at position (x,y)
      */
     TileType getTileType(int x, int y) {
+        // If the map tiles have not been generated yet, throw an exception
+        if(tiles == null) {
+            throw new NullPointerException("Map tiles have not been generated yet");
+        }
+
         // If the given position is invalid throw an exception
         if(!isValidPosition(x,y)) {
             throw new IllegalArgumentException("Given tile position is not valid.");

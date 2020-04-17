@@ -139,9 +139,23 @@ public class BasicMapTest {
     }
 
     /**
-     * The {@link Map#getTileType(int, int)} method is only tested once on its own since it is already used in the test
+     * The {@link Map#getTileType(int, int)} method is only tested for error cases since it is already used in the test
      * for the method {@code BasicMap_storesAnArrayOf2DObjects_IfGivenA2DArrayofTilesWithEqualDimensions}
      */
+    @Test
+    public void getTileType_throwsNullPointerException_IfMapHasNotYetBeenGenerated() {
+        // Expect getTileType to throw an IllegalArgumentException
+        expectedException.expect(NullPointerException.class);
+        expectedException.expectMessage("Map tiles have not been generated yet");
+
+        // Create a new empty map with no tiles
+        basicMap = new BasicMap(defaultSize);
+
+        // Try to get a tile from a position in the map
+        int x = 1, y = 3;
+        basicMap.getTileType(x,y);
+    }
+
     @Test
     public void getTileType_throwsIllegalArgumentException_IfGivenPositionIsInvalid() {
         // Expect getTileType to throw an IllegalArgumentException
