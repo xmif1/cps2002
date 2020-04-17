@@ -49,7 +49,9 @@ public enum TileType {
         this.statusAfterMove = statusAfterMove;
         this.html_handle = html_handle;
         this.html_blurb = "." + html_handle +
-                         " {background-color: rgba(" + r + ", " + g + ", " + b + ", 0.8);\n" +
-                         "border: 1px solid rgba(0, 0, 0, 0.8);}\n\n";
+                          " {\nbackground-color: rgba(" + r + ", " + g + ", " + b + ", 0.8);\n" +
+                          "border: 1px solid rgba(0, 0, 0, 0.8);\n" +
+                          "font-size: 30px;\n" +
+                          "text-align: center;}\n\n";
     }
 }

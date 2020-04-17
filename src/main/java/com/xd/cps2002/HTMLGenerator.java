@@ -115,7 +115,7 @@ public class HTMLGenerator{
         // add the first part of the <body> block - up to the grid-container class [at index 2]
         html.add("<body>\n\n" +
                 "<h1>Map for Player #" + player.get_pID() + "</h1>\n\n" + // header with player number
-                "<div class=\"grid-container\"");
+                "<div class=\"grid-container\">\n");
 
         // add map_size^2 uncovered tiles to the map [at index 3 to map_size^2 + 3]
         html.addAll(Collections.nCopies(map_size*map_size, "<div class=\"uncovered\"></div>\n"));
@@ -127,6 +127,18 @@ public class HTMLGenerator{
             // set the tile style to the corresponding one in the map, based on the player's visited position
             html.set(idx, "<div class=\"" + map.getTileType(position.x, position.y).html_handle + "\"></div>\n");
         }
+
+        // marking the start position with a symbol (a Torii Gate)
+        Position start_position = player.getStartPosition();
+        idx = 3 + map_size*start_position.y + start_position.x;
+        html.set(idx, "<div class=\"" + map.getTileType(start_position.x, start_position.y).html_handle +
+                "\">&#x26E9;</div>\n");
+
+        // marking the start position with a symbol (a gleaming Sun)
+        Position curr_position = player.getPosition();
+        idx = 3 + map_size*curr_position.y + curr_position.x;
+        html.set(idx, "<div class=\"" + map.getTileType(curr_position.x, curr_position.y).html_handle +
+                "\">&#x1F31E;</div>\n");
 
         return html;
 

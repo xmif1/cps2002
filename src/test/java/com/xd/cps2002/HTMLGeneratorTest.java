@@ -1,5 +1,7 @@
 package com.xd.cps2002;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.junit.After;
@@ -45,9 +47,15 @@ public class HTMLGeneratorTest{
      * pattern).
      */
     @Test
-    public void singletonTest(){
+    public void singletonTest() throws IOException {
         HTMLGenerator new_htmlGenerator = HTMLGenerator.getHTMLGenerator();
         assertEquals(htmlGenerator, new_htmlGenerator);
+
+        FileWriter writer = new FileWriter("./player_" + player.get_pID() + "_map.html");
+        for(String ln: htmlGenerator.genPlayerMap(player, map)){ // iterate through the html ArrayList and persist
+            writer.write(ln);
+        }
+        writer.close();
     }
 
     /* ----- This section tests the overall structure of the HTML file -----
@@ -102,7 +110,7 @@ public class HTMLGeneratorTest{
     @Test
     public void start_tileTest(){
         ArrayList<String> html = htmlGenerator.genPlayerMap(player, map);
-        assertEquals("<div class=\"" + tiles[0][0].html_handle + "\">&#26E9</div>\n", html.get(4));
+        assertEquals("<div class=\"" + tiles[0][0].html_handle + "\">&#x26E9;</div>\n", html.get(3));
     }
 
     /**
@@ -111,7 +119,7 @@ public class HTMLGeneratorTest{
     @Test
     public void current_tileTest(){
         ArrayList<String> html = htmlGenerator.genPlayerMap(player, map);
-        assertEquals("<div class=\"" + tiles[2][2].html_handle + "\">&#1F31E</div>\n", html.get(8));
+        assertEquals("<div class=\"" + tiles[2][2].html_handle + "\">&#x1F31E;</div>\n", html.get(15));
     }
 
     @After
