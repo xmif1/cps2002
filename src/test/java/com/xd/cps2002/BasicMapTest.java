@@ -25,7 +25,7 @@ public class BasicMapTest {
 
     @Before
     public  void setup() {
-        // Create a map alternating rows of grass and water tiles
+        // Create a map with alternating rows of grass and water tiles
         defaultTiles = new TileType[defaultSize][defaultSize];
         for(int i = 0; i < defaultSize; i++) {
             TileType tile = (i % 2 == 0) ? TileType.Grass : TileType.Water;
@@ -102,6 +102,50 @@ public class BasicMapTest {
 
         // Try to initialize the map with a 2D array of tiles with size 3x5 (the lists have unequal lengths)
         TileType[][] tiles = new TileType[3][5];
+        basicMap = new BasicMap(tiles);
+    }
+
+    @Test
+    public void BasicMap__throwsIllegalArgumentException_IfGivenA2DArrayofTilesWithoutATreasureTile() {
+        // Expect BasicMap to throw an IllegalArgumentException
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("The 2D array of tiles must include 1 treasure tile.");
+
+        // Create a 2D array of tiles with alternating rows of grass and water tiles without a treasure tile
+        TileType[][] tiles = new TileType[defaultSize][defaultSize];
+        for(int i = 0; i < defaultSize; i++) {
+            TileType tile = (i % 2 == 0) ? TileType.Grass : TileType.Water;
+
+            for(int j = 0; j < defaultSize; j++) {
+                defaultTiles[i][j] = tile;
+            }
+        }
+
+        // Try to initialize the map with the 2D array of tiles
+        basicMap = new BasicMap(tiles);
+    }
+
+    @Test
+    public void BasicMap__throwsIllegalArgumentException_IfGivenA2DArrayofTilesWithTooManyTreasureTiles() {
+        // Expect BasicMap to throw an IllegalArgumentException
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("The 2D array of tiles must include 1 treasure tile.");
+
+        // Create a 2D array of tiles with alternating rows of grass and water tiles
+        TileType[][] tiles = new TileType[defaultSize][defaultSize];
+        for(int i = 0; i < defaultSize; i++) {
+            TileType tile = (i % 2 == 0) ? TileType.Grass : TileType.Water;
+
+            for(int j = 0; j < defaultSize; j++) {
+                defaultTiles[i][j] = tile;
+            }
+        }
+
+        // Add 2 treasure tiles to the map
+        tiles[0][0] = TileType.Treasure;
+        tiles[0][1] = TileType.Treasure;
+
+        // Try to initialize the map with the 2D array of tiles
         basicMap = new BasicMap(tiles);
     }
 

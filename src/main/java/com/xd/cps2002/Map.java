@@ -56,6 +56,20 @@ public abstract class Map {
         // Set the size of the map to the size of the array
         size = tiles.length;
 
+        // Count the number of treasure tiles in the map
+        int treasureCount = 0;
+
+        for(int i = 0; i < size; i++) {
+            for(int j = 0; j < size; j++) {
+                if(tiles[i][j] == TileType.Treasure) treasureCount++;
+            }
+        }
+
+        // If there is more or less than one treasure tile throw an exception
+        if(treasureCount != 1) {
+            throw new IllegalArgumentException("The 2D array of tiles must include 1 treasure tile.");
+        }
+
         // Store the given 2D tile array in the "tiles" member
         this.tiles = tiles;
     }
