@@ -69,8 +69,6 @@ public class BasicMapTest {
         basicMap = new BasicMap(size);
     }
 
-
-
     @Test
     public void BasicMap_storesAnArrayOf2DObjects_IfGivenA2DArrayofTilesWithEqualDimensions() {
         // Try to initialize the map with a pre-generated 2D array of tiles with size 5x5 (both lists have equal length)
@@ -94,7 +92,7 @@ public class BasicMapTest {
     }
 
     @Test
-    public void BasicMap__throwsIllegalArgumentException_IfGivenA2DArrayofTilesWithoutEqualDimensions() {
+    public void BasicMap_throwsIllegalArgumentException_IfGivenA2DArrayofTilesWithoutEqualDimensions() {
         // Expect BasicMap to throw an IllegalArgumentException
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("The lists in the 2D array of tiles must have equal lengths " +
@@ -106,7 +104,7 @@ public class BasicMapTest {
     }
 
     @Test
-    public void BasicMap__throwsIllegalArgumentException_IfGivenA2DArrayofTilesWithoutATreasureTile() {
+    public void BasicMap_throwsIllegalArgumentException_IfGivenA2DArrayofTilesWithoutATreasureTile() {
         // Expect BasicMap to throw an IllegalArgumentException
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("The 2D array of tiles must include 1 treasure tile.");
@@ -126,7 +124,7 @@ public class BasicMapTest {
     }
 
     @Test
-    public void BasicMap__throwsIllegalArgumentException_IfGivenA2DArrayofTilesWithTooManyTreasureTiles() {
+    public void BasicMap_throwsIllegalArgumentException_IfGivenA2DArrayofTilesWithTooManyTreasureTiles() {
         // Expect BasicMap to throw an IllegalArgumentException
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("The 2D array of tiles must include 1 treasure tile.");
@@ -137,20 +135,34 @@ public class BasicMapTest {
             TileType tile = (i % 2 == 0) ? TileType.Grass : TileType.Water;
 
             for(int j = 0; j < defaultSize; j++) {
-                defaultTiles[i][j] = tile;
+                tiles[i][j] = tile;
             }
         }
 
         // Add 2 treasure tiles to the map
         tiles[0][0] = TileType.Treasure;
-        tiles[0][1] = TileType.Treasure;
+        tiles[0][3] = TileType.Treasure;
 
         // Try to initialize the map with the 2D array of tiles
         basicMap = new BasicMap(tiles);
     }
 
     @Test
-    public void BasicMap__throwsIllegalArgumentException_IfGivenANull2DArray() {
+    public void BasicMap_throwsIllegalArgumentException_IfGivenA2DArrayofTilesWithNullTiles() {
+        // Expect BasicMap to throw an IllegalArgumentException
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("The 2D array of tiles cannot have tiles which are null.");
+
+        // Create a 2D array with only 1 treasure tiles and all other elements set to null
+        TileType[][] tiles = new TileType[defaultSize][defaultSize];
+        tiles[0][0] = TileType.Treasure;
+
+        // Try to initialize the map with the 2D array of tiles
+        basicMap = new BasicMap(tiles);
+    }
+
+    @Test
+    public void BasicMap_throwsIllegalArgumentException_IfGivenANull2DArray() {
         // Expect BasicMap to throw an IllegalArgumentException
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("The lists in the 2D array of tiles cannot be null.");
@@ -161,7 +173,7 @@ public class BasicMapTest {
     }
 
     @Test
-    public void BasicMap__throwsIllegalArgumentException_IfGivenAnEmpty2DArray() {
+    public void BasicMap_throwsIllegalArgumentException_IfGivenAnEmpty2DArray() {
         // Expect BasicMap to throw an IllegalArgumentException
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("The lists in the 2D array of tiles cannot be empty.");

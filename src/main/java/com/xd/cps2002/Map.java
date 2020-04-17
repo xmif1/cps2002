@@ -59,9 +59,20 @@ public abstract class Map {
         // Count the number of treasure tiles in the map
         int treasureCount = 0;
 
+        treasureSearch:
         for(int i = 0; i < size; i++) {
             for(int j = 0; j < size; j++) {
-                if(tiles[i][j] == TileType.Treasure) treasureCount++;
+                if(tiles[i][j] == null) {
+                    // If the tile is null (not set) throw an error
+                    throw new IllegalArgumentException("The 2D array of tiles cannot have tiles which are null.");
+                }
+                else if(tiles[i][j] == TileType.Treasure) {
+                    // Increase "treasureCount" if a treasure tile is found
+                    treasureCount++;
+
+                    // If more than 1 treasure tile has been found already stop searching - ERROR
+                    if(treasureCount > 1) break treasureSearch;
+                }
             }
         }
 
