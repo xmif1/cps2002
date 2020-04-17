@@ -1,7 +1,5 @@
 package com.xd.cps2002;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import org.junit.After;
@@ -47,15 +45,9 @@ public class HTMLGeneratorTest{
      * pattern).
      */
     @Test
-    public void singletonTest() throws IOException {
+    public void singletonTest(){
         HTMLGenerator new_htmlGenerator = HTMLGenerator.getHTMLGenerator();
         assertEquals(htmlGenerator, new_htmlGenerator);
-
-        FileWriter writer = new FileWriter("./player_" + player.get_pID() + "_map.html");
-        for(String ln: htmlGenerator.genPlayerMap(player, map)){ // iterate through the html ArrayList and persist
-            writer.write(ln);
-        }
-        writer.close();
     }
 
     /* ----- This section tests the overall structure of the HTML file -----
