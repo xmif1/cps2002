@@ -57,17 +57,19 @@ public class HTMLGeneratorTest{
      */
 
     /**
-     * Testing whether the generated HTML map is coloured correctly, based on the TileType definition for each visited tile.
+     * Testing whether the generated HTML map is coloured correctly, based on the TileType definition for each visited
+     * tile, except the starting tile and the current tile.
      */
     @Test
     public void visited_tilesTest(){
         ArrayList<String> html = htmlGenerator.genPlayerMap(player, map);
+        int[][] visited_pos = {{1, 0}, {1, 1}, {2, 1}};
 
         int idx;
-        for(Position position : player.getPositionHistory()){ // for each visited position by the player
-            idx = 3 + 5*position.y + position.x; // calculate linearised 1D index corresponding to 2D coordinates
+        for(int[] position : visited_pos){ // for each visited position by the player
+            idx = 3 + 5*position[1] + position[0]; // calculate linearised 1D index corresponding to 2D coordinates
             // check if map is correctly coloured
-            assertEquals("<div class=\"" + map.getTileType(position.x, position.y).html_handle + "\"></div>\n",
+            assertEquals("<div class=\"" + tiles[position[0]][position[1]].html_handle + "\"></div>\n",
                     html.get(idx));
         }
     }
@@ -100,10 +102,7 @@ public class HTMLGeneratorTest{
     @Test
     public void start_tileTest(){
         ArrayList<String> html = htmlGenerator.genPlayerMap(player, map);
-        Position start_position = player.getStartPosition();
-
-        assertEquals("<div class=\"" + map.getTileType(start_position.x, start_position.y).html_handle +
-                        "\">&#26E9</div>\n", html.get(4));
+        assertEquals("<div class=\"" + tiles[0][0].html_handle + "\">&#26E9</div>\n", html.get(4));
     }
 
     /**
@@ -112,10 +111,7 @@ public class HTMLGeneratorTest{
     @Test
     public void current_tileTest(){
         ArrayList<String> html = htmlGenerator.genPlayerMap(player, map);
-        Position curr_position = player.getPosition();
-
-        assertEquals("<div class=\"" + map.getTileType(curr_position.x, curr_position.y).html_handle +
-                        "\">&#1F31E</div>\n", html.get(8));
+        assertEquals("<div class=\"" + tiles[2][2].html_handle + "\">&#1F31E</div>\n", html.get(8));
     }
 
     @After
