@@ -115,7 +115,7 @@ public class BasicMapTest {
             TileType tile = (i % 2 == 0) ? TileType.Grass : TileType.Water;
 
             for(int j = 0; j < defaultSize; j++) {
-                defaultTiles[i][j] = tile;
+                tiles[i][j] = tile;
             }
         }
 
