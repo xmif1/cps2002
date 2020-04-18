@@ -195,11 +195,29 @@ public class BasicMapTest {
     }
 
     /*
-     * The Map.getTileType(int, int) method is only tested for error cases since it is already used correctly in
-     * the test BasicMap_storesAnArrayOf2DObjects_IfGivenA2DArrayofTilesWithEqualDimensions
+     * The tests below test the version of getTileType which takes individual x and y coordinates.
+     */
+
+    /**
+     * Note that this test is very similar to the unit test
+     * {@link BasicMapTest#BasicMap_storesAnArrayOf2DObjects_IfGivenA2DArrayofTilesWithEqualDimensions()}. However the
+     * test was added for the sake of completeness.
      */
     @Test
-    public void getTileType_throwsNullPointerException_IfMapHasNotYetBeenGenerated() {
+    public void getTileTypeXY_returnsCorrectTileType_ifTileExists() {
+        // Try to initialize the map with a pre-generated 2D array of tiles with size 5x5
+        basicMap = new BasicMap(defaultTiles);
+
+        // Get each tile in the map using getTileType and make sure the type matches that of the pre-generated tiles
+        for(int i = 0; i < defaultSize; i++) {
+            for(int j = 0; j < defaultSize; j++) {
+                assertEquals(defaultTiles[i][j], basicMap.getTileType(i,j));
+            }
+        }
+    }
+
+    @Test
+    public void getTileTypeXY_throwsNullPointerException_IfMapHasNotYetBeenGenerated() {
         // Expect getTileType to throw an IllegalArgumentException
         expectedException.expect(NullPointerException.class);
         expectedException.expectMessage("Map tiles have not been generated yet");
@@ -213,7 +231,7 @@ public class BasicMapTest {
     }
 
     @Test
-    public void getTileType_throwsIllegalArgumentException_IfGivenPositionIsInvalid() {
+    public void getTileTypeXY_throwsIllegalArgumentException_IfGivenPositionIsInvalid() {
         // Expect getTileType to throw an IllegalArgumentException
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("Given tile position is not valid.");
@@ -221,6 +239,49 @@ public class BasicMapTest {
         // Try to get a tile from a position which does not exist in the map
         int x = -2, y = 5;
         basicMap.getTileType(x,y);
+    }
+
+    /*
+     * The tests below test the version of isValidPosition which takes a Position object.
+     */
+
+    @Test
+    public void getTileTypePos_returnsCorrectTileType_ifTileExists() {
+        // Try to initialize the map with a pre-generated 2D array of tiles with size 5x5
+        basicMap = new BasicMap(defaultTiles);
+
+        // Get each tile in the map using getTileType and make sure the type matches that of the pre-generated tiles
+        for(int i = 0; i < defaultSize; i++) {
+            for(int j = 0; j < defaultSize; j++) {
+                Position pos = new Position(i,j);
+                assertEquals(defaultTiles[i][j], basicMap.getTileType(pos));
+            }
+        }
+    }
+
+    @Test
+    public void getTileTypePos_throwsNullPointerException_IfMapHasNotYetBeenGenerated() {
+        // Expect getTileType to throw an IllegalArgumentException
+        expectedException.expect(NullPointerException.class);
+        expectedException.expectMessage("Map tiles have not been generated yet");
+
+        // Create a new empty map with no tiles
+        basicMap = new BasicMap(defaultSize);
+
+        // Try to get a tile from a position in the map
+        Position pos = new Position(1,3);
+        basicMap.getTileType(pos);
+    }
+
+    @Test
+    public void getTileTypePos_throwsIllegalArgumentException_IfGivenPositionIsInvalid() {
+        // Expect getTileType to throw an IllegalArgumentException
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("Given tile position is not valid.");
+
+        // Try to get a tile from a position which does not exist in the map
+        Position pos = new Position(-2,5);
+        basicMap.getTileType(pos);
     }
 
     /*

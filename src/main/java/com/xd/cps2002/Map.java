@@ -155,4 +155,16 @@ public abstract class Map {
         // Get the tile at the given position from the "tiles" 2D array
         return tiles[x][y];
     }
+
+    /**
+     * Function used to check the type of the tile at the given {@link Position} in the map. This function was
+     * implemented as a convenience function to allow use of the {@link Position} class.
+     * @param pos position of the tile of interest in the map.
+     * @apiNote The function indexes tiles in the map starting from (0,0), which is the tile in the upper left corner
+     * of the map.
+     * @return the type of the tile at position (x,y)
+     */
+    TileType getTileType(Position pos) {
+        return getTileType(pos.x, pos.y);
+    }
 }
