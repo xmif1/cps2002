@@ -33,6 +33,11 @@ public class BasicMap extends Map {
         super(tiles);
     }
 
+    /**
+     * Generates the tiles for the {@code BasicMap} randomly. The function generates one treasure tile and a number of
+     * water tiles according to {@link BasicMap#waterTileRatio}. It also makes sure that none of the water tiles that
+     * are generated are placed adjacent to the treasure tile.
+     */
     @Override
     public void generate() {
         // Create a new 2D array of tiles
