@@ -194,9 +194,9 @@ public class BasicMapTest {
         basicMap = new BasicMap(size);
     }
 
-    /**
-     * The {@link Map#getTileType(int, int)} method is only tested for error cases since it is already used correctly in
-     * the test {@code BasicMap_storesAnArrayOf2DObjects_IfGivenA2DArrayofTilesWithEqualDimensions}
+    /*
+     * The Map.getTileType(int, int) method is only tested for error cases since it is already used correctly in
+     * the test BasicMap_storesAnArrayOf2DObjects_IfGivenA2DArrayofTilesWithEqualDimensions
      */
     @Test
     public void getTileType_throwsNullPointerException_IfMapHasNotYetBeenGenerated() {
@@ -223,8 +223,12 @@ public class BasicMapTest {
         basicMap.getTileType(x,y);
     }
 
+    /*
+     * The tests below test the version of isValidPosition which takes individual x and y coordinates.
+     */
+
     @Test
-    public void isValidPosition_returnsTrue_ifPositionIsValid() {
+    public void isValidPositionXY_returnsTrue_ifPositionIsValid() {
         // Try to check if a valid position (x/y coordinates in range 0-4) exists within the 5x5 map
         int x = 3, y = 2;
 
@@ -233,7 +237,7 @@ public class BasicMapTest {
     }
 
     @Test
-    public void isValidPosition_returnsFalse_ifXPositionIsNegative() {
+    public void isValidPositionXY_returnsFalse_ifXPositionIsNegative() {
         // Try to check if a position with a negative x coordinate exists within the 5x5 map
         int x = -3, y = 1;
 
@@ -242,7 +246,7 @@ public class BasicMapTest {
     }
 
     @Test
-    public void isValidPosition_returnsFalse_ifYPositionIsNegative() {
+    public void isValidPositionXY_returnsFalse_ifYPositionIsNegative() {
         // Try to check if a position with a negative y coordinate exists within the 5x5 map
         int x = 2, y = -1;
 
@@ -251,7 +255,7 @@ public class BasicMapTest {
     }
 
     @Test
-    public void isValidPosition_returnsFalse_ifXPositionIsTooBig() {
+    public void isValidPositionXY_returnsFalse_ifXPositionIsTooBig() {
         // Try to check if a position with an x coordinate >=5 exists within the 5x5 map (which is indexed from 0 to 4)
         int x = 5, y = 1;
 
@@ -260,12 +264,61 @@ public class BasicMapTest {
     }
 
     @Test
-    public void isValidPosition_returnsFalse_ifYPositionIsTooBig() {
+    public void isValidPositionXY_returnsFalse_ifYPositionIsTooBig() {
         // Try to check if a position with an y coordinate >=5 exists within the 5x5 map (which is indexed from 0 to 4)
         int x = 2, y = 5;
 
         // Expect the function to return false
         assertFalse(basicMap.isValidPosition(x,y));
+    }
+
+    /*
+     * The tests below test the version of isValidPosition which takes a Position object.
+     */
+
+    @Test
+    public void isValidPositionPos_returnsTrue_ifPositionIsValid() {
+        // Try to check if a valid position (x/y coordinates in range 0-4) exists within the 5x5 map
+        Position pos = new Position(3,2);
+
+        // Expect the function to return true
+        assertTrue(basicMap.isValidPosition(pos));
+    }
+
+    @Test
+    public void isValidPositionPos_returnsFalse_ifXPositionIsNegative() {
+        // Try to check if a position with a negative x coordinate exists within the 5x5 map
+        Position pos = new Position(-3, 1);
+
+        // Expect the function to return false
+        assertFalse(basicMap.isValidPosition(pos));
+    }
+
+    @Test
+    public void isValidPositionPos_returnsFalse_ifYPositionIsNegative() {
+        // Try to check if a position with a negative y coordinate exists within the 5x5 map
+        Position pos = new Position(2, -1);
+
+        // Expect the function to return false
+        assertFalse(basicMap.isValidPosition(pos));
+    }
+
+    @Test
+    public void isValidPositionPos_returnsFalse_ifXPositionIsTooBig() {
+        // Try to check if a position with an x coordinate >=5 exists within the 5x5 map (which is indexed from 0 to 4)
+        Position pos = new Position(5, 1);
+
+        // Expect the function to return false
+        assertFalse(basicMap.isValidPosition(pos));
+    }
+
+    @Test
+    public void isValidPositionPos_returnsFalse_ifYPositionIsTooBig() {
+        // Try to check if a position with a y coordinate >=5 exists within the 5x5 map (which is indexed from 0 to 4)
+        Position pos = new Position(2, 5);
+
+        // Expect the function to return false
+        assertFalse(basicMap.isValidPosition(pos));
     }
 
     @Test
@@ -357,7 +410,7 @@ public class BasicMapTest {
         // Check that none of the tiles in the map are set to null
         for(int i = 0; i < size; i++) {
             for(int j = 0; j < size; j++) {
-                assertTrue(basicMap.getTileType(i, j) != null);
+                assertNotNull(basicMap.getTileType(i, j));
             }
         }
     }

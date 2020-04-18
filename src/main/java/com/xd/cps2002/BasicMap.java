@@ -11,6 +11,11 @@ public class BasicMap extends Map {
     private final double waterTileRatio = 0.10;
 
     /**
+     * Defines the minimum percentage of tiles in the map from which a player needs to be able to reach the treasure.
+     */
+    private final double minimumWinnableTiles = 0.10;
+
+    /**
      * Constructor used to initialize an empty {@code BasicMap} object. It uses the constructor of the {@link Map} super
      * class.
      * @param n size of the {@code n} x {@code n} square map
@@ -109,8 +114,8 @@ public class BasicMap extends Map {
     }
 
     /**
-     * Function to check if the player can reach the treasure starting from any grass tile.
-     * @return true if the player can reach the treasure from any grass tile and false otherwise.
+     * Function to check if the player can reach the treasure starting from at least 75% of the grass tiles.
+     * @return true if the player can reach the treasure from at least 75% of the grass tiles and false otherwise.
      */
     @Override
     boolean isPlayable() {

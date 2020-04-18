@@ -11,6 +11,11 @@ public abstract class Map {
     protected TileType[][] tiles;
 
     /**
+     * The {@code treasurePos} member stores position of the treasure tile in the map.
+     */
+    protected Position treasurePos;
+
+    /**
      * Constructor used to initialize an empty {@code Map} object.
      * @param n size of the {@code n} x {@code n} square map
      * @throws IllegalArgumentException if the method is given an invalid size parameter (outside of the range 5-50)
@@ -100,8 +105,8 @@ public abstract class Map {
     abstract void generate();
 
     /**
-     * Method used to check if the given map can be played by a player from all possible starting positions. This
-     * method should also be implemented by the sub-class given that map generation is also handled there
+     * Method used to check if the given map can be played by a player. This method should also be implemented by the
+     * sub-class given that map generation is also handled there.
      * @return true if the player can reach the treasure starting from any point in the map.
      */
     abstract boolean isPlayable();
@@ -115,6 +120,17 @@ public abstract class Map {
     boolean isValidPosition(int x, int y) {
         // Check if the x and y coordinates are within the ranges of the "tiles" array (from 0 to size)
         return x >= 0 && x < size && y >= 0 && y < size;
+    }
+
+    /**
+     * Function used to check if the given tile {@link Position} exists in the map. This function was implemented as a
+     * convenience function to allow use of the {@link Position} class.
+     * @param pos position in the map to be validated
+     * @return true if {@code pos} is a valid tile position in the map and false otherwise.
+     */
+    boolean isValidPosition(Position pos) {
+        // Pass the x and y coordinates to the other version of the function
+        return isValidPosition(pos.x, pos.y);
     }
 
     /**
