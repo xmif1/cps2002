@@ -4,11 +4,11 @@ public abstract class Map {
     /**
      * The {@code size} member stores the dimension of the square map (size x size tiles).
      */
-    private int size;
+    protected int size;
     /**
      * The {@code tiles} member stores the actual types for each tile on the map that the player can walk on.
      */
-    private TileType[][] tiles;
+    protected TileType[][] tiles;
 
     /**
      * Constructor used to initialize an empty {@code Map} object.
@@ -56,6 +56,31 @@ public abstract class Map {
         // Set the size of the map to the size of the array
         size = tiles.length;
 
+        // Count the number of treasure tiles in the map
+        int treasureCount = 0;
+
+        treasureSearch:
+        for(int i = 0; i < size; i++) {
+            for(int j = 0; j < size; j++) {
+                if(tiles[i][j] == null) {
+                    // If the tile is null (not set) throw an error
+                    throw new IllegalArgumentException("The 2D array of tiles cannot have tiles which are null.");
+                }
+                else if(tiles[i][j] == TileType.Treasure) {
+                    // Increase "treasureCount" if a treasure tile is found
+                    treasureCount++;
+
+                    // If more than 1 treasure tile has been found already stop searching - ERROR
+                    if(treasureCount > 1) break treasureSearch;
+                }
+            }
+        }
+
+        // If there is more or less than one treasure tile throw an exception
+        if(treasureCount != 1) {
+            throw new IllegalArgumentException("The 2D array of tiles must include 1 treasure tile.");
+        }
+
         // Store the given 2D tile array in the "tiles" member
         this.tiles = tiles;
     }
@@ -75,6 +100,13 @@ public abstract class Map {
     abstract void generate();
 
     /**
+     * Method used to check if the given map can be played by a player from all possible starting positions. This
+     * method should also be implemented by the sub-class given that map generation is also handled there
+     * @return true if the player can reach the treasure starting from any point in the map.
+     */
+    abstract boolean isPlayable();
+
+    /**
      * Function used to check if the given coordinate is a valid position which exists in the map.
      * @param x x-coordinate in the map
      * @param y y-coordinate in the map
@@ -89,9 +121,16 @@ public abstract class Map {
      * Function used to check the type of the tile at the given coordinate in the map.
      * @param x x-coordinate in the map
      * @param y y-coordinate in the map
+     * @apiNote The function indexes tiles in the map starting from (0,0), which is the tile in the upper left corner
+     * of the map.
      * @return the type of the tile at position (x,y)
      */
     TileType getTileType(int x, int y) {
+        // If the map tiles have not been generated yet, throw an exception
+        if(tiles == null) {
+            throw new NullPointerException("Map tiles have not been generated yet");
+        }
+
         // If the given position is invalid throw an exception
         if(!isValidPosition(x,y)) {
             throw new IllegalArgumentException("Given tile position is not valid.");
