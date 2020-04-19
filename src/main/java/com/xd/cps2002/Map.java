@@ -16,6 +16,12 @@ public abstract class Map {
     protected Position treasurePos;
 
     /**
+     * The {@code winnableTiles} member stores a 2D array of tiles from which a player can reach the treasure tile and
+     * win the game.
+     */
+    protected boolean[][] winnableTiles;
+
+    /**
      * Constructor used to initialize an empty {@code Map} object.
      * @param n size of the {@code n} x {@code n} square map
      * @throws IllegalArgumentException if the method is given an invalid size parameter (outside of the range 5-50)
@@ -30,8 +36,12 @@ public abstract class Map {
         // Otherwise set the map size as normal
         this.size=n;
 
-        // Initialize the "tiles" array to null
+        // Initialize the "tiles" and "reachableTiles" arrays to null
         tiles = null;
+        winnableTiles = null;
+
+        // Initialize the "treasurePos" to null
+        treasurePos = null;
     }
 
     /**
@@ -77,6 +87,8 @@ public abstract class Map {
 
                     // If more than 1 treasure tile has been found already stop searching - ERROR
                     if(treasureCount > 1) break treasureSearch;
+                    // If this is the 1st treasure tile that has been found, store its position
+                    else treasurePos = new Position(i, j);
                 }
             }
         }
@@ -88,6 +100,9 @@ public abstract class Map {
 
         // Store the given 2D tile array in the "tiles" member
         this.tiles = tiles;
+
+        // Initialize "reachableTiles" to null
+        winnableTiles = null;
     }
 
     /**

@@ -14,10 +14,17 @@ import static org.junit.Assert.*;
  */
 public class BasicMapTest {
 
-    // BasicMap object used to test different methods
+    /**
+     * BasicMap object used to test different methods
+     */
     private BasicMap basicMap;
+    /**
+     * Default map size used in most of the tests.
+     */
     private final int defaultSize = 5;
-    // Default pre-generated map used in tests requiring a priori knowledge of the tiles
+    /**
+     * Default pre-generated map used in tests requiring a priori knowledge of the tiles
+     */
     private TileType[][] defaultTiles;
 
     @Rule
@@ -474,5 +481,49 @@ public class BasicMapTest {
                 assertNotNull(basicMap.getTileType(i, j));
             }
         }
+    }
+
+    @Test public void isPlayable_returnsTrue_IfTheTreasureCanBeReachedFrom75PercentOfTiles() {
+        // Create a new 10x10 map with a strip of water tiles dividing it (80% of the map is playable)
+        int size = 10;
+        TileType[][] tiles = new TileType[size][size];
+        for(int i = 0; i < size; i++) {
+            // Create a strip of water tiles in row 8
+            TileType tile = (i == 8) ? TileType.Water : TileType.Grass;
+            for(int j = 0; j < size; j++) {
+                tiles[i][j] = tile;
+            }
+        }
+
+        // Put the treasure tile in the larger (80%) section
+        tiles[0][0] = TileType.Treasure;
+
+        // Create a new map with the tiles created above
+        basicMap = new BasicMap(tiles);
+
+        // Check that the function returns true
+        assertTrue(basicMap.isPlayable());
+    }
+
+    @Test public void isPlayable_returnsFalse_IfTheTreasureCannotBeReachedFrom75PercentOfTiles() {
+        // Create a new 10x10 map with a strip of water tiles dividing it (20% of the map is playable)
+        int size = 10;
+        TileType[][] tiles = new TileType[size][size];
+        for(int i = 0; i < size; i++) {
+            // Create a strip of water tiles in row 8
+            TileType tile = (i == 8) ? TileType.Water : TileType.Grass;
+            for(int j = 0; j < size; j++) {
+                tiles[i][j] = tile;
+            }
+        }
+
+        // Put the treasure tile in the smaller (20%) section
+        tiles[9][9] = TileType.Treasure;
+
+        // Create a new map with the tiles created above
+        basicMap = new BasicMap(tiles);
+
+        // Check that the function returns true
+        assertFalse(basicMap.isPlayable());
     }
 }

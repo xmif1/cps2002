@@ -1,6 +1,8 @@
 package com.xd.cps2002;
 
+import java.util.Arrays;
 import java.util.Random;
+import java.util.Stack;
 
 public class BasicMap extends Map {
 
@@ -12,8 +14,9 @@ public class BasicMap extends Map {
 
     /**
      * Defines the minimum percentage of tiles in the map from which a player needs to be able to reach the treasure.
+     * For this type of map at least 75% of tiles should be reachable
      */
-    private final double minimumWinnableTiles = 0.10;
+    private final double minimumWinnableTiles = 0.75;
 
     /**
      * Constructor used to initialize an empty {@code BasicMap} object. It uses the constructor of the {@link Map} super
@@ -114,11 +117,65 @@ public class BasicMap extends Map {
     }
 
     /**
-     * Function to check if the player can reach the treasure starting from at least 75% of the grass tiles.
+     * Function to check if the player can reach the treasure starting from at least 75% of the grass tiles. The
+     * function also computes from which tiles the player can reach the treasure.
      * @return true if the player can reach the treasure from at least 75% of the grass tiles and false otherwise.
+     * @implNote The function carries out a Depth First Search (DFS) traversal of the map starting from the treasure
+     * tile to check which grass tiles are actually connected to the treasure tile. The function also creates an array
+     * of booleans representing the tiles which can
      */
     @Override
     boolean isPlayable() {
-        return true;
+        // Initialize "winnableTiles" with all tiles set to false
+        winnableTiles = new boolean[size][size];
+        for(boolean[] row : winnableTiles) {
+            Arrays.fill(row, false);
+        }
+
+        // Store a stack of tile positions which still need to be checked
+        Stack<Position> uncheckedPositions = new Stack<>();
+        // Start checking from the treasure tile
+        uncheckedPositions.push(treasurePos);
+
+        /* Perform a DFS traversal of the 2D tile array to check which grass tiles can reach the treasure */
+        // Keep a count of grass tiles which have been reached
+        int reachableCount = 0;
+
+        // Keep traversing until no more possible positions remain
+        while(!uncheckedPositions.empty()) {
+            // Get the top position on the stack and get the type of the tile
+            Position currentPos = uncheckedPositions.pop();
+
+            // Check all of the neighbouring tiles
+            for(int xOffset = -1; xOffset <= 1; xOffset++) {
+                for(int yOffset = -1; yOffset <= 1; yOffset++) {
+                    // Check the the move is either up, down, left, or right (i.e. at least one co-ordinate must remain
+                    // the same)
+                    if(xOffset == 0 ^ yOffset == 0) {
+                        Position adjacentPos = new Position(currentPos.x + xOffset, currentPos.y + yOffset);
+                        // Check if the adjacent position is valid, has not been visited yet and is not a water tile
+                        if(isValidPosition(adjacentPos)
+                            && !winnableTiles[adjacentPos.x][adjacentPos.y]
+                            && getTileType(adjacentPos) != TileType.Water) {
+                            // If so, add the position to the stack, so that its neighbouring tiles can also be
+                            // traversed.
+                            uncheckedPositions.push(adjacentPos);
+
+                            // Mark the adjacent tile as winnable and update the count of tiles reached
+                            winnableTiles[adjacentPos.x][adjacentPos.y] = true;
+                            reachableCount++;
+                        }
+                    }
+                }
+            }
+        }
+        // Set the treasure tile to unreachable (since the player should not be able to start playing on this tile)
+        winnableTiles[treasurePos.x][treasurePos.y] = false;
+
+        // Calculate the minimum number of reachable tiles needed
+        int minReachableTiles = (int) Math.floor(size * size * minimumWinnableTiles);
+
+        // Check that the minimum number of reachable tiles is met.
+        return reachableCount >= minReachableTiles;
     }
 }
