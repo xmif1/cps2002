@@ -141,9 +141,11 @@ public abstract class Map {
      * @apiNote The function expects that the position actually exists in the map.
      * @implNote Note that if the tile at {@code pos} is actually the treasure tile, the function returns false, since
      * the player should not be able to start from this tile.
+     * @throws NullPointerException if given a null {@link Position} argument.
+     * @throws IllegalArgumentException if given a {@link Position} which does not exist in the map.
      */
     public boolean isPositionWinnable(Position pos) {
-        // Throw an exception if pos is null
+        // Throw an exception if pos argument is null
         if(pos == null) {
             throw new NullPointerException("Given tile position cannot be null.");
         }
@@ -173,8 +175,15 @@ public abstract class Map {
      * convenience function to allow use of the {@link Position} class.
      * @param pos position in the map to be validated
      * @return true if {@code pos} is a valid tile position in the map and false otherwise.
+     * @implNote Note that this function returns false if the position is null. It does not throw an exception since
+     * it would not make sense given that the function is used for validation of positions.
      */
     boolean isValidPosition(Position pos) {
+        // Return false if the position is null
+        if(pos == null) {
+            return false;
+        }
+
         // Pass the x and y coordinates to the other version of the function
         return isValidPosition(pos.x, pos.y);
     }
@@ -186,6 +195,8 @@ public abstract class Map {
      * @apiNote The function indexes tiles in the map starting from (0,0), which is the tile in the upper left corner
      * of the map.
      * @return the type of the tile at position (x,y)
+     * @throws NullPointerException if given a null {@link Position} argument.
+     * @throws IllegalArgumentException if given a {@link Position} which does not exist in the map.
      */
     TileType getTileType(int x, int y) {
         // If the map tiles have not been generated yet, throw an exception
@@ -211,6 +222,12 @@ public abstract class Map {
      * @return the type of the tile at position (x,y)
      */
     TileType getTileType(Position pos) {
+        // Throw an exception if pos argument is null
+        if(pos == null) {
+            throw new NullPointerException("Given tile position cannot be null.");
+        }
+
+        // Pass the x and y coordinates to the other version of the function
         return getTileType(pos.x, pos.y);
     }
 }

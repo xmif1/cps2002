@@ -225,7 +225,7 @@ public class BasicMapTest {
 
     @Test
     public void getTileTypeXY_throwsNullPointerException_IfMapHasNotYetBeenGenerated() {
-        // Expect getTileType to throw an IllegalArgumentException
+        // Expect getTileType to throw a NullPointerException
         expectedException.expect(NullPointerException.class);
         expectedException.expectMessage("Map tiles have not been generated yet");
 
@@ -267,10 +267,21 @@ public class BasicMapTest {
     }
 
     @Test
+    public void getTileTypePos_throwsNullPointerException_IfPositionIsNull() {
+        // Expect getTileType to throw a NullPointerException
+        expectedException.expect(NullPointerException.class);
+        expectedException.expectMessage("Given tile position cannot be null.");
+
+        // Try to get a tile from a null position in the map
+        Position pos = null;
+        basicMap.getTileType(pos);
+    }
+
+    @Test
     public void getTileTypePos_throwsNullPointerException_IfMapHasNotYetBeenGenerated() {
         // Expect getTileType to throw a NullPointerException
         expectedException.expect(NullPointerException.class);
-        expectedException.expectMessage("Map tiles have not been generated yet");
+        expectedException.expectMessage("Map tiles have not been generated yet.");
 
         // Create a new empty map with no tiles
         basicMap = new BasicMap(defaultSize);
@@ -351,6 +362,15 @@ public class BasicMapTest {
 
         // Expect the function to return true
         assertTrue(basicMap.isValidPosition(pos));
+    }
+
+    @Test
+    public void isValidPositionPos_returnsFalse_ifPositionObjectIsNull() {
+        // Try to check if a null position exists within the 5x5 map
+        Position pos = null;
+
+        // Expect the function to return false
+        assertFalse(basicMap.isValidPosition(pos));
     }
 
     @Test
