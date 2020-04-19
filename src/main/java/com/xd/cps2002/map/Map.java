@@ -1,4 +1,7 @@
-package com.xd.cps2002;
+package com.xd.cps2002.map;
+
+import com.xd.cps2002.Player;
+import com.xd.cps2002.Position;
 
 public abstract class Map {
     /**
@@ -198,7 +201,7 @@ public abstract class Map {
      * @throws NullPointerException if given a null {@link Position} argument.
      * @throws IllegalArgumentException if given a {@link Position} which does not exist in the map.
      */
-    TileType getTileType(int x, int y) {
+    public TileType getTileType(int x, int y) {
         // If the map tiles have not been generated yet, throw an exception
         if(tiles == null) {
             throw new NullPointerException("Map tiles have not been generated yet");

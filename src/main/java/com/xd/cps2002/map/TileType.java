@@ -1,4 +1,6 @@
-package com.xd.cps2002;
+package com.xd.cps2002.map;
+
+import com.xd.cps2002.PlayerStatus;
 
 /**
  *  The {@link TileType} enum defines the different types of tiles used in different maps.
