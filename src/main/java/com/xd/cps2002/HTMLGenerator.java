@@ -1,5 +1,8 @@
 package com.xd.cps2002;
 
+import com.xd.cps2002.map.Map;
+import com.xd.cps2002.map.TileType;
+
 import java.util.ArrayList;
 import java.util.Collections;
 

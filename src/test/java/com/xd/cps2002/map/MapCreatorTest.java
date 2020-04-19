@@ -1,12 +1,10 @@
-package com.xd.cps2002;
+package com.xd.cps2002.map;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import static com.xd.cps2002.MapCreator.createMap;
+import static com.xd.cps2002.map.MapCreator.createMap;
 import static org.junit.Assert.*;
 
 public class MapCreatorTest {

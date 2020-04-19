@@ -1,5 +1,6 @@
-package com.xd.cps2002;
+package com.xd.cps2002.map;
 
+import com.xd.cps2002.Position;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -14,10 +15,17 @@ import static org.junit.Assert.*;
  */
 public class BasicMapTest {
 
-    // BasicMap object used to test different methods
+    /**
+     * BasicMap object used to test different methods
+     */
     private BasicMap basicMap;
+    /**
+     * Default map size used in most of the tests.
+     */
     private final int defaultSize = 5;
-    // Default pre-generated map used in tests requiring a priori knowledge of the tiles
+    /**
+     * Default pre-generated map used in tests requiring a priori knowledge of the tiles
+     */
     private TileType[][] defaultTiles;
 
     @Rule
@@ -194,13 +202,31 @@ public class BasicMapTest {
         basicMap = new BasicMap(size);
     }
 
+    /*
+     * The tests below test the version of getTileType which takes individual x and y coordinates.
+     */
+
     /**
-     * The {@link Map#getTileType(int, int)} method is only tested for error cases since it is already used correctly in
-     * the test {@code BasicMap_storesAnArrayOf2DObjects_IfGivenA2DArrayofTilesWithEqualDimensions}
+     * Note that this test is very similar to the unit test
+     * {@link BasicMapTest#BasicMap_storesAnArrayOf2DObjects_IfGivenA2DArrayofTilesWithEqualDimensions()}. However the
+     * test was added for the sake of completeness.
      */
     @Test
-    public void getTileType_throwsNullPointerException_IfMapHasNotYetBeenGenerated() {
-        // Expect getTileType to throw an IllegalArgumentException
+    public void getTileTypeXY_returnsCorrectTileType_ifTileExists() {
+        // Try to initialize the map with a pre-generated 2D array of tiles with size 5x5
+        basicMap = new BasicMap(defaultTiles);
+
+        // Get each tile in the map using getTileType and make sure the type matches that of the pre-generated tiles
+        for(int i = 0; i < defaultSize; i++) {
+            for(int j = 0; j < defaultSize; j++) {
+                assertEquals(defaultTiles[i][j], basicMap.getTileType(i,j));
+            }
+        }
+    }
+
+    @Test
+    public void getTileTypeXY_throwsNullPointerException_IfMapHasNotYetBeenGenerated() {
+        // Expect getTileType to throw a NullPointerException
         expectedException.expect(NullPointerException.class);
         expectedException.expectMessage("Map tiles have not been generated yet");
 
@@ -213,7 +239,7 @@ public class BasicMapTest {
     }
 
     @Test
-    public void getTileType_throwsIllegalArgumentException_IfGivenPositionIsInvalid() {
+    public void getTileTypeXY_throwsIllegalArgumentException_IfGivenPositionIsInvalid() {
         // Expect getTileType to throw an IllegalArgumentException
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("Given tile position is not valid.");
@@ -223,8 +249,66 @@ public class BasicMapTest {
         basicMap.getTileType(x,y);
     }
 
+    /*
+     * The tests below test the version of isValidPosition which takes a Position object.
+     */
+
     @Test
-    public void isValidPosition_returnsTrue_ifPositionIsValid() {
+    public void getTileTypePos_returnsCorrectTileType_ifTileExists() {
+        // Try to initialize the map with a pre-generated 2D array of tiles with size 5x5
+        basicMap = new BasicMap(defaultTiles);
+
+        // Get each tile in the map using getTileType and make sure the type matches that of the pre-generated tiles
+        for(int i = 0; i < defaultSize; i++) {
+            for(int j = 0; j < defaultSize; j++) {
+                Position pos = new Position(i,j);
+                assertEquals(defaultTiles[i][j], basicMap.getTileType(pos));
+            }
+        }
+    }
+
+    @Test
+    public void getTileTypePos_throwsNullPointerException_IfPositionIsNull() {
+        // Expect getTileType to throw a NullPointerException
+        expectedException.expect(NullPointerException.class);
+        expectedException.expectMessage("Given tile position cannot be null.");
+
+        // Try to get a tile from a null position in the map
+        Position pos = null;
+        basicMap.getTileType(pos);
+    }
+
+    @Test
+    public void getTileTypePos_throwsNullPointerException_IfMapHasNotYetBeenGenerated() {
+        // Expect getTileType to throw a NullPointerException
+        expectedException.expect(NullPointerException.class);
+        expectedException.expectMessage("Map tiles have not been generated yet.");
+
+        // Create a new empty map with no tiles
+        basicMap = new BasicMap(defaultSize);
+
+        // Try to get a tile from a position in the map
+        Position pos = new Position(1,3);
+        basicMap.getTileType(pos);
+    }
+
+    @Test
+    public void getTileTypePos_throwsIllegalArgumentException_IfGivenPositionIsInvalid() {
+        // Expect getTileType to throw an IllegalArgumentException
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("Given tile position is not valid.");
+
+        // Try to get a tile from a position which does not exist in the map
+        Position pos = new Position(-2,5);
+        basicMap.getTileType(pos);
+    }
+
+    /*
+     * The tests below test the version of isValidPosition which takes individual x and y coordinates.
+     */
+
+    @Test
+    public void isValidPositionXY_returnsTrue_ifPositionIsValid() {
         // Try to check if a valid position (x/y coordinates in range 0-4) exists within the 5x5 map
         int x = 3, y = 2;
 
@@ -233,7 +317,7 @@ public class BasicMapTest {
     }
 
     @Test
-    public void isValidPosition_returnsFalse_ifXPositionIsNegative() {
+    public void isValidPositionXY_returnsFalse_ifXPositionIsNegative() {
         // Try to check if a position with a negative x coordinate exists within the 5x5 map
         int x = -3, y = 1;
 
@@ -242,7 +326,7 @@ public class BasicMapTest {
     }
 
     @Test
-    public void isValidPosition_returnsFalse_ifYPositionIsNegative() {
+    public void isValidPositionXY_returnsFalse_ifYPositionIsNegative() {
         // Try to check if a position with a negative y coordinate exists within the 5x5 map
         int x = 2, y = -1;
 
@@ -251,7 +335,7 @@ public class BasicMapTest {
     }
 
     @Test
-    public void isValidPosition_returnsFalse_ifXPositionIsTooBig() {
+    public void isValidPositionXY_returnsFalse_ifXPositionIsTooBig() {
         // Try to check if a position with an x coordinate >=5 exists within the 5x5 map (which is indexed from 0 to 4)
         int x = 5, y = 1;
 
@@ -260,12 +344,70 @@ public class BasicMapTest {
     }
 
     @Test
-    public void isValidPosition_returnsFalse_ifYPositionIsTooBig() {
+    public void isValidPositionXY_returnsFalse_ifYPositionIsTooBig() {
         // Try to check if a position with an y coordinate >=5 exists within the 5x5 map (which is indexed from 0 to 4)
         int x = 2, y = 5;
 
         // Expect the function to return false
         assertFalse(basicMap.isValidPosition(x,y));
+    }
+
+    /*
+     * The tests below test the version of isValidPosition which takes a Position object.
+     */
+
+    @Test
+    public void isValidPositionPos_returnsTrue_ifPositionIsValid() {
+        // Try to check if a valid position (x/y coordinates in range 0-4) exists within the 5x5 map
+        Position pos = new Position(3,2);
+
+        // Expect the function to return true
+        assertTrue(basicMap.isValidPosition(pos));
+    }
+
+    @Test
+    public void isValidPositionPos_returnsFalse_ifPositionObjectIsNull() {
+        // Try to check if a null position exists within the 5x5 map
+        Position pos = null;
+
+        // Expect the function to return false
+        assertFalse(basicMap.isValidPosition(pos));
+    }
+
+    @Test
+    public void isValidPositionPos_returnsFalse_ifXPositionIsNegative() {
+        // Try to check if a position with a negative x coordinate exists within the 5x5 map
+        Position pos = new Position(-3, 1);
+
+        // Expect the function to return false
+        assertFalse(basicMap.isValidPosition(pos));
+    }
+
+    @Test
+    public void isValidPositionPos_returnsFalse_ifYPositionIsNegative() {
+        // Try to check if a position with a negative y coordinate exists within the 5x5 map
+        Position pos = new Position(2, -1);
+
+        // Expect the function to return false
+        assertFalse(basicMap.isValidPosition(pos));
+    }
+
+    @Test
+    public void isValidPositionPos_returnsFalse_ifXPositionIsTooBig() {
+        // Try to check if a position with an x coordinate >=5 exists within the 5x5 map (which is indexed from 0 to 4)
+        Position pos = new Position(5, 1);
+
+        // Expect the function to return false
+        assertFalse(basicMap.isValidPosition(pos));
+    }
+
+    @Test
+    public void isValidPositionPos_returnsFalse_ifYPositionIsTooBig() {
+        // Try to check if a position with a y coordinate >=5 exists within the 5x5 map (which is indexed from 0 to 4)
+        Position pos = new Position(2, 5);
+
+        // Expect the function to return false
+        assertFalse(basicMap.isValidPosition(pos));
     }
 
     @Test
@@ -357,8 +499,122 @@ public class BasicMapTest {
         // Check that none of the tiles in the map are set to null
         for(int i = 0; i < size; i++) {
             for(int j = 0; j < size; j++) {
-                assertTrue(basicMap.getTileType(i, j) != null);
+                assertNotNull(basicMap.getTileType(i, j));
             }
         }
+    }
+
+    @Test public void isPlayable_returnsTrue_IfTheTreasureCanBeReachedFrom75PercentOfTiles() {
+        // Create a new 10x10 map with a strip of water tiles dividing it (80% of the map is playable)
+        int size = 10;
+        TileType[][] tiles = new TileType[size][size];
+        for(int i = 0; i < size; i++) {
+            // Create a strip of water tiles in row 8
+            TileType tile = (i == 8) ? TileType.Water : TileType.Grass;
+            for(int j = 0; j < size; j++) {
+                tiles[i][j] = tile;
+            }
+        }
+
+        // Put the treasure tile in the larger (80%) section
+        tiles[0][0] = TileType.Treasure;
+
+        // Create a new map with the tiles created above
+        basicMap = new BasicMap(tiles);
+
+        // Check that the function returns true
+        assertTrue(basicMap.isPlayable());
+    }
+
+    @Test public void isPlayable_returnsFalse_IfTheTreasureCannotBeReachedFrom75PercentOfTiles() {
+        // Create a new 10x10 map with a strip of water tiles dividing it (20% of the map is playable)
+        int size = 10;
+        TileType[][] tiles = new TileType[size][size];
+        for(int i = 0; i < size; i++) {
+            // Create a strip of water tiles in row 8
+            TileType tile = (i == 8) ? TileType.Water : TileType.Grass;
+            for(int j = 0; j < size; j++) {
+                tiles[i][j] = tile;
+            }
+        }
+
+        // Put the treasure tile in the smaller (20%) section
+        tiles[9][9] = TileType.Treasure;
+
+        // Create a new map with the tiles created above
+        basicMap = new BasicMap(tiles);
+
+        // Check that the function returns true
+        assertFalse(basicMap.isPlayable());
+    }
+
+    @Test public void isPositionWinnable_correctlyReturnsIfATileIsWinnable_ifGivenAValidPosition() {
+        // Create a new 10x10 map with a strip of water tiles dividing it (80% of the map is playable)
+        int size = 10;
+        TileType[][] tiles = new TileType[size][size];
+        for(int i = 0; i < size; i++) {
+            // Create a strip of water tiles in row 8
+            TileType tile = (i == 8) ? TileType.Water : TileType.Grass;
+            for(int j = 0; j < size; j++) {
+                tiles[i][j] = tile;
+            }
+        }
+
+        // Put the treasure tile in the larger (80%) section
+        tiles[0][0] = TileType.Treasure;
+
+        // Create a new map with the tiles created above
+        basicMap = new BasicMap(tiles);
+
+        // Perform a DFA traversal to find winnable tiles
+        basicMap.isPlayable();
+
+        // Check that the treasure tile is not winnable
+        assertFalse(basicMap.isPositionWinnable(new Position(0,0)));
+
+        // Check that all tiles in the first 8 rows (except the treasure tile at (0,0)) are be winnable
+        for(int i = 1; i < size; i++) {
+            boolean expected = i < 8;
+            for(int j = 0; j < size; j++) {
+                Position position = new Position(i,j);
+                assertEquals(expected, basicMap.isPositionWinnable(position));
+            }
+        }
+    }
+
+    @Test public void isPositionWinnable_ThrowsNullPointerException_ifGivenANullPosition() {
+        // Expect getTileType to throw a NullPointerException
+        expectedException.expect(NullPointerException.class);
+        expectedException.expectMessage("Given tile position cannot be null.");
+
+        // Perform a DFA traversal to find winnable tiles
+        basicMap.isPlayable();
+
+        // Try to check if a player can win from a null position
+        Position pos = null;
+        basicMap.isPositionWinnable(pos);
+    }
+
+    @Test public void isPositionWinnable_ThrowsNullPointerException_ifIsPlayableHasNotBeenRunYet() {
+        // Expect getTileType to throw a NullPointerException
+        expectedException.expect(NullPointerException.class);
+        expectedException.expectMessage("The isPlayable function must be run before isPositionWinnable.");
+
+        // Try to check if a player can win from a position in the map without running isPlayable first
+        Position pos = new Position(3,4);
+        basicMap.isPositionWinnable(pos);
+    }
+
+    @Test public void isPositionWinnable_ThrowsInvalidArgumentException_ifGivenAnInvalidPosition() {
+        // Expect getTileType to throw an IllegalArgumentException
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("Given tile position is not valid.");
+
+        // Perform a DFA traversal to find winnable tiles
+        basicMap.isPlayable();
+
+        // Try to check if a player can win from a position outside of the map bounds
+        Position pos = new Position(-6,7);
+        basicMap.isPositionWinnable(pos);
     }
 }

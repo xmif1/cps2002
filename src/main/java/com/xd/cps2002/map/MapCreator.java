@@ -1,4 +1,4 @@
-package com.xd.cps2002;
+package com.xd.cps2002.map;
 
 /** The MapCreator class is used to create different types of {@link Map} objects. This class is the
  * "creator" class used to implement the factory design pattern.
