@@ -268,7 +268,7 @@ public class BasicMapTest {
 
     @Test
     public void getTileTypePos_throwsNullPointerException_IfMapHasNotYetBeenGenerated() {
-        // Expect getTileType to throw an IllegalArgumentException
+        // Expect getTileType to throw a NullPointerException
         expectedException.expect(NullPointerException.class);
         expectedException.expectMessage("Map tiles have not been generated yet");
 
@@ -527,7 +527,7 @@ public class BasicMapTest {
         assertFalse(basicMap.isPlayable());
     }
 
-    @Test public void isWinnable_correctlyReturnsIfATileIsWinnable_ifGivenAValidPosition() {
+    @Test public void isPositionWinnable_correctlyReturnsIfATileIsWinnable_ifGivenAValidPosition() {
         // Create a new 10x10 map with a strip of water tiles dividing it (80% of the map is playable)
         int size = 10;
         TileType[][] tiles = new TileType[size][size];
@@ -545,7 +545,7 @@ public class BasicMapTest {
         // Create a new map with the tiles created above
         basicMap = new BasicMap(tiles);
 
-        // Perform a DFA traversal to fin winnable tiles
+        // Perform a DFA traversal to find winnable tiles
         basicMap.isPlayable();
 
         // Check that the treasure tile is not winnable
@@ -559,5 +559,31 @@ public class BasicMapTest {
                 assertEquals(expected, basicMap.isPositionWinnable(position));
             }
         }
+    }
+
+    @Test public void isPositionWinnable_ThrowsNullPointerException_ifGivenANullPosition() {
+        // Expect getTileType to throw a NullPointerException
+        expectedException.expect(NullPointerException.class);
+        expectedException.expectMessage("Given tile position cannot be null.");
+
+        // Perform a DFA traversal to find winnable tiles
+        basicMap.isPlayable();
+
+        // Try to check if a player can win from a null position
+        Position pos = null;
+        basicMap.isPositionWinnable(pos);
+    }
+
+    @Test public void isPositionWinnable_ThrowsInvalidArgumentException_ifGivenAnInvalidPosition() {
+        // Expect getTileType to throw an IllegalArgumentException
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("Given tile position is not valid.");
+
+        // Perform a DFA traversal to find winnable tiles
+        basicMap.isPlayable();
+
+        // Try to check if a player can win from a position outside of the map bounds
+        Position pos = new Position(-6,7);
+        basicMap.isPositionWinnable(pos);
     }
 }

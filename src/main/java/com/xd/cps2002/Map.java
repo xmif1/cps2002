@@ -138,10 +138,21 @@ public abstract class Map {
      *  up/down/left/right movements.
      * @param pos The {@code Position} from which the treasure tile needs to be reached.
      * @return returns true if the treasure tile can be reached from the given map position and false otherwise.
+     * @apiNote The function expects that the position actually exists in the map.
      * @implNote Note that if the tile at {@code pos} is actually the treasure tile, the function returns false, since
      * the player should not be able to start from this tile.
      */
     public boolean isPositionWinnable(Position pos) {
+        // Throw an exception if pos is null
+        if(pos == null) {
+            throw new NullPointerException("Given tile position cannot be null.");
+        }
+
+        // Throw an exception if pos is not a valid position in the map
+        if(!isValidPosition(pos)) {
+            throw new IllegalArgumentException("Given tile position is not valid.");
+        }
+
         // Check if the given position is winnable using the "winnableTiles" array
         return winnableTiles[pos.x][pos.y];
     }
