@@ -158,6 +158,11 @@ public abstract class Map {
             throw new IllegalArgumentException("Given tile position is not valid.");
         }
 
+        // If the "isPlayable" function has not been run yet and "winnableTiles" is still empty throw an exception
+        if(winnableTiles == null) {
+            throw new NullPointerException("The isPlayable function must be run before isPositionWinnable.");
+        }
+
         // Check if the given position is winnable using the "winnableTiles" array
         return winnableTiles[pos.x][pos.y];
     }
@@ -204,7 +209,7 @@ public abstract class Map {
     public TileType getTileType(int x, int y) {
         // If the map tiles have not been generated yet, throw an exception
         if(tiles == null) {
-            throw new NullPointerException("Map tiles have not been generated yet");
+            throw new NullPointerException("Map tiles have not been generated yet.");
         }
 
         // If the given position is invalid throw an exception
@@ -222,7 +227,7 @@ public abstract class Map {
      * @param pos position of the tile of interest in the map.
      * @apiNote The function indexes tiles in the map starting from (0,0), which is the tile in the upper left corner
      * of the map.
-     * @return the type of the tile at position (x,y)
+     * @return the type of the tile at position {@code pos}
      */
     TileType getTileType(Position pos) {
         // Throw an exception if pos argument is null

@@ -595,6 +595,16 @@ public class BasicMapTest {
         basicMap.isPositionWinnable(pos);
     }
 
+    @Test public void isPositionWinnable_ThrowsNullPointerException_ifIsPlayableHasNotBeenRunYet() {
+        // Expect getTileType to throw a NullPointerException
+        expectedException.expect(NullPointerException.class);
+        expectedException.expectMessage("The isPlayable function must be run before isPositionWinnable.");
+
+        // Try to check if a player can win from a position in the map without running isPlayable first
+        Position pos = new Position(3,4);
+        basicMap.isPositionWinnable(pos);
+    }
+
     @Test public void isPositionWinnable_ThrowsInvalidArgumentException_ifGivenAnInvalidPosition() {
         // Expect getTileType to throw an IllegalArgumentException
         expectedException.expect(IllegalArgumentException.class);
