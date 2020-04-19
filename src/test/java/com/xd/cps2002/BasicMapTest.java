@@ -526,4 +526,38 @@ public class BasicMapTest {
         // Check that the function returns true
         assertFalse(basicMap.isPlayable());
     }
+
+    @Test public void isWinnable_correctlyReturnsIfATileIsWinnable_ifGivenAValidPosition() {
+        // Create a new 10x10 map with a strip of water tiles dividing it (80% of the map is playable)
+        int size = 10;
+        TileType[][] tiles = new TileType[size][size];
+        for(int i = 0; i < size; i++) {
+            // Create a strip of water tiles in row 8
+            TileType tile = (i == 8) ? TileType.Water : TileType.Grass;
+            for(int j = 0; j < size; j++) {
+                tiles[i][j] = tile;
+            }
+        }
+
+        // Put the treasure tile in the larger (80%) section
+        tiles[0][0] = TileType.Treasure;
+
+        // Create a new map with the tiles created above
+        basicMap = new BasicMap(tiles);
+
+        // Perform a DFA traversal to fin winnable tiles
+        basicMap.isPlayable();
+
+        // Check that the treasure tile is not winnable
+        assertFalse(basicMap.isPositionWinnable(new Position(0,0)));
+
+        // Check that all tiles in the first 8 rows (except the treasure tile at (0,0)) are be winnable
+        for(int i = 1; i < size; i++) {
+            boolean expected = i < 8;
+            for(int j = 0; j < size; j++) {
+                Position position = new Position(i,j);
+                assertEquals(expected, basicMap.isPositionWinnable(position));
+            }
+        }
+    }
 }

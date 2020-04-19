@@ -122,7 +122,8 @@ public class BasicMap extends Map {
      * @return true if the player can reach the treasure from at least 75% of the grass tiles and false otherwise.
      * @implNote The function carries out a Depth First Search (DFS) traversal of the map starting from the treasure
      * tile to check which grass tiles are actually connected to the treasure tile. The function also creates an array
-     * of booleans representing the tiles which can
+     * of booleans ({@link Map#winnableTiles}) representing the tiles which are connected to the treasure tile. The
+     * elements of this array can be accessed using the {@link Map#isPositionWinnable(Position)} function.
      */
     @Override
     boolean isPlayable() {

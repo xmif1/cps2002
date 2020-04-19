@@ -17,7 +17,11 @@ public abstract class Map {
 
     /**
      * The {@code winnableTiles} member stores a 2D array of tiles from which a player can reach the treasure tile and
-     * win the game.
+     * win the game. It is assumed that this array does not mark the treasure tile itself as winnable however, since a
+     * player should not start directly on a treasure tile.
+     *
+     * The reason why the class does not implement a function to directly return start positions for the players is so
+     * that the {@link Map} class can operate completely independently of the {@link Player} and {@link Game} classes.
      */
     protected boolean[][] winnableTiles;
 
@@ -123,8 +127,24 @@ public abstract class Map {
      * Method used to check if the given map can be played by a player. This method should also be implemented by the
      * sub-class given that map generation is also handled there.
      * @return true if the player can reach the treasure starting from any point in the map.
+     * @implNote It is assumed that this function will also set the member variable {@link Map#winnableTiles} while
+     * checking that the map is playable. Moreover this was left to be implemented by the subclasses since it assumed
+     * that given that they may generate maps differently, they may also need to traverse the maps differently as well.
      */
     abstract boolean isPlayable();
+
+    /**
+     *  Used to check if starting from a particular position the player can reach the treasure tile by just using
+     *  up/down/left/right movements.
+     * @param pos The {@code Position} from which the treasure tile needs to be reached.
+     * @return returns true if the treasure tile can be reached from the given map position and false otherwise.
+     * @implNote Note that if the tile at {@code pos} is actually the treasure tile, the function returns false, since
+     * the player should not be able to start from this tile.
+     */
+    public boolean isPositionWinnable(Position pos) {
+        // Check if the given position is winnable using the "winnableTiles" array
+        return winnableTiles[pos.x][pos.y];
+    }
 
     /**
      * Function used to check if the given coordinate is a valid position which exists in the map.
