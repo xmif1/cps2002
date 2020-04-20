@@ -62,14 +62,11 @@ public class MainGame{
      * i.   Any players in the game have been initialized (i.e. MainGame.players is not null)
      * ii.  The map_size is not less than 5 and not greater than 50.
      * iii. If the number of players is at least 5, than the minimum map_size is at least 8.
-     * iv.  The map_type corresponds to a defined concrete map implementation, as established by the MapCreator.
      * @param map_size is the size of the map.
      * @throws SetupOperationPrecedenceException is thrown if MainGame.players is null. [Criteria i. above]
      * @throws InvalidMapSizeException is thrown if the map_size is invalid. [Criteria ii. & iii. above]
-     * @throws IllegalArgumentException is thrown whenever the map type specified is invalid. [Criteria iv. above]
      */
-    public void setupMap(String map_type, int map_size) throws SetupOperationPrecedenceException, InvalidMapSizeException,
-            IllegalArgumentException{
+    public void setupMap(int map_size) throws SetupOperationPrecedenceException, InvalidMapSizeException{
 
         if(players == null){ // if players have not been initialized
             throw new SetupOperationPrecedenceException("Invalid attempt to setup Map instance before Player instances.");
@@ -82,7 +79,7 @@ public class MainGame{
         }
         else{ // else initialize map
             do{
-                map = MapCreator.createMap(map_type, map_size);
+                map = MapCreator.createMap("basic", map_size);
             } while(!map.isPlayable()); // attempt map creation until generated map is playable
         }
     }
