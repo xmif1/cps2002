@@ -3,6 +3,8 @@ package com.xd.cps2002;
 import com.xd.cps2002.map.Map;
 import com.xd.cps2002.map.MapCreator;
 
+import java.util.Random;
+
 /**
  * The MainGame class is responsible for coordinating the main logic of the game, and the primary interface for user
  * input and provision of output to the user. It implements a Singleton design pattern, and is designed to be the
@@ -106,7 +108,13 @@ public class MainGame{
         }
         else{
             for(Player player : players){
-                // TO-DO
+                Position starting_position;
+                do{
+                    starting_position = new Position(new Random().nextInt(map.getSize()),
+                                                     new Random().nextInt(map.getSize()));
+                }while(!map.isPositionWinnable(starting_position));
+
+                player.setStartPosition(starting_position);
             }
         }
     }
