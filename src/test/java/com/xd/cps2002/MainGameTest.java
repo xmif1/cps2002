@@ -155,7 +155,7 @@ public class MainGameTest{
      */
     @Test
     public void mainGame_resetTest(){
-        mainGame.reset();
+        MainGame.reset();
 
         assertNull(MainGame.players);
         assertNull(MainGame.map);
