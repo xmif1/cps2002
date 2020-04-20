@@ -1,5 +1,8 @@
 package com.xd.cps2002;
 
+import com.xd.cps2002.map.Map;
+import com.xd.cps2002.map.MapCreator;
+
 /**
  * The MainGame class is responsible for coordinating the main logic of the game, and the primary interface for user
  * input and provision of output to the user. It implements a Singleton design pattern, and is designed to be the
