@@ -128,7 +128,7 @@ public class BasicMap extends Map {
      * elements of this array can be accessed using the {@link Map#isPositionWinnable(Position)} function.
      */
     @Override
-    boolean isPlayable() {
+    public boolean isPlayable() {
         // Initialize "winnableTiles" with all tiles set to false
         winnableTiles = new boolean[size][size];
         for(boolean[] row : winnableTiles) {

@@ -24,7 +24,7 @@ public abstract class Map {
      * player should not start directly on a treasure tile.
      *
      * The reason why the class does not implement a function to directly return start positions for the players is so
-     * that the {@link Map} class can operate completely independently of the {@link Player} and {@link Game} classes.
+     * that the {@link Map} class can operate completely independently of the {@link Player} and {@link MainGame} classes.
      */
     protected boolean[][] winnableTiles;
 
@@ -124,7 +124,7 @@ public abstract class Map {
      * Method used to randomly generate the map. This method should be implemented by each subclass of the Map class to
      * allow different methods of map generation.
      */
-    abstract void generate();
+    public abstract void generate();
 
     /**
      * Method used to check if the given map can be played by a player. This method should also be implemented by the
@@ -134,7 +134,7 @@ public abstract class Map {
      * checking that the map is playable. Moreover this was left to be implemented by the subclasses since it assumed
      * that given that they may generate maps differently, they may also need to traverse the maps differently as well.
      */
-    abstract boolean isPlayable();
+    public abstract boolean isPlayable();
 
     /**
      *  Used to check if starting from a particular position the player can reach the treasure tile by just using
@@ -173,7 +173,7 @@ public abstract class Map {
      * @param y y-coordinate in the map
      * @return true if the given (x,y) coordinate is a valid tile position in the map and false otherwise.
      */
-    boolean isValidPosition(int x, int y) {
+    public boolean isValidPosition(int x, int y) {
         // Check if the x and y coordinates are within the ranges of the "tiles" array (from 0 to size)
         return x >= 0 && x < size && y >= 0 && y < size;
     }
@@ -186,7 +186,7 @@ public abstract class Map {
      * @implNote Note that this function returns false if the position is null. It does not throw an exception since
      * it would not make sense given that the function is used for validation of positions.
      */
-    boolean isValidPosition(Position pos) {
+    public boolean isValidPosition(Position pos) {
         // Return false if the position is null
         if(pos == null) {
             return false;
@@ -229,7 +229,7 @@ public abstract class Map {
      * of the map.
      * @return the type of the tile at position {@code pos}
      */
-    TileType getTileType(Position pos) {
+    public TileType getTileType(Position pos) {
         // Throw an exception if pos argument is null
         if(pos == null) {
             throw new NullPointerException("Given tile position cannot be null.");
