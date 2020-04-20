@@ -1,5 +1,7 @@
 package com.xd.cps2002;
 
+import sun.rmi.rmic.Main;
+
 /**
  * The MainGame class is responsible for coordinating the main logic of the game, and the primary interface for user
  * input and provision of output to the user. It implements a Singleton design pattern, and is designed to be the
@@ -36,6 +38,14 @@ public class MainGame{
      */
     public static void dereferenceMainGame(){
         instance = null;
+    }
+
+    /**
+     * Sets the MainGame.players and MainGame.map to null, allowing for the setup functions to be called again sequentially.
+     */
+    public static void reset(){
+        MainGame.players = null;
+        MainGame.map = null;
     }
 
     /**
@@ -81,6 +91,22 @@ public class MainGame{
             do{
                 map = MapCreator.createMap("basic", map_size);
             } while(!map.isPlayable()); // attempt map creation until generated map is playable
+        }
+    }
+
+    public void setPlayerPositions() throws SetupOperationPrecedenceException{
+        if(players == null){
+            throw new SetupOperationPrecedenceException("Invalid attempt to set players positions when no Players " +
+                    "initialized.");
+        }
+        else if(map == null){
+            throw new SetupOperationPrecedenceException("Invalid attempt to set players positions when no Map has been" +
+                    " initialized.");
+        }
+        else{
+            for(Player player : players){
+                // TO-DO
+            }
         }
     }
 }
