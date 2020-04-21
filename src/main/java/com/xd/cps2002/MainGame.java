@@ -12,6 +12,11 @@ import java.util.Random;
  * setup and is designed to prevent the execution of setup steps in an invalid procedural order, if done so through this
  * class. Otherwise access to the sub-systems is left unhindered by this class.
  *
+ * The setup sequence via this class is intended to be executed in the following manner, with a number of checks to
+ * ensure so:
+ *
+ * [label:start setupPlayers(int n_players) -> setupMap(int map_size) -> setPlayerPositions()] |-> reset() goto:start
+ *
  * @author Xandru Mifsud
  */
 public class MainGame{
@@ -81,7 +86,7 @@ public class MainGame{
      */
     public void setupMap(int map_size) throws SetupOperationPrecedenceException, InvalidMapSizeException{
 
-        if(players == null){ // if players have not been initialized
+        if(players == null){ // if players have not been initialized i.e. MainGame.players is null
             throw new SetupOperationPrecedenceException("Invalid attempt to setup Map instance before Player instances.");
         }
         else if(51 <= map_size || map_size <= 4){ // else if map_size is outside the global minimum and maximum size
@@ -97,35 +102,50 @@ public class MainGame{
         }
     }
 
+    /**
+     * Initializes the starting position for all the Player instance in MainGame.players.
+     * @throws SetupOperationPrecedenceException is thrown if a Map instance has not already been created, or if
+     *         MainGame.players is null.
+     */
     public void setPlayerPositions() throws SetupOperationPrecedenceException{
-        if(players == null){
+
+        if(players == null){ // if players have not been initialized i.e. MainGame.players is null
             throw new SetupOperationPrecedenceException("Invalid attempt to set players positions when no Players " +
                     "initialized.");
         }
-        else if(map == null){
+        else if(map == null){ // else if a Map instance has not already been created
             throw new SetupOperationPrecedenceException("Invalid attempt to set players positions when no Map has been" +
                     " initialized.");
         }
         else{
+            // for each player, initialize starting position
             for(Player player : players){
                 Position starting_position;
                 do{
+                    // randomly generate position within map size
                     starting_position = new Position(new Random().nextInt(map.getSize()),
                                                      new Random().nextInt(map.getSize()));
-                }while(!map.isPositionWinnable(starting_position));
+                }while(!map.isPositionWinnable(starting_position)); // check that the treasure tile is reachable
 
-                player.setStartPosition(starting_position);
+                player.setStartPosition(starting_position); // set position
             }
         }
     }
 }
 
+/**
+ * Simple exception intended to be thrown when setup is carried out in an incorrect order, resulting in some unstable
+ * state of the system variables.
+ */
 class SetupOperationPrecedenceException extends Exception{
     public SetupOperationPrecedenceException(String s){
         System.err.println("Setup Operations Executed In Wrong Sequence: " + s);
     }
 }
 
+/**
+ * Exception intended to be thrown whenever an invalid number of players is passed.
+ */
 class InvalidNumberOfPlayersException extends Exception{
     public InvalidNumberOfPlayersException(int n_players){
         System.err.println("Invalid input provided: Cannot have " + n_players + " players." +
@@ -133,6 +153,9 @@ class InvalidNumberOfPlayersException extends Exception{
     }
 }
 
+/**
+ * Exception intended to be thrown whenever the map size is too small or too large, depending on a number of criteria.
+ */
 class InvalidMapSizeException extends Exception{
     public InvalidMapSizeException(int map_size){
         System.err.println("Invalid input provided: Cannot have map of size " + map_size + "x" + map_size + "." +
