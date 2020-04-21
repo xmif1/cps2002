@@ -69,6 +69,10 @@ public class MainGame{
         }
         else if(2 <= n_players && n_players <= 8){ // validation check
             players = new Player[n_players]; // initialize if within range
+
+            for(int i = 0; i < n_players; i++){
+                players[i] = new Player();
+            }
         }
         else{
             throw new InvalidNumberOfPlayersException(n_players); // else throw exception
