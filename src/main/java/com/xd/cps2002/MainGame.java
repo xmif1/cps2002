@@ -21,8 +21,8 @@ import java.util.Random;
  */
 public class MainGame{
     private static MainGame instance = null; // the singleton instance
-    public static Player[] players = null;
-    public static Map map = null;
+    public Player[] players = null;
+    public Map map = null;
 
     /**
      * Private constructor to initialize an MainGame instance (if one does not already exist).
@@ -51,9 +51,9 @@ public class MainGame{
     /**
      * Sets the MainGame.players and MainGame.map to null, allowing for the setup functions to be called again sequentially.
      */
-    public static void reset(){
-        MainGame.players = null;
-        MainGame.map = null;
+    public void reset(){
+        players = null;
+        map = null;
     }
 
     /**
@@ -98,6 +98,7 @@ public class MainGame{
         else{ // else initialize map
             do{
                 map = MapCreator.createMap("basic", map_size);
+                map.generate();
             } while(!map.isPlayable()); // attempt map creation until generated map is playable
         }
     }

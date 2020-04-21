@@ -24,7 +24,7 @@ public class MainGameTest{
 
     @Before
     public void setupMainGameTest(){
-        MainGame.players = new Player[2]; // initialize two players
+        mainGame.players = new Player[2]; // initialize two players
     }
 
     /**
@@ -66,7 +66,7 @@ public class MainGameTest{
      */
     @Test(expected = SetupOperationPrecedenceException.class)
     public void mapInitializedBeforePlayers_setupPlayersTest() throws InvalidNumberOfPlayersException{
-        MainGame.map = new BasicMap(tiles);
+        mainGame.map = new BasicMap(tiles);
         mainGame.setupPlayers(5);
     }
 
@@ -77,7 +77,7 @@ public class MainGameTest{
      */
     @Test(expected = SetupOperationPrecedenceException.class)
     public void noPlayersInitialized_setupMapTest() throws InvalidMapSizeException{
-        MainGame.players = null;
+        mainGame.players = null;
         mainGame.setupMap(8);
     }
 
@@ -111,7 +111,7 @@ public class MainGameTest{
      */
     @Test(expected = InvalidMapSizeException.class)
     public void smallMap_Min5Players_setupMapTest() throws InvalidMapSizeException{
-        MainGame.players = new Player[5];
+        mainGame.players = new Player[5];
 
         int map_size = 5;
         mainGame.setupMap(map_size);
@@ -123,9 +123,9 @@ public class MainGameTest{
      */
     @Test(expected = SetupOperationPrecedenceException.class)
     public void noPlayersInitialized_setPlayerPositionsTest(){
-        MainGame.map = new BasicMap(tiles);
+        mainGame.map = new BasicMap(tiles);
 
-        MainGame.players = null;
+        mainGame.players = null;
         mainGame.setPlayerPositions();
     }
 
@@ -135,9 +135,9 @@ public class MainGameTest{
      */
     @Test(expected = SetupOperationPrecedenceException.class)
     public void noMapInitialized_setPlayerPositionsTest(){
-        MainGame.players = new Player[5];
+        mainGame.players = new Player[5];
 
-        MainGame.map = null;
+        mainGame.map = null;
         mainGame.setPlayerPositions();
     }
 
@@ -146,14 +146,14 @@ public class MainGameTest{
      */
     @Test
     public void mainGame_resetTest(){
-        MainGame.reset();
+        mainGame.reset();
 
-        assertNull(MainGame.players);
-        assertNull(MainGame.map);
+        assertNull(mainGame.players);
+        assertNull(mainGame.map);
     }
 
     @After
     public void teardownMainGameTest(){
-        MainGame.players = null; //dereference
+        mainGame.players = null; //dereference
     }
 }

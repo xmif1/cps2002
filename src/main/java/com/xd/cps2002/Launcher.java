@@ -28,7 +28,7 @@ public class Launcher{
             catch(InvalidNumberOfPlayersException ignored){ }
         }
 
-        int min_map_size = (MainGame.players.length < 5) ? 5 : 8;
+        int min_map_size = (mainGame.players.length < 5) ? 5 : 8;
         while(true){
             System.out.print("Kindly enter a map size between " + min_map_size + " and 50: ");
 
