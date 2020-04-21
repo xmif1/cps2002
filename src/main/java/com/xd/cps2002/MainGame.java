@@ -62,7 +62,7 @@ public class MainGame{
      * @throws SetupOperationPrecedenceException is thrown if a Map instances has already been created.
      * @throws InvalidNumberOfPlayersException is thrown if the number of players is < 2 or > 8.
      */
-    public void setupPlayers(int n_players) throws SetupOperationPrecedenceException, InvalidNumberOfPlayersException{
+    public void setupPlayers(int n_players) throws InvalidNumberOfPlayersException{
         if(map != null){
             throw new SetupOperationPrecedenceException("Invalid attempt to setup Player instances after a Map instance" +
                     " has already been initialized.");
@@ -84,7 +84,7 @@ public class MainGame{
      * @throws SetupOperationPrecedenceException is thrown if MainGame.players is null. [Criteria i. above]
      * @throws InvalidMapSizeException is thrown if the map_size is invalid. [Criteria ii. & iii. above]
      */
-    public void setupMap(int map_size) throws SetupOperationPrecedenceException, InvalidMapSizeException{
+    public void setupMap(int map_size) throws InvalidMapSizeException{
 
         if(players == null){ // if players have not been initialized i.e. MainGame.players is null
             throw new SetupOperationPrecedenceException("Invalid attempt to setup Map instance before Player instances.");
@@ -107,7 +107,7 @@ public class MainGame{
      * @throws SetupOperationPrecedenceException is thrown if a Map instance has not already been created, or if
      *         MainGame.players is null.
      */
-    public void setPlayerPositions() throws SetupOperationPrecedenceException{
+    public void setPlayerPositions(){
 
         if(players == null){ // if players have not been initialized i.e. MainGame.players is null
             throw new SetupOperationPrecedenceException("Invalid attempt to set players positions when no Players " +
@@ -134,10 +134,10 @@ public class MainGame{
 }
 
 /**
- * Simple exception intended to be thrown when setup is carried out in an incorrect order, resulting in some unstable
+ * Simple unchecked exception intended to be thrown when setup is carried out in an incorrect order, resulting in some unstable
  * state of the system variables.
  */
-class SetupOperationPrecedenceException extends Exception{
+class SetupOperationPrecedenceException extends RuntimeException{
     public SetupOperationPrecedenceException(String s){
         System.err.println("Setup Operations Executed In Wrong Sequence: " + s);
     }
