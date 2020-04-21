@@ -43,9 +43,7 @@ public class MainGameTest{
      * @throws SetupOperationPrecedenceException is thrown if a Map instances has already been created (not expected).
      */
     @Test(expected = InvalidNumberOfPlayersException.class)
-    public void belowMin_NoOfPlayers_setupPlayersTest() throws InvalidNumberOfPlayersException,
-            SetupOperationPrecedenceException{
-
+    public void belowMin_NoOfPlayers_setupPlayersTest() throws InvalidNumberOfPlayersException{
         int n_players = 1;
         mainGame.setupPlayers(n_players);
     }
@@ -56,9 +54,7 @@ public class MainGameTest{
      * @throws SetupOperationPrecedenceException is thrown if a Map instances has already been created (not expected).
      */
     @Test(expected = InvalidNumberOfPlayersException.class)
-    public void aboveMax_NoOfPlayers_setupPlayersTest() throws InvalidNumberOfPlayersException,
-            SetupOperationPrecedenceException{
-
+    public void aboveMax_NoOfPlayers_setupPlayersTest() throws InvalidNumberOfPlayersException{
         int n_players = 9;
         mainGame.setupPlayers(n_players);
     }
@@ -69,9 +65,7 @@ public class MainGameTest{
      * @throws InvalidNumberOfPlayersException is thrown if the number of players is < 2 or > 8 (not expected).
      */
     @Test(expected = SetupOperationPrecedenceException.class)
-    public void mapInitializedBeforePlayers_setupPlayersTest() throws SetupOperationPrecedenceException,
-            InvalidNumberOfPlayersException{
-
+    public void mapInitializedBeforePlayers_setupPlayersTest() throws InvalidNumberOfPlayersException{
         MainGame.map = new BasicMap(tiles);
         mainGame.setupPlayers(5);
     }
@@ -82,8 +76,7 @@ public class MainGameTest{
      * @throws InvalidMapSizeException is thrown if the map_size is invalid (not expected).
      */
     @Test(expected = SetupOperationPrecedenceException.class)
-    public void noPlayersInitialized_setupMapTest() throws SetupOperationPrecedenceException, InvalidMapSizeException{
-
+    public void noPlayersInitialized_setupMapTest() throws InvalidMapSizeException{
         MainGame.players = null;
         mainGame.setupMap(8);
     }
@@ -94,8 +87,7 @@ public class MainGameTest{
      * @throws SetupOperationPrecedenceException is thrown if MainGame.players is null (not expected).
      */
     @Test(expected = InvalidMapSizeException.class)
-    public void belowMin_MapSize_setupMapTest() throws InvalidMapSizeException, SetupOperationPrecedenceException{
-
+    public void belowMin_MapSize_setupMapTest() throws InvalidMapSizeException{
         int map_size = 4;
         mainGame.setupMap(map_size);
     }
@@ -106,8 +98,7 @@ public class MainGameTest{
      * @throws SetupOperationPrecedenceException is thrown if MainGame.players is null (not expected).
      */
     @Test(expected = InvalidMapSizeException.class)
-    public void aboveMax_MapSize_setupMapTest() throws InvalidMapSizeException, SetupOperationPrecedenceException{
-
+    public void aboveMax_MapSize_setupMapTest() throws InvalidMapSizeException{
         int map_size = 51;
         mainGame.setupMap(map_size);
     }
@@ -119,8 +110,7 @@ public class MainGameTest{
      * @throws SetupOperationPrecedenceException is thrown if MainGame.players is null (not expected).
      */
     @Test(expected = InvalidMapSizeException.class)
-    public void smallMap_Min5Players_setupMapTest() throws InvalidMapSizeException, SetupOperationPrecedenceException{
-
+    public void smallMap_Min5Players_setupMapTest() throws InvalidMapSizeException{
         MainGame.players = new Player[5];
 
         int map_size = 5;
@@ -132,7 +122,7 @@ public class MainGameTest{
      * @throws SetupOperationPrecedenceException is thrown if no Players or Map has been initialized (expected).
      */
     @Test(expected = SetupOperationPrecedenceException.class)
-    public void noPlayersInitialized_setPlayerPositionsTest() throws SetupOperationPrecedenceException{
+    public void noPlayersInitialized_setPlayerPositionsTest(){
         MainGame.map = new BasicMap(tiles);
 
         MainGame.players = null;
@@ -144,7 +134,7 @@ public class MainGameTest{
      * @throws SetupOperationPrecedenceException is thrown if no Players or Map has been initialized (expected).
      */
     @Test(expected = SetupOperationPrecedenceException.class)
-    public void noMapInitialized_setPlayerPositionsTest() throws SetupOperationPrecedenceException{
+    public void noMapInitialized_setPlayerPositionsTest(){
         MainGame.players = new Player[5];
 
         MainGame.map = null;
