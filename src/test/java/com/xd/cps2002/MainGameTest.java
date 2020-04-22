@@ -74,7 +74,7 @@ public class MainGameTest{
 
         assertEquals(5, mainGame.players.length);
         for(int i = 0; i < 5; i++){
-            assertEquals(Player.class, mainGame.players[i].getClass());
+            assertNotNull(mainGame.players[i]);
         }
     }
 
@@ -146,7 +146,7 @@ public class MainGameTest{
         int map_size = 5;
         mainGame.setupMap(map_size);
 
-        assertEquals(Map.class, mainGame.map.getClass());
+        assertNotNull(mainGame.map);
         assertEquals(5, mainGame.map.getSize());
     }
 
@@ -190,7 +190,7 @@ public class MainGameTest{
 
         mainGame.setPlayerPositions();
         for(int i = 0; i < 5; i++){
-            assertEquals(Position.class, mainGame.players[i].getStartPosition().getClass());
+            assertNotNull(mainGame.players[i].getStartPosition());
         }
     }
 
@@ -232,5 +232,7 @@ public class MainGameTest{
     @After
     public void teardownMainGameTest(){
         mainGame.players = null; //dereference
+        mainGame.map = null;
+        mainGame.dir = null;
     }
 }
