@@ -78,6 +78,7 @@ public class HTMLGenerator{
      * @param player is a Player instance for which a map will be generated.
      * @param map is a Map instance on which the HTML map will be based.
      * @throws IllegalArgumentException whenever the Player or Map instances passed are null.
+     * @return an ArrayList of type String with the lines of the HTML file.
      */
     public ArrayList<String> genPlayerMap(Player player, Map map) throws IllegalArgumentException{
         if(map == null){
