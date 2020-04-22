@@ -6,6 +6,9 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.Stack;
 
+/**
+ * The {@code BasicMap} class is a
+ */
 public class BasicMap extends Map {
 
     /**
@@ -35,7 +38,8 @@ public class BasicMap extends Map {
      * Constructor used to initialize a {@code BasicMap} object with a pre-generated map. It also uses the constructor
      * of the {@link Map} super class.
      * @param tiles Pre-generated 2D array of {@code n} x {@code n} tiles to be used in the map.
-     * @throws IllegalArgumentException if the method is given an invalid size parameter (outside of the range 5-50)
+     * @throws IllegalArgumentException if {@code tiles} is null, empty or if the lists in the 2D array do not have the
+     * same lengths.
      */
 
     public BasicMap(TileType[][] tiles) {
@@ -50,8 +54,8 @@ public class BasicMap extends Map {
      * in the function {@link Map#isPlayable()}.
      *
      * @implNote The function generates one treasure tile and a number of water tiles according to
-     * {@link BasicMap#waterTileRatio}. It also makes sure that none of the water tiles that are generated are placed
-     * adjacent to the treasure tile.
+     * {@link BasicMap#waterTileRatio} and the total number of tiles in the map. It also makes sure that none of the
+     * water tiles that are generated are placed adjacent to the treasure tile.
      */
     @Override
     public void generate() {
