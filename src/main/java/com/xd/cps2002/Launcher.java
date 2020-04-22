@@ -1,5 +1,6 @@
 package com.xd.cps2002;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -50,10 +51,33 @@ public class Launcher{
             catch(InvalidMapSizeException ignored){ }
         }
 
+        // repeatedly ask for string input for the path to write the HTML files to, until valid input is provided
+        while(true){
+            System.out.print("Kindly enter a directory path in which to write the HTML files: ");
+
+            try{
+                mainGame.setHTMLDirectory(scanner.next());
+                break; // if IOException is not thrown, break
+            }
+            catch(IOException ignored){ }
+        }
+
         mainGame.setPlayerPositions(); // initialize the player positions
 
         // this is the main game sequence
         while(!win){ // loop until a player lands on the Treasure tile
+            // generate current maps
+            try{
+                mainGame.writeHTMLFiles();
+            }
+            // if persistence to disk fails, this is generally a fatal error beyond the scope of the program
+            catch(IOException ioe){
+                ioe.printStackTrace();
+
+                System.out.println("Fatal error occurred during file persistence. Sorry! Exiting...");
+                System.exit(1);
+            }
+
             System.out.println("------------------------------------------------------------------------\n");
             for(Player player : mainGame.players){ // for each player
                 System.out.println("Player #" + player.get_pID() + ", it's your turn!\n");
@@ -94,5 +118,8 @@ public class Launcher{
                 System.out.println("------------------------------------------------------------------------\n");
             }
         }
+
+        System.out.println("Thank you for playing...bye bye!\nExiting...");
+        System.exit(0);
     }
 }

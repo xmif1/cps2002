@@ -6,6 +6,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
+
 import static org.junit.Assert.*;
 
 /**
@@ -139,6 +141,30 @@ public class MainGameTest{
 
         mainGame.map = null;
         mainGame.setPlayerPositions();
+    }
+
+    /**
+     * Tests that a SetupOperationPrecedenceException is thrown when no directory path has been specified.
+     * @throws SetupOperationPrecedenceException is thrown if no directory path or Map has been initialized (expected).
+     * @throws IOException is thrown when there is a failure in persisting to disk [generally fatal] (not expected).
+     */
+    @Test(expected = SetupOperationPrecedenceException.class)
+    public void noDirPathSpecified_writeHTMLFilesTest() throws IOException{
+        mainGame.map = new BasicMap(tiles);
+        mainGame.dir = null;
+
+        mainGame.writeHTMLFiles();
+    }
+
+    /**
+     * Tests that a SetupOperationPrecedenceException is thrown when no Map instance has been initialized.
+     * @throws SetupOperationPrecedenceException is thrown if no directory path or Map has been initialized (expected).
+     * @throws IOException is thrown when there is a failure in persisting to disk [generally fatal] (not expected).
+     */
+    @Test(expected = SetupOperationPrecedenceException.class)
+    public void noMapInitialized_writeHTMLFilesTest() throws IOException{
+        mainGame.map = null;
+        mainGame.writeHTMLFiles();
     }
 
     /**

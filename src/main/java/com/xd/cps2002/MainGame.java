@@ -3,7 +3,13 @@ package com.xd.cps2002;
 import com.xd.cps2002.map.Map;
 import com.xd.cps2002.map.MapCreator;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Random;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.Files;
 
 /**
  * The MainGame class is responsible for coordinating the main logic of the game, and the primary interface for user
@@ -21,8 +27,12 @@ import java.util.Random;
  */
 public class MainGame{
     private static MainGame instance = null; // the singleton instance
+
     public Player[] players = null;
     public Map map = null;
+
+    public String dir = null;
+    public HTMLGenerator htmlGenerator = HTMLGenerator.getHTMLGenerator();
 
     /**
      * Private constructor to initialize an MainGame instance (if one does not already exist).
@@ -133,6 +143,47 @@ public class MainGame{
                 }while(!map.isPositionWinnable(starting_position)); // check that the treasure tile is reachable
 
                 player.setStartPosition(starting_position); // set position
+            }
+        }
+    }
+
+    /**
+     * Simple function to set the directory path at which to write the generated HTML maps.
+     * @param dir is the directory path specified by the user, in which to write the HTML files.
+     * @throws IOException is thrown whenever the path specified is not a directory.
+     */
+    public void setHTMLDirectory(String dir) throws IOException{
+        Path path = Paths.get(dir);
+
+        if(Files.exists(path)){ // if valid directory, set dir to specified path
+            this.dir = dir;
+        }
+        else{
+            throw new IOException(); // else throw an IOException
+        }
+    }
+
+    /**
+     * Convenience function for generating and persisting to disk the HTML map file for each player instance in players.
+     * @throws IOException is thrown when there is a failure in persisting to disk [generally fatal].
+     */
+    public void writeHTMLFiles() throws IOException{
+        if(map == null){ // if map is not set, throw a SetupOperationPrecedenceException
+            throw new SetupOperationPrecedenceException("Cannot call generation of HTML file before map creation.");
+        } // since players has precedence over map, map being initialized => players being initialized
+        else if(dir == null){ // if directory not set, throw a SetupOperationPrecedenceException
+            throw new SetupOperationPrecedenceException("Directory to write HTML files not specified.");
+        }
+        else{
+
+            for(Player player : players){ // generate and persist to disk the HTML map for each player instance
+                FileWriter writer = new FileWriter(dir + "/player_" + player.get_pID() + "_map.html");
+
+                // iterate through the html ArrayList and persist
+                for (String ln : htmlGenerator.genPlayerMap(player, map)){
+                    writer.write(ln);
+                }
+                writer.close();
             }
         }
     }
