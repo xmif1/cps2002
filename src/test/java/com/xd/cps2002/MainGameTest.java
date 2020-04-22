@@ -42,7 +42,7 @@ public class MainGameTest{
 
     /**
      * Tests that an InvalidNumberOfPlayersException is thrown when the number of players is less than 2.
-     * @throws InvalidNumberOfPlayersException is thrown if the number of players is < 2 or > 8 (expected).
+     * @throws InvalidNumberOfPlayersException is thrown if the number of players is {@literal <} 2 or {@literal >} 8 (expected).
      * @throws SetupOperationPrecedenceException is thrown if a Map instances has already been created (not expected).
      */
     @Test(expected = InvalidNumberOfPlayersException.class)
@@ -53,7 +53,7 @@ public class MainGameTest{
 
     /**
      * Tests that an InvalidNumberOfPlayersException is thrown when the number of players is greater than 8.
-     * @throws InvalidNumberOfPlayersException is thrown if the number of players is < 2 or > 8 (expected).
+     * @throws InvalidNumberOfPlayersException is thrown if the number of players is {@literal <} 2 or {@literal >} 8 (expected).
      * @throws SetupOperationPrecedenceException is thrown if a Map instances has already been created (not expected).
      */
     @Test(expected = InvalidNumberOfPlayersException.class)
@@ -64,7 +64,7 @@ public class MainGameTest{
 
     /**
      * Tests that the players array is initialized with the correct number of Player instances if input is valid.
-     * @throws InvalidNumberOfPlayersException is thrown if the number of players is < 2 or > 8 (not expected).
+     * @throws InvalidNumberOfPlayersException is thrown if the number of players is {@literal <} 2 or {@literal >} 8 (not expected).
      * @throws SetupOperationPrecedenceException is thrown if a Map instances has already been created (not expected).
      */
     @Test
@@ -81,7 +81,7 @@ public class MainGameTest{
     /**
      * Tests that a SetupOperationPrecedenceException is thrown when a Map has already been initialised before the Players.
      * @throws SetupOperationPrecedenceException is thrown if a Map instances has already been created (expected).
-     * @throws InvalidNumberOfPlayersException is thrown if the number of players is < 2 or > 8 (not expected).
+     * @throws InvalidNumberOfPlayersException is thrown if the number of players is {@literal <} 2 or {@literal >} 8 (not expected).
      */
     @Test(expected = SetupOperationPrecedenceException.class)
     public void mapInitializedBeforePlayers_setupPlayersTest() throws InvalidNumberOfPlayersException{

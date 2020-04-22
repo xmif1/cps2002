@@ -21,7 +21,8 @@ import java.nio.file.Files;
  * The setup sequence via this class is intended to be executed in the following manner, with a number of checks to
  * ensure so:
  *
- * [label:start setupPlayers(int n_players) -> setupMap(int map_size) -> setPlayerPositions()] |-> reset() goto:start
+ * [label:start setupPlayers(int n_players) -{@literal >} setupMap(int map_size) -{@literal >} setPlayerPositions()]
+ * |-{@literal >} reset() goto:start
  *
  * @author Xandru Mifsud
  */
@@ -70,7 +71,7 @@ public class MainGame{
      * Initializes n_players Player instances, if n_players is not less than 2 or greater then 8.
      * @param n_players is the number of players to be initialized.
      * @throws SetupOperationPrecedenceException is thrown if a Map instances has already been created.
-     * @throws InvalidNumberOfPlayersException is thrown if the number of players is < 2 or > 8.
+     * @throws InvalidNumberOfPlayersException is thrown if the number of players is {@literal <} 2 or {@literal >} 8.
      */
     public void setupPlayers(int n_players) throws InvalidNumberOfPlayersException{
         if(map != null){
@@ -96,7 +97,7 @@ public class MainGame{
      * iii. If the number of players is at least 5, than the minimum map_size is at least 8.
      * @param map_size is the size of the map.
      * @throws SetupOperationPrecedenceException is thrown if MainGame.players is null. [Criteria i. above]
-     * @throws InvalidMapSizeException is thrown if the map_size is invalid. [Criteria ii. & iii. above]
+     * @throws InvalidMapSizeException is thrown if the map_size is invalid. [Criteria ii. {@literal &} iii. above]
      */
     public void setupMap(int map_size) throws InvalidMapSizeException{
 
