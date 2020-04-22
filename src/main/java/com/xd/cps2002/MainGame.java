@@ -205,7 +205,7 @@ class SetupOperationPrecedenceException extends RuntimeException{
 class InvalidNumberOfPlayersException extends Exception{
     public InvalidNumberOfPlayersException(int n_players){
         System.out.println("Invalid input provided: Cannot have " + n_players + " players." +
-                " The minimum number of players is 2 while the maximum is 8.");
+                           " The minimum number of players is 2 while the maximum is 8.");
     }
 }
 
@@ -215,11 +215,11 @@ class InvalidNumberOfPlayersException extends Exception{
 class InvalidMapSizeException extends Exception{
     public InvalidMapSizeException(int map_size){
         System.out.println("Invalid input provided: Cannot have map of size " + map_size + "x" + map_size + "." +
-                " The minimum map size is 5x5 while the maximum is 50x50.");
+                           " The minimum map size is 5x5 while the maximum is 50x50.");
     }
 
     public InvalidMapSizeException(int map_size, String s){
         System.out.println("Invalid input provided: Cannot have map of size " + map_size + "x" + map_size + "." +
-                " The minimum map size is 5x5 while the maximum is 50x50. " + s);
+                           " The minimum map size is 5x5 while the maximum is 50x50. " + s);
     }
 }
