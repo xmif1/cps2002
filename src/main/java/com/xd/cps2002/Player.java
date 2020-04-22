@@ -42,7 +42,7 @@ public class Player{
      * @param position is a Position object to which the player's position will be set upon correct execution.
      * @throws NullPositionException is thrown when Position start_position is null, i.e. when it has not been set.
      */
-    public void setPosition(Position position) throws NullPositionException{
+    public void setPosition(Position position){
         if(start_position == null){
             throw new NullPositionException(player_id);
         }
@@ -109,7 +109,7 @@ public class Player{
      * @throws MoveException is thrown whenever the input is not a valid character.
      * @throws NullPositionException is thrown whenever the Player.position is not set.
      */
-    public Position move(char input) throws NullPositionException, MoveException{
+    public Position move(char input) throws MoveException{
         // in case position is not set, throw exception
         if(position == null){
             throw new NullPositionException(player_id);
@@ -128,7 +128,7 @@ public class Player{
 /**
  * Simple exception to handle when a player's Position position has not been set.
  */
-class NullPositionException extends Exception{
+class NullPositionException extends RuntimeException{
     public NullPositionException(int player_id){
         System.err.println("Player #" + player_id + " does not have position initialised.");
     }
@@ -139,6 +139,6 @@ class NullPositionException extends Exception{
  */
 class MoveException extends Exception{
     public MoveException(){
-        System.err.println("Invalid input provided. Only the characters [U|D|L|R] allowed.");
+        System.out.println("Invalid input provided. Only the characters [U|D|L|R] allowed.");
     }
 }

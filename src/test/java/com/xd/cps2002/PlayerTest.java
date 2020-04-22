@@ -45,7 +45,7 @@ public class PlayerTest{
      * @throws NullPositionException is thrown whenever the Player.position is not set (not expected).
      */
     @Test(expected = MoveException.class)
-    public void move_InvalidInputTest() throws MoveException, NullPositionException{
+    public void move_InvalidInputTest() throws MoveException{
         input = 'i'; // character is invalid, since 'i' is not in {'u', 'd', 'r', 'l'}
         player.move(input);
     }
@@ -56,7 +56,7 @@ public class PlayerTest{
      * @throws NullPositionException is thrown whenever the Player.position is not set (not expected).
      */
     @Test(expected = MoveException.class)
-    public void move_NullCharInputTest() throws MoveException, NullPositionException{
+    public void move_NullCharInputTest() throws MoveException{
         input = '\0'; // character is invalid, since it is not in {'u', 'd', 'r', 'l'}
         player.move(input);
     }
@@ -67,7 +67,7 @@ public class PlayerTest{
      * @throws NullPositionException is expected to be thrown, since the Player.position is set to null.
      */
     @Test(expected = NullPositionException.class)
-    public void move_NullPositionTest() throws MoveException, NullPositionException{
+    public void move_NullPositionTest() throws MoveException{
         player.setPosition(null);
         input = 'u'; // providing valid input, beyond scope of this test
         player.move(input);
@@ -88,7 +88,7 @@ public class PlayerTest{
      * @throws NullPositionException is thrown whenever the Player.position is not set (not expected).
      */
     @Test
-    public void move_UpPosCalcTest() throws MoveException, NullPositionException{
+    public void move_UpPosCalcTest() throws MoveException{
         input = 'u';
 
         Position p = player.move(input);
@@ -102,7 +102,7 @@ public class PlayerTest{
      * @throws NullPositionException is thrown whenever the Player.position is not set (not expected).
      */
     @Test
-    public void move_DownPosCalcTest() throws MoveException, NullPositionException{
+    public void move_DownPosCalcTest() throws MoveException{
         input = 'd';
 
         Position p = player.move(input);
@@ -116,7 +116,7 @@ public class PlayerTest{
      * @throws NullPositionException is thrown whenever the Player.position is not set (not expected).
      */
     @Test
-    public void move_LeftPosCalcTest() throws MoveException, NullPositionException{
+    public void move_LeftPosCalcTest() throws MoveException{
         input = 'l';
 
         Position p = player.move(input);
@@ -130,7 +130,7 @@ public class PlayerTest{
      * @throws NullPositionException is thrown whenever the Player.position is not set (not expected).
      */
     @Test
-    public void move_RightPosCalcTest() throws MoveException, NullPositionException{
+    public void move_RightPosCalcTest() throws MoveException{
         input = 'r';
 
         Position p = player.move(input);
@@ -145,7 +145,7 @@ public class PlayerTest{
      * @throws NullPositionException is expected to be thrown, since the Player.position is set to null.
      */
     @Test(expected = NullPositionException.class)
-    public void reset_NullStartPositionTest() throws NullPositionException{
+    public void reset_NullStartPositionTest(){
         Player player2 = new Player();
         player2.reset();
     }
@@ -155,7 +155,7 @@ public class PlayerTest{
      * @throws NullPositionException is expected to be thrown, since the Player.position is set to null (not expected).
      */
     @Test
-    public void reset_AtStart_NoHistoricalTruncationTest() throws NullPositionException{
+    public void reset_AtStart_NoHistoricalTruncationTest(){
         player.reset();
         assertEquals(player.getStartPosition(), player.getPositionHistory().get(0));
     }
@@ -165,7 +165,7 @@ public class PlayerTest{
      * @throws NullPositionException is expected to be thrown, since the Player.position is set to null (not expected).
      */
     @Test
-    public void reset_HistoricalTruncationTest() throws NullPositionException{
+    public void reset_HistoricalTruncationTest(){
         player.setPosition(new Position(1, 1));
         player.setPosition(new Position(1, 2));
         assertEquals(3, player.getPositionHistory().size());
