@@ -44,9 +44,14 @@ public class BasicMap extends Map {
     }
 
     /**
-     * Generates the tiles for the {@code BasicMap} randomly. The function generates one treasure tile and a number of
-     * water tiles according to {@link BasicMap#waterTileRatio}. It also makes sure that none of the water tiles that
-     * are generated are placed adjacent to the treasure tile.
+     * Generates the tiles for the {@code BasicMap} object randomly.
+     *
+     * @apiNote Note that this function should also set the {@link Map#treasurePos} member so that it can be used later
+     * in the function {@link Map#isPlayable()}.
+     *
+     * @implNote The function generates one treasure tile and a number of water tiles according to
+     * {@link BasicMap#waterTileRatio}. It also makes sure that none of the water tiles that are generated are placed
+     * adjacent to the treasure tile.
      */
     @Override
     public void generate() {
@@ -59,7 +64,11 @@ public class BasicMap extends Map {
         treasureX = r.nextInt(size);
         treasureY = r.nextInt(size);
 
+        // Set the tile at the chosen position to be a treasure tile
         tiles[treasureX][treasureY] = TileType.Treasure;
+
+        // Store the position of the treasure tile in the "treasurePos" member
+        treasurePos = new Position(treasureX, treasureY);
 
         // Calculate the number of water tiles that need to be generated
         int waterTilesQuota = (int) Math.floor(size * size * waterTileRatio);
@@ -129,6 +138,11 @@ public class BasicMap extends Map {
      */
     @Override
     public boolean isPlayable() {
+        // If "treasurePos" has not been set, throw an exception
+        if(treasurePos == null) {
+            throw new NullPointerException("Treasure position has not been set yet.");
+        }
+
         // Initialize "winnableTiles" with all tiles set to false
         winnableTiles = new boolean[size][size];
         for(boolean[] row : winnableTiles) {

@@ -123,6 +123,9 @@ public abstract class Map {
     /**
      * Method used to randomly generate the map. This method should be implemented by each subclass of the Map class to
      * allow different methods of map generation.
+     *
+     * @apiNote Note that this function should also set the {@link Map#treasurePos} member so that it can be used later
+     * in the function {@link Map#isPlayable()}.
      */
     public abstract void generate();
 
@@ -130,6 +133,8 @@ public abstract class Map {
      * Method used to check if the given map can be played by a player. This method should also be implemented by the
      * sub-class given that map generation is also handled there.
      * @return true if the player can reach the treasure starting from any point in the map.
+     * @apiNote This function assumes that the {@link Map#treasurePos} member has been set previously using either the
+     * {@link Map#Map(TileType[][])} constructor or the {@link Map#generate()} function.
      * @implNote It is assumed that this function will also set the member variable {@link Map#winnableTiles} while
      * checking that the map is playable. Moreover this was left to be implemented by the subclasses since it assumed
      * that given that they may generate maps differently, they may also need to traverse the maps differently as well.
@@ -141,7 +146,8 @@ public abstract class Map {
      *  up/down/left/right movements.
      * @param pos The {@code Position} from which the treasure tile needs to be reached.
      * @return returns true if the treasure tile can be reached from the given map position and false otherwise.
-     * @apiNote The function expects that the position actually exists in the map.
+     * @apiNote The function expects that the position actually exists in the map. It also expects that the function
+     * {@link Map#isPlayable()} has been run before, so that the member {@link Map#winnableTiles} gets set beforehand.
      * @implNote Note that if the tile at {@code pos} is actually the treasure tile, the function returns false, since
      * the player should not be able to start from this tile.
      * @throws NullPointerException if given a null {@link Position} argument.

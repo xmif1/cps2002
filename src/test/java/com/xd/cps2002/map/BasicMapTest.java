@@ -548,6 +548,20 @@ public class BasicMapTest {
         assertFalse(basicMap.isPlayable());
     }
 
+    @Test
+    public void isPlayable_throwsANullPointerException_ifTreasurePosMemberHasNotBeenSet() {
+        // Expect the function to throw the NullPointerException
+        expectedException.expect(NullPointerException.class);
+        expectedException.expectMessage("Treasure position has not been set yet.");
+
+        // Create a new empty 8 x 8 tile map
+        int size = 8;
+        basicMap = new BasicMap(size);
+
+        // Try to check if the map is playable without generating the tiles first
+        basicMap.isPlayable();
+    }
+
     @Test public void isPositionWinnable_correctlyReturnsIfATileIsWinnable_ifGivenAValidPosition() {
         // Create a new 10x10 map with a strip of water tiles dividing it (80% of the map is playable)
         int size = 10;
