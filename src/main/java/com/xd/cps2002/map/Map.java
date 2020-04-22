@@ -3,6 +3,14 @@ package com.xd.cps2002.map;
 import com.xd.cps2002.Player;
 import com.xd.cps2002.Position;
 
+/**
+ * The {@code Map} abstract class provides a common interface for all the different types of map types. This acts as the
+ * abstract "product" class used to implement the factory design pattern.
+ *
+ * This class was implemented as an abstract class rather than an interface since the only functionality that would be
+ * carried out differently by each subclass is the map generation and the way that that map is verified to be playable.
+ * Hence, all other functionality was implemented in this class so that it would be common to all subclasses.
+ */
 public abstract class Map {
     /**
      * The {@code size} member stores the dimension of the square map (size x size tiles).
@@ -209,7 +217,7 @@ public abstract class Map {
      * @apiNote The function indexes tiles in the map starting from (0,0), which is the tile in the upper left corner
      * of the map.
      * @return the type of the tile at position (x,y)
-     * @throws NullPointerException if given a null {@link Position} argument.
+     * @throws NullPointerException if the Map's tiles have not been set or generated yet.
      * @throws IllegalArgumentException if given a {@link Position} which does not exist in the map.
      */
     public TileType getTileType(int x, int y) {
@@ -234,6 +242,9 @@ public abstract class Map {
      * @apiNote The function indexes tiles in the map starting from (0,0), which is the tile in the upper left corner
      * of the map.
      * @return the type of the tile at position {@code pos}
+     * @throws NullPointerException if the argument {@code pos} is set to {@code null} or if the Map's tiles have not
+     * been set or generated yet.
+     * @throws IllegalArgumentException if given a {@link Position} which does not exist in the map.
      */
     public TileType getTileType(Position pos) {
         // Throw an exception if pos argument is null
