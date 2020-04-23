@@ -154,10 +154,22 @@ public class MainGame{
      * @throws IOException is thrown whenever the path specified is not a directory.
      */
     public void setHTMLDirectory(String dir) throws IOException{
-        Path path = Paths.get(dir);
+        Path path;
 
-        if(Files.exists(path)){ // if valid directory, set dir to specified path
-            this.dir = dir;
+        try {
+            path = Paths.get(dir);
+        }
+        catch(Exception e){
+            throw new IOException(); // throw an IOException
+        }
+
+        if(Files.exists(path) && Files.isDirectory(path)){ // if valid directory, set dir to specified path
+            if(System.getProperty("file.separator").charAt(0) == (dir.charAt(dir.length()-1))){
+                this.dir = dir.substring(0, dir.length() - 1);
+            }
+            else {
+                this.dir = dir;
+            }
         }
         else{
             throw new IOException(); // else throw an IOException
@@ -178,7 +190,8 @@ public class MainGame{
         else{
 
             for(Player player : players){ // generate and persist to disk the HTML map for each player instance
-                FileWriter writer = new FileWriter(dir + "/player_" + player.get_pID() + "_map.html");
+                FileWriter writer = new FileWriter(dir + System.getProperty("file.separator") +
+                                                   "player_" + player.get_pID() + "_map.html");
 
                 // iterate through the html ArrayList and persist
                 for (String ln : htmlGenerator.genPlayerMap(player, map)){

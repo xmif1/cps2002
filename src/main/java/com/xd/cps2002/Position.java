@@ -2,6 +2,8 @@ package com.xd.cps2002;
 
 /**
  * Simple convenience class to maintain (x,y)--coordinates (representative of indices).
+ *
+ * @author Xandru Mifsud
  */
 public class Position{
     public int x; // the x-coordinate, as an integer (to serve as an array index)
