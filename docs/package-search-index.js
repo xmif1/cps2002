@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"com.xd.cps2002"},{"l":"com.xd.cps2002.map"}]
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"com.xd.cps2002"},{"l":"com.xd.cps2002.game"},{"l":"com.xd.cps2002.game.game_exceptions"},{"l":"com.xd.cps2002.map"},{"l":"com.xd.cps2002.player"},{"l":"com.xd.cps2002.player.player_exceptions"}]
