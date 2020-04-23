@@ -1,6 +1,6 @@
 package com.xd.cps2002.map;
 
-import com.xd.cps2002.Position;
+import com.xd.cps2002.player.Position;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

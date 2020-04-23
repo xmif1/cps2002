@@ -1,4 +1,7 @@
-package com.xd.cps2002;
+package com.xd.cps2002.player;
+
+import com.xd.cps2002.player.player_exceptions.MoveException;
+import com.xd.cps2002.player.player_exceptions.NullPositionException;
 
 import java.util.ArrayList;
 
@@ -128,23 +131,5 @@ public class Player{
 
             default: throw new MoveException();
         }
-    }
-}
-
-/**
- * Simple exception to handle when a player's Position position has not been set.
- */
-class NullPositionException extends RuntimeException{
-    public NullPositionException(int player_id){
-        System.err.println("Player #" + player_id + " does not have position initialised.");
-    }
-}
-
-/**
- * Simple exception to handle when a character beyond {'u', 'd', 'l', r'} has been supplied to move().
- */
-class MoveException extends Exception{
-    public MoveException(){
-        System.out.println("Invalid input provided. Only the characters [U|D|L|R] allowed.");
     }
 }

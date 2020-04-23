@@ -1,7 +1,11 @@
-package com.xd.cps2002;
+package com.xd.cps2002.game;
 
+import com.xd.cps2002.game.game_exceptions.InvalidMapSizeException;
+import com.xd.cps2002.game.game_exceptions.InvalidNumberOfPlayersException;
+import com.xd.cps2002.game.game_exceptions.SetupOperationPrecedenceException;
 import com.xd.cps2002.map.BasicMap;
 import com.xd.cps2002.map.TileType;
+import com.xd.cps2002.player.Player;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

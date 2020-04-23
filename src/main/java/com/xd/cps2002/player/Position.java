@@ -1,4 +1,4 @@
-package com.xd.cps2002;
+package com.xd.cps2002.player;
 
 /**
  * Simple convenience class to maintain (x,y)--coordinates (representative of indices).

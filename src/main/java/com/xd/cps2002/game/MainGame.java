@@ -1,7 +1,12 @@
-package com.xd.cps2002;
+package com.xd.cps2002.game;
 
+import com.xd.cps2002.game.game_exceptions.InvalidMapSizeException;
+import com.xd.cps2002.game.game_exceptions.InvalidNumberOfPlayersException;
+import com.xd.cps2002.game.game_exceptions.SetupOperationPrecedenceException;
 import com.xd.cps2002.map.Map;
 import com.xd.cps2002.map.MapCreator;
+import com.xd.cps2002.player.Player;
+import com.xd.cps2002.player.Position;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -200,40 +205,5 @@ public class MainGame{
                 writer.close();
             }
         }
-    }
-}
-
-/**
- * Simple unchecked exception intended to be thrown when setup is carried out in an incorrect order, resulting in some unstable
- * state of the system variables.
- */
-class SetupOperationPrecedenceException extends RuntimeException{
-    public SetupOperationPrecedenceException(String s){
-        System.err.println("Setup Operations Executed In Wrong Sequence: " + s);
-    }
-}
-
-/**
- * Exception intended to be thrown whenever an invalid number of players is passed.
- */
-class InvalidNumberOfPlayersException extends Exception{
-    public InvalidNumberOfPlayersException(int n_players){
-        System.out.println("Invalid input provided: Cannot have " + n_players + " players." +
-                           " The minimum number of players is 2 while the maximum is 8.");
-    }
-}
-
-/**
- * Exception intended to be thrown whenever the map size is too small or too large, depending on a number of criteria.
- */
-class InvalidMapSizeException extends Exception{
-    public InvalidMapSizeException(int map_size){
-        System.out.println("Invalid input provided: Cannot have map of size " + map_size + "x" + map_size + "." +
-                           " The minimum map size is 5x5 while the maximum is 50x50.");
-    }
-
-    public InvalidMapSizeException(int map_size, String s){
-        System.out.println("Invalid input provided: Cannot have map of size " + map_size + "x" + map_size + "." +
-                           " The minimum map size is 5x5 while the maximum is 50x50. " + s);
     }
 }

@@ -1,4 +1,4 @@
-package com.xd.cps2002;
+package com.xd.cps2002.player;
 
 import com.xd.cps2002.map.TileType;
 

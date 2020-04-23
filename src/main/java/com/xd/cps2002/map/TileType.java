@@ -1,10 +1,10 @@
 package com.xd.cps2002.map;
 
-import com.xd.cps2002.PlayerStatus;
+import com.xd.cps2002.player.PlayerStatus;
 
 /**
  *  The {@link TileType} enum defines the different types of tiles used in different maps.
- *  It also defines the {@link com.xd.cps2002.PlayerStatus} after stepping on that particular tile.
+ *  It also defines the {@link PlayerStatus} after stepping on that particular tile.
  *  Each tile is described by its PlayerStatus, a handle (string identifier), and a colour (as three integers [r,g,b]).
  *
  * @author Domenico Agius and Xandru Mifsud

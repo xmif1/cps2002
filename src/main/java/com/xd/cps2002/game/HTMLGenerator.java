@@ -1,7 +1,9 @@
-package com.xd.cps2002;
+package com.xd.cps2002.game;
 
 import com.xd.cps2002.map.Map;
 import com.xd.cps2002.map.TileType;
+import com.xd.cps2002.player.Player;
+import com.xd.cps2002.player.Position;
 
 import java.util.ArrayList;
 import java.util.Collections;

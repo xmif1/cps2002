@@ -1,10 +1,14 @@
-package com.xd.cps2002;
+package com.xd.cps2002.game;
 
 import java.util.ArrayList;
 
+import com.xd.cps2002.game.HTMLGenerator;
 import com.xd.cps2002.map.BasicMap;
 import com.xd.cps2002.map.Map;
 import com.xd.cps2002.map.TileType;
+import com.xd.cps2002.player.player_exceptions.NullPositionException;
+import com.xd.cps2002.player.Player;
+import com.xd.cps2002.player.Position;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,7 +36,7 @@ public class HTMLGeneratorTest{
      * @throws NullPositionException is thrown whenever the start_position is not set (unexpected).
      */
     @Before
-    public void setupHTMLGeneratorTest() throws NullPositionException{
+    public void setupHTMLGeneratorTest() throws NullPositionException {
         player = new Player(); // initialising new player
         player.setStartPosition(new Position(0,0));// setting to origin
 

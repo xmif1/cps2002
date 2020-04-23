@@ -1,5 +1,13 @@
 package com.xd.cps2002;
 
+import com.xd.cps2002.game.game_exceptions.InvalidMapSizeException;
+import com.xd.cps2002.game.game_exceptions.InvalidNumberOfPlayersException;
+import com.xd.cps2002.game.MainGame;
+import com.xd.cps2002.player.player_exceptions.MoveException;
+import com.xd.cps2002.player.Player;
+import com.xd.cps2002.player.PlayerStatus;
+import com.xd.cps2002.player.Position;
+
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;

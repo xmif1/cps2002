@@ -1,7 +1,8 @@
 package com.xd.cps2002.map;
 
-import com.xd.cps2002.Player;
-import com.xd.cps2002.Position;
+import com.xd.cps2002.game.MainGame;
+import com.xd.cps2002.player.Player;
+import com.xd.cps2002.player.Position;
 
 /**
  * The {@code Map} abstract class provides a common interface for all the different types of map types. This acts as the
@@ -32,7 +33,7 @@ public abstract class Map {
      * player should not start directly on a treasure tile.
      *
      * The reason why the class does not implement a function to directly return start positions for the players is so
-     * that the {@link Map} class can operate completely independently of the {@link Player} and {@link com.xd.cps2002.MainGame} classes.
+     * that the {@link Map} class can operate completely independently of the {@link Player} and {@link MainGame} classes.
      */
     protected boolean[][] winnableTiles;
 
