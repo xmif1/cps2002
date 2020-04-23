@@ -6,6 +6,16 @@ import java.util.ArrayList;
 
 /**
  * Launches a maze-game session, defines the runtime routine.
+ *
+ * Consists of minimal conditional logic constructs, and is mainly composed of looping constructs. Instead, all logic
+ * has been encapsulated within the MainGame class, in order to enhance testability of this logic. For this reason,
+ * since this class primarily handles input by means of Scanner, no testing is required beyond that of mocking.
+ *
+ * Invalid input is handled by an extensive collection of custom exceptions. These exceptions carry out any necessary
+ * handling to return the game to a correct state. When caught, they provide the programmer with the opportunity to
+ * take further action, eg. by re-prompting for input.
+ *
+ * @author Xandru Mifsud
  */
 public class Launcher{
     static MainGame mainGame; // hold singleton instance

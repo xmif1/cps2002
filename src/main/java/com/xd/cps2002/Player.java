@@ -2,6 +2,12 @@ package com.xd.cps2002;
 
 import java.util.ArrayList;
 
+/**
+ * The Player class defines a player in the game, and is responsible for calculating the new Position after a move,
+ * while also keeping a historical record of the positions visited by a player.
+ *
+ * @author Xandru Mifsud
+ */
 public class Player{
     private static int global_player_count = 0; // maintains count of the number of Player instances created
     private int player_id; // auto-incrementing upon instantiation

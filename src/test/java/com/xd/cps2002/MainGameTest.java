@@ -1,7 +1,6 @@
 package com.xd.cps2002;
 
 import com.xd.cps2002.map.BasicMap;
-import com.xd.cps2002.map.Map;
 import com.xd.cps2002.map.TileType;
 import org.junit.After;
 import org.junit.Before;
