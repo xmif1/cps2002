@@ -6,11 +6,14 @@ import com.xd.cps2002.game.game_exceptions.SetupOperationPrecedenceException;
 import com.xd.cps2002.map.BasicMap;
 import com.xd.cps2002.map.TileType;
 import com.xd.cps2002.player.Player;
+import com.xd.cps2002.player.Position;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.io.IOException;
 
 import static org.junit.Assert.*;
 
@@ -211,6 +214,91 @@ public class MainGameTest{
     }
 
     /**
+     * Tests that a SetupOperationPrecedenceException is thrown when getMoves() is called and MainGame.initialized is
+     * false.
+     * @throws SetupOperationPrecedenceException is thrown when there is an attempted call to getMoves() before a call
+     * to initializeGame() (expected).
+     */
+    @Test(expected = SetupOperationPrecedenceException.class)
+    public void notInitialized_getMovesTest(){
+        mainGame.initialized = false;
+        mainGame.getMoves();
+    }
+
+    /**
+     * Tests that a SetupOperationPrecedenceException is thrown when updateGameState() is called and MainGame.initialized
+     * is false.
+     * @throws SetupOperationPrecedenceException is thrown when there is an attempted call to updateGameState() before a
+     * call to initializeGame() (expected).
+     */
+    @Test(expected = SetupOperationPrecedenceException.class)
+    public void notInitialized_updateGameStateTest(){
+        mainGame.initialized = false;
+        mainGame.updateGameState();
+    }
+
+    /**
+     * Tests that if multiple players are currently at the treasure tile, then they are all returned.
+     * @throws SetupOperationPrecedenceException is thrown when there is an attempted call to updateGameState() before a
+     * call to initializeGame() (not expected).
+     */
+    @Test
+    public void multipleWinners_updateGameStateTest(){
+        // initialize a number of players
+        mainGame.players = new Player[3];
+        mainGame.players[0] = new Player();
+        mainGame.players[0].setStartPosition(new Position(2, 2)); // at treasure tile
+        mainGame.players[1] = new Player();
+        mainGame.players[1].setStartPosition(new Position(0, 0)); // not at treasure tile
+        mainGame.players[2] = new Player();
+        mainGame.players[2].setStartPosition(new Position(2, 2)); // at treasure tile
+
+        mainGame.map = new BasicMap(tiles);
+        mainGame.map.isPlayable();
+
+        mainGame.initialized = true;
+        ArrayList<Integer> winners = mainGame.updateGameState();
+
+        assertEquals(2, winners.size());
+        assertEquals(mainGame.players[0].get_pID(), (int) winners.get(0));
+        assertEquals(mainGame.players[2].get_pID(), (int) winners.get(1));
+    }
+
+    /**
+     * Tests that a player is reset if they land on a water tile.
+     * @throws SetupOperationPrecedenceException is thrown when there is an attempted call to updateGameState() before a
+     * call to initializeGame() (not expected).
+     */
+    @Test
+    public void deadPlayer_updateGameStateTest(){
+        // initialize a number of players
+        mainGame.players = new Player[1];
+        mainGame.players[0] = new Player();
+        mainGame.players[0].setStartPosition(new Position(0, 2)); // at grass tile
+        mainGame.players[0].setPosition(new Position(1, 2)); // at water tile
+
+        mainGame.map = new BasicMap(tiles);
+        mainGame.map.isPlayable();
+
+        mainGame.initialized = true;
+        mainGame.updateGameState();
+
+        assertTrue(mainGame.players[0].getPosition().x == 0 && mainGame.players[0].getPosition().y == 2);
+    }
+
+    /**
+     * Tests that a SetupOperationPrecedenceException is thrown when startGame() is called and MainGame.initialized is
+     * false.
+     * @throws SetupOperationPrecedenceException is thrown when there is an attempted call to startGame() before a call
+     * to initializeGame() (expected).
+     */
+    @Test(expected = SetupOperationPrecedenceException.class)
+    public void notInitialized_startGameTest(){
+        mainGame.initialized = false;
+        mainGame.startGame();
+    }
+
+    /**
      * Tests that a SetupOperationPrecedenceException is thrown when no Map instance has been initialized.
      * @throws SetupOperationPrecedenceException is thrown if no directory path or Map has been initialized (expected).
      * @throws IOException is thrown when there is a failure in persisting to disk [generally fatal] (not expected).
@@ -230,6 +318,8 @@ public class MainGameTest{
 
         assertNull(mainGame.players);
         assertNull(mainGame.map);
+        assertNull(mainGame.dir);
+        assertFalse(mainGame.initialized);
     }
 
     @After
@@ -237,5 +327,6 @@ public class MainGameTest{
         mainGame.players = null; //dereference
         mainGame.map = null;
         mainGame.dir = null;
+        mainGame.initialized = false;
     }
 }
