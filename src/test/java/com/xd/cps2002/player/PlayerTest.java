@@ -163,18 +163,18 @@ public class PlayerTest{
     }
 
     /**
-     * Testing that history is truncated when reset() is called and player has played a number of moves.
+     * Testing that history is updated with start position when reset() is called and player has played a number of moves.
      * @throws NullPositionException is expected to be thrown, since the Player.position is set to null (not expected).
      */
     @Test
-    public void reset_HistoricalTruncationTest(){
+    public void reset_HistoricalUpdateResetTest(){
         player.setPosition(new Position(1, 1));
         player.setPosition(new Position(1, 2));
         assertEquals(3, player.getPositionHistory().size());
 
         player.reset();
-        assertEquals(player.getStartPosition(), player.getPositionHistory().get(0));
-        assertEquals(1, player.getPositionHistory().size());
+        assertEquals(player.getStartPosition(), player.getPositionHistory().get(3));
+        assertEquals(4, player.getPositionHistory().size());
     }
 
     @After
