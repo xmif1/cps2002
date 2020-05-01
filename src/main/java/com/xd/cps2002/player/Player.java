@@ -88,7 +88,7 @@ public class Player{
     }
 
     /**
-     * Resets the player's position to the starting position and truncates the position history (if any).
+     * Resets the player's position to the starting position
      * @throws NullPositionException is thrown when Position start_position is null, i.e. when it has not been set.
      */
     public void reset() throws NullPositionException{
@@ -96,8 +96,7 @@ public class Player{
             throw new NullPositionException(player_id);
         }
         else {
-            position = start_position;
-            historical_positions.subList(1, historical_positions.size()).clear();
+            setPosition(start_position);
         }
     }
 
