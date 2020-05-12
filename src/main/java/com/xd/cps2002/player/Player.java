@@ -18,13 +18,16 @@ public class Player{
     private Position start_position = null; // maintain the start position of the player
     private ArrayList<Position> historical_positions = new ArrayList<Position>(); // maintain record of visited coords
 
+    // MAKE PRIVATE WITH APPROPRIATE GETTERS AND SETTERS
+    public Team team;
+
     public Player(){
         this.player_id = global_player_count++; // auto-incrementation
     }
 
     /**
      * Getter for private static int global_player_count.
-     * @return Position global_player_count - the count of the number of Player instances created.
+     * @return int global_player_count - the count of the number of Player instances created.
      */
     public static int get_global_player_count(){
         return global_player_count;

@@ -1,5 +1,8 @@
 package com.xd.cps2002.player;
 
+import com.xd.cps2002.player.player_exceptions.NullPositionException;
+import com.xd.cps2002.player.player_exceptions.TeamOverrideException;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,6 +11,7 @@ import static org.junit.Assert.*;
 
 /**
  * Tester class for the Team class.
+ * @author Xandru Mifsud
  */
 public class TeamTest{
     // Player object to initialise on setup and de-reference on teardown.
@@ -40,29 +44,61 @@ public class TeamTest{
     }
 
     /**
+     * Testing that upon joining a team, the player must have an initialised starting position.
+     * @throws NullPositionException is expected to be thrown, since the Player.start_position is set to null (expected).
+     * @throws NullPointerException is expected to be thrown, since the Player is null (not expected).
+     * @throws TeamOverrideException is thrown whenever a Player instance has already joined a team (not expected).
+     */
+    @Test(expected = NullPositionException.class)
+    public void nullStartPosition_joinTest() throws TeamOverrideException{
+        Player new_player = new Player(); // create new player
+
+        team.join(new_player);
+    }
+
+    /**
+     * Testing that upon joining a team, the player be an initialised Player instance.
+     * @throws NullPositionException is expected to be thrown, since the Player.start_position is set to null (not expected).
+     * @throws NullPointerException is expected to be thrown, since the Player is null (expected).
+     * @throws TeamOverrideException is thrown whenever a Player instance has already joined a team (not expected).
+     */
+    @Test(expected = NullPointerException.class)
+    public void nullPlayer_joinTest() throws TeamOverrideException{
+        Player new_player; // null instance
+
+        team.join(new_player);
+    }
+
+    /**
+     * Testing that upon attempting to join a team, an exception is thrown if the Player has already joined another team
+     * @throws NullPositionException is expected to be thrown, since the Player.start_position is set to null (not expected).
+     * @throws NullPointerException is expected to be thrown, since the Player is null (not expected).
+     * @throws TeamOverrideException is thrown whenever a Player instance has already joined a team (expected).
+     */
+    @Test(expected = TeamOverrideException.class)
+    public void playerHasTeam_joinTest() throws TeamOverrideException{
+        Player new_player = new Player(); // create new player
+	new_player.team = new Team();
+
+        team.join(new_player);
+    }
+
+    /**
      * Testing that upon joining a team, the new Player is added to players.
+     * @throws NullPositionException is expected to be thrown, since the Player.start_position is set to null (not expected).
+     * @throws NullPointerException is expected to be thrown, since the Player is null (not expected).
+     * @throws TeamOverrideException is thrown whenever a Player instance has already joined a team (not expected).
      */
     @Test
-    public void addPlayer_joinTeamTest(){
+    public void addPlayer_joinTest() throws TeamOverrideException{
         Player new_player = new Player(); // create new player
         int pID = new_player.get_pID();
 
         int t_player_len = team.players.size();
 
-        team.add(new_player);
+        team.join(new_player);
         assertEquals(t_player_len + 1, team.players.size()); // check that size increased by 1
         assertEquals(pID, team.get(team.size()-1)); // check that last player is new_player by comparing pID
-    }
-
-    /**
-     * Testing that upon joining a team, the player must have an initialised starting position.
-     * @throws NullPositionException is expected to be thrown, since the Player.start_position is set to null.
-     */
-    @Test(expected = NullPositionException.class)
-    public void nullStartPosition_joinTeamTest(){
-        Player new_player = new Player(); // create new player
-
-        team.add(new_player);
     }
 
     /**

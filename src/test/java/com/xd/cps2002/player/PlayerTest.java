@@ -10,6 +10,7 @@ import static org.junit.Assert.*;
 
 /**
  * Tester class for the Player class.
+ * @author Xandru Mifsud
  */
 public class PlayerTest{
     // Player object to initialise on setup and de-reference on teardown.
