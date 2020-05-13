@@ -2,12 +2,10 @@ package com.xd.cps2002.player;
 
 import com.xd.cps2002.player.player_exceptions.MoveException;
 import com.xd.cps2002.player.player_exceptions.NullPositionException;
-
-import java.util.ArrayList;
+import com.xd.cps2002.player.player_exceptions.NullTeamException;
 
 /**
- * The Player class defines a player in the game, and is responsible for calculating the new Position after a move,
- * while also keeping a historical record of the positions visited by a player.
+ * The Player class defines a player in the game, and is responsible for calculating the new Position after a move.
  *
  * @author Xandru Mifsud
  */
@@ -16,7 +14,6 @@ public class Player{
     private int player_id; // auto-incrementing upon instantiation
     private Position position = null; // maintain the current player position
     private Position start_position = null; // maintain the start position of the player
-    private ArrayList<Position> historical_positions = new ArrayList<Position>(); // maintain record of visited coords
 
     private Team team;
 
@@ -65,17 +62,22 @@ public class Player{
     }
 
     /**
-     * Setter for the player Position position, only allowed if start_position has been set beforehand.
+     * Setter for the player Position position, only allowed if start_position has been set beforehand. It is also
+     * responsible for notifying the Team instance of the new position.
      * @param position is a Position object to which the player's position will be set upon correct execution.
      * @throws NullPositionException is thrown when Position start_position is null, i.e. when it has not been set.
+     * @throws NullTeamException is thrown when Team team is null, i.e. when it has not been set.
      */
     public void setPosition(Position position){
         if(start_position == null){
             throw new NullPositionException(player_id);
         }
+        else if(team == null){
+            throw new NullTeamException(player_id);
+        }
         else{
             this.position = position;
-            historical_positions.add(position);
+            team.update(position); // TO-DO: THROW EXCEPTION IF TEAM NOT SET
         }
     }
 
@@ -94,22 +96,13 @@ public class Player{
     public void setStartPosition(Position start_position){
         this.start_position = start_position;
         position = start_position;
-        historical_positions.add(start_position);
-    }
-
-    /**
-     * Getter for the player's Position history (from start/reset state till the current state).
-     * @return ArrayList{@literal <}Position{@literal >} historical_positions is an ArrayList of all previously visited Position(s).
-     */
-    public ArrayList<Position> getPositionHistory(){
-        return historical_positions;
     }
 
     /**
      * Resets the player's position to the starting position
      * @throws NullPositionException is thrown when Position start_position is null, i.e. when it has not been set.
      */
-    public void reset() throws NullPositionException{
+    public void reset(){
         if(start_position == null){
             throw new NullPositionException(player_id);
         }

@@ -2,6 +2,7 @@ package com.xd.cps2002.player;
 
 import com.xd.cps2002.player.player_exceptions.MoveException;
 import com.xd.cps2002.player.player_exceptions.NullPositionException;
+import com.xd.cps2002.player.player_exceptions.NullTeamException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,6 +22,7 @@ public class PlayerTest{
     public void setupPlayerTest(){
         player = new Player(); // initialising new player
         player.setStartPosition(new Position(0,0));// setting to origin
+        player.setTeam(new Team()); // set to some Team instance
     }
 
     /**
@@ -141,6 +143,32 @@ public class PlayerTest{
         assertEquals(0, p.y); // y remains at the origin
     }
 
+    /* ---- This section is intended to test the setPosition() functionality ---- */
+
+    /**
+     * Testing exception is thrown when setPosition() is called and Player Position start_position is null.
+     * @throws NullPositionException is thrown when Position start_position is null, i.e. when it has not been set (expected).
+     * @throws NullTeamException is thrown when Team team is null, i.e. when it has not been set (not expected).
+     */
+    @Test(expected = NullPositionException.class)
+    public void nullStartPosition_setPositionTest(){
+        Player player2 = new Player();
+        player2.setPosition(new Position(0, 0));
+    }
+
+    /**
+     * Testing exception is thrown when setPosition() is called and Team team is null.
+     * @throws NullPositionException is thrown when Position start_position is null, i.e. when it has not been set (not expected).
+     * @throws NullTeamException is thrown when Team team is null, i.e. when it has not been set (expected).
+     */
+    @Test(expected = NullTeamException.class)
+    public void nullTeam_setPositionTest(){
+        Player player2 = new Player();
+        player2.setStartPosition(new Position(0, 0));
+
+        player2.setPosition(new Position(0, 1));
+    }
+
     /* ---- This section is intended to test the reset() functionality ---- */
 
     /**
@@ -151,31 +179,6 @@ public class PlayerTest{
     public void reset_NullStartPositionTest(){
         Player player2 = new Player();
         player2.reset();
-    }
-
-    /**
-     * Testing that history is not truncated when reset() is called and player is still at the starting position.
-     * @throws NullPositionException is expected to be thrown, since the Player.position is set to null (not expected).
-     */
-    @Test
-    public void reset_AtStart_NoHistoricalTruncationTest(){
-        player.reset();
-        assertEquals(player.getStartPosition(), player.getPositionHistory().get(0));
-    }
-
-    /**
-     * Testing that history is updated with start position when reset() is called and player has played a number of moves.
-     * @throws NullPositionException is expected to be thrown, since the Player.position is set to null (not expected).
-     */
-    @Test
-    public void reset_HistoricalUpdateResetTest(){
-        player.setPosition(new Position(1, 1));
-        player.setPosition(new Position(1, 2));
-        assertEquals(3, player.getPositionHistory().size());
-
-        player.reset();
-        assertEquals(player.getStartPosition(), player.getPositionHistory().get(3));
-        assertEquals(4, player.getPositionHistory().size());
     }
 
     @After
