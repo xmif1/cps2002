@@ -22,7 +22,7 @@ public class Position{
     /**
      * Basic equality operator to check if two Positions are the same with regards
      * to their coordinates on the plane.
-     * @param Object o The object to compare against.
+     * @param o The object to compare against.
      */
     @Override
     public boolean equals(Object o){

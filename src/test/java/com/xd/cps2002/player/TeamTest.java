@@ -76,6 +76,7 @@ public class TeamTest{
     @Test(expected = TeamOverrideException.class)
     public void playerHasTeam_joinTest() throws TeamOverrideException{
         Player new_player = new Player(); // create new player
+        new_player.setStartPosition(new Position(0, 0)); // set start position
 	    new_player.setTeam(new Team());
 
         team.join(new_player);
@@ -90,6 +91,7 @@ public class TeamTest{
     @Test
     public void addPlayer_joinTest() throws TeamOverrideException{
         Player new_player = new Player(); // create new player
+        new_player.setStartPosition(new Position(0, 0)); // set start position
         int pID = new_player.get_pID();
 
         int t_player_len = team.players.size();
