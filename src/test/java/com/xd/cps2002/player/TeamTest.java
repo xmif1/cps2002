@@ -64,9 +64,7 @@ public class TeamTest{
      */
     @Test(expected = NullPointerException.class)
     public void nullPlayer_joinTest() throws TeamOverrideException{
-        Player new_player; // null instance
-
-        team.join(new_player);
+        team.join(null);
     }
 
     /**
@@ -78,7 +76,7 @@ public class TeamTest{
     @Test(expected = TeamOverrideException.class)
     public void playerHasTeam_joinTest() throws TeamOverrideException{
         Player new_player = new Player(); // create new player
-	new_player.team = new Team();
+	    new_player.setTeam(new Team());
 
         team.join(new_player);
     }
@@ -98,7 +96,8 @@ public class TeamTest{
 
         team.join(new_player);
         assertEquals(t_player_len + 1, team.players.size()); // check that size increased by 1
-        assertEquals(pID, team.get(team.size()-1)); // check that last player is new_player by comparing pID
+        // check that last player is new_player by comparing pID
+        assertEquals(pID, team.players.get(team.players.size()-1).get_pID());
     }
 
     /**
@@ -106,12 +105,12 @@ public class TeamTest{
      */
     @Test
     public void addNewPosition_updateTest(){
-        team.update(new Position(0, 1))
+        team.update(new Position(0, 1));
         
-	assertEquals(1, team.historical_positions.size()) // check that size is 1
+	assertEquals(1, team.getPositionHistory().size()); // check that size is 1
 	// verify appended position coordinates
-	assertEquals(0, team.historical_positions.get(0).x)
-	assertEquals(1, team.historical_positions.get(0).y)
+	assertEquals(0, team.getPositionHistory().get(0).x);
+	assertEquals(1, team.getPositionHistory().get(0).y);
     }
 
     /**
@@ -120,11 +119,11 @@ public class TeamTest{
      */
     @Test
     public void addDuplicatePosition_updateTest(){
-	team.historical_positions.add(new Position(0, 1))
-	assertEquals(1, team.historical_positions.size()) // check that size is 1
+	team.getPositionHistory().add(new Position(0, 1));
+	assertEquals(1, team.getPositionHistory().size()); // check that size is 1
 
-	team.update(new Position(0, 1)) // attempt to add duplicate
-	assertEquals(1, team.historical_positions.size()) // check that size is still 1
+	team.update(new Position(0, 1)); // attempt to add duplicate
+	assertEquals(1, team.getPositionHistory().size()); // check that size is still 1
 
     }
 

@@ -18,8 +18,7 @@ public class Player{
     private Position start_position = null; // maintain the start position of the player
     private ArrayList<Position> historical_positions = new ArrayList<Position>(); // maintain record of visited coords
 
-    // MAKE PRIVATE WITH APPROPRIATE GETTERS AND SETTERS
-    public Team team;
+    private Team team;
 
     public Player(){
         this.player_id = global_player_count++; // auto-incrementation
@@ -39,6 +38,22 @@ public class Player{
      */
     public int get_pID(){
         return this.player_id;
+    }
+
+    /**
+     * Getter for the Team instance associated with the player.
+     * @return Team this.team - the Team instance associated with the player.
+     */
+    public Team getTeam(){
+        return this.team;
+    }
+
+    /**
+     * Setter for the Team instance associated with the player.
+     * @param team - the Team instance to be associated with the player.
+     */
+    public void setTeam(Team team){
+        this.team = team;
     }
 
     /**

@@ -17,10 +17,9 @@ import java.util.ArrayList;
 public class Team{
     private static int global_team_count = 0; // maintains count of the number of Team instances created
     private int team_id; // auto-incrementing upon instantiation
+    private ArrayList<Position> historical_positions = new ArrayList<Position>(); // maintain record of visited coords
 
-    // SET PRIVATE WITH GETTERS AND SETTERS AS NECESSARY?
-    public ArrayList<Position> historical_positions = new ArrayList<Position>(); // maintain record of visited coords
-    public ArrayList<Player> players = new ArrayList<Player>(); // maintain record of visited coords
+    public ArrayList<Player> players = new ArrayList<Player>(); // maintain record of joined players
 
     public Team(){
         this.team_id = global_team_count++; // auto-incrementation
@@ -40,6 +39,14 @@ public class Team{
      */
     public int get_tID(){
         return this.team_id;
+    }
+
+    /**
+     * Getter for the team's Position history (from start/reset state till the current state).
+     * @return ArrayList{@literal <}Position{@literal >} historical_positions is an ArrayList of all previously visited Position(s).
+     */
+    public ArrayList<Position> getPositionHistory(){
+        return historical_positions;
     }
 
     /**
@@ -71,7 +78,7 @@ public class Team{
         else if(player.getStartPosition() == null){
             throw new NullPositionException(player.get_pID());
         }
-        else if(player.team != null){
+        else if(player.getTeam() != null){
             throw new TeamOverrideException(player.get_pID());
         }
         else{
