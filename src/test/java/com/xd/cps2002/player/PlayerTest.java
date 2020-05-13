@@ -169,6 +169,17 @@ public class PlayerTest{
         player2.setPosition(new Position(0, 1));
     }
 
+    /* ---- This section is intended to test the setTeam() functionality ---- */
+
+    /**
+     * Testing whether an IllegalArgumentException is raised when setTeam is called with a null Team instance.
+     * @throws IllegalArgumentException whenever the Team instance passed is null (expected).
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void nullTeam_setTeamTest(){
+        player.setTeam(null);
+    }
+
     /* ---- This section is intended to test the reset() functionality ---- */
 
     /**

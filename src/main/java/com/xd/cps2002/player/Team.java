@@ -68,12 +68,12 @@ public class Team{
      * ii. Player player.start_position has been initialised i.e. is not null.
      * iii. Player player.team is null.
      * @throws NullPositionException is thrown whenever the player.start_position is not set.
-     * @throws NullPointerException is thrown whenever Player player is null.
+     * @throws IllegalArgumentException is thrown whenever Player player is null.
      * @throws TeamOverrideException is thrown whenever a Player instance has already joined a team.
      */
     public void join(Player player) throws TeamOverrideException{
         if(player == null){
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         }
         else if(player.getStartPosition() == null){
             throw new NullPositionException(player.get_pID());

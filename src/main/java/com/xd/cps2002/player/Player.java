@@ -48,8 +48,12 @@ public class Player{
     /**
      * Setter for the Team instance associated with the player.
      * @param team - the Team instance to be associated with the player.
+     * @throws IllegalArgumentException whenever the passed team instance is null.
      */
     public void setTeam(Team team){
+        if(team == null){
+            throw new IllegalArgumentException("Team instance cannot be null");
+        }
         this.team = team;
     }
 

@@ -45,8 +45,8 @@ public class TeamTest{
 
     /**
      * Testing that upon joining a team, the player must have an initialised starting position.
-     * @throws NullPositionException is expected to be thrown, since the Player.start_position is set to null (expected).
-     * @throws NullPointerException is expected to be thrown, since the Player is null (not expected).
+     * @throws NullPositionException is thrown whenever the Player.start_position is set to null (expected).
+     * @throws IllegalArgumentException is thrown whenever the Player is null (not expected).
      * @throws TeamOverrideException is thrown whenever a Player instance has already joined a team (not expected).
      */
     @Test(expected = NullPositionException.class)
@@ -58,19 +58,19 @@ public class TeamTest{
 
     /**
      * Testing that upon joining a team, the player be an initialised Player instance.
-     * @throws NullPositionException is expected to be thrown, since the Player.start_position is set to null (not expected).
-     * @throws NullPointerException is expected to be thrown, since the Player is null (expected).
+     * @throws NullPositionException is thrown whenever the Player.start_position is set to null (not expected).
+     * @throws IllegalArgumentException is thrown whenever the Player is null (expected).
      * @throws TeamOverrideException is thrown whenever a Player instance has already joined a team (not expected).
      */
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void nullPlayer_joinTest() throws TeamOverrideException{
         team.join(null);
     }
 
     /**
      * Testing that upon attempting to join a team, an exception is thrown if the Player has already joined another team
-     * @throws NullPositionException is expected to be thrown, since the Player.start_position is set to null (not expected).
-     * @throws NullPointerException is expected to be thrown, since the Player is null (not expected).
+     * @throws NullPositionException is thrown whenever the Player.start_position is set to null (not expected).
+     * @throws IllegalArgumentException is thrown whenever the Player is null (not expected).
      * @throws TeamOverrideException is thrown whenever a Player instance has already joined a team (expected).
      */
     @Test(expected = TeamOverrideException.class)
@@ -84,8 +84,8 @@ public class TeamTest{
 
     /**
      * Testing that upon joining a team, the new Player is added to players.
-     * @throws NullPositionException is expected to be thrown, since the Player.start_position is set to null (not expected).
-     * @throws NullPointerException is expected to be thrown, since the Player is null (not expected).
+     * @throws NullPositionException is thrown whenever the Player.start_position is set to null (not expected).
+     * @throws IllegalArgumentException is thrown whenever the Player is null (not expected).
      * @throws TeamOverrideException is thrown whenever a Player instance has already joined a team (not expected).
      */
     @Test
