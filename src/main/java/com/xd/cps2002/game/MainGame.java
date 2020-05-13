@@ -10,6 +10,7 @@ import com.xd.cps2002.player.PlayerStatus;
 import com.xd.cps2002.player.Position;
 import com.xd.cps2002.player.Team;
 import com.xd.cps2002.player.player_exceptions.MoveException;
+import com.xd.cps2002.player.player_exceptions.TeamOverrideException;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -41,6 +42,7 @@ public class MainGame{
     public boolean initialized = false;
 
     public Player[] players = null;
+    public Team[] teams = null;
     public Map map = null;
 
     public String dir = null;
@@ -93,10 +95,13 @@ public class MainGame{
         }
         else if(2 <= n_players && n_players <= 8){ // validation check
             players = new Player[n_players]; // initialize if within range
+            teams = new Team[n_players]; // initialize if within range
 
             for(int i = 0; i < n_players; i++){
                 players[i] = new Player();
-                players[i].setTeam(new Team());
+
+                // TEMPORARY
+                teams[i] = new Team();
             }
         }
         else{
@@ -158,6 +163,18 @@ public class MainGame{
                 }while(!map.isPositionWinnable(starting_position)); // check that the treasure tile is reachable
 
                 player.setStartPosition(starting_position); // set position
+            }
+        }
+    }
+
+    // TEMPORARY
+    public void allocateTeams(){
+        for(int i = 0; i < players.length; i++) {
+            try {
+                teams[i].join(players[i]);
+            }catch(TeamOverrideException toe) {
+                throw new SetupOperationPrecedenceException("Invalid attempt to join a team when already has been allocated" +
+                        " to a team");
             }
         }
     }
@@ -296,6 +313,9 @@ public class MainGame{
         }
 
         setPlayerPositions(); // initialize the player positions
+
+        // TEMPORARY
+        allocateTeams();
 
         initialized = true; // allows startGame() to be called successfully;
     }
