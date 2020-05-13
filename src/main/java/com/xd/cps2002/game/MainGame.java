@@ -8,6 +8,7 @@ import com.xd.cps2002.map.MapCreator;
 import com.xd.cps2002.player.Player;
 import com.xd.cps2002.player.PlayerStatus;
 import com.xd.cps2002.player.Position;
+import com.xd.cps2002.player.Team;
 import com.xd.cps2002.player.player_exceptions.MoveException;
 
 import java.io.FileWriter;
@@ -95,6 +96,7 @@ public class MainGame{
 
             for(int i = 0; i < n_players; i++){
                 players[i] = new Player();
+                players[i].setTeam(new Team());
             }
         }
         else{

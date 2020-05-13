@@ -11,6 +11,7 @@ import com.xd.cps2002.player.Position;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.xd.cps2002.player.Team;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -275,6 +276,7 @@ public class MainGameTest{
         mainGame.players = new Player[1];
         mainGame.players[0] = new Player();
         mainGame.players[0].setStartPosition(new Position(0, 2)); // at grass tile
+        mainGame.players[0].setTeam(new Team());
         mainGame.players[0].setPosition(new Position(1, 2)); // at water tile
 
         mainGame.map = new BasicMap(tiles);
