@@ -18,4 +18,23 @@ public class Position{
         this.x = x;
         this.y = y;
     }
+
+    /**
+     * Basic equality operator to check if two Positions are the same with regards
+     * to their coordinates on the plane.
+     * @param o The object to compare against.
+     */
+    @Override
+    public boolean equals(Object o){
+        if(o == null){ // if null, return false
+            return false;
+        }
+        else if(getClass() != o.getClass()){ // if derived from a different class, return false
+            return false;
+        }
+
+        Position position = (Position) o; // else cast
+
+        return (position.x == this.x) && (position.y == this.y); // and return equality check
+    }
 }

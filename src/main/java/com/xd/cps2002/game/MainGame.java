@@ -8,7 +8,10 @@ import com.xd.cps2002.map.MapCreator;
 import com.xd.cps2002.player.Player;
 import com.xd.cps2002.player.PlayerStatus;
 import com.xd.cps2002.player.Position;
+import com.xd.cps2002.player.Team;
 import com.xd.cps2002.player.player_exceptions.MoveException;
+import com.xd.cps2002.player.player_exceptions.NullPositionException;
+import com.xd.cps2002.player.player_exceptions.TeamOverrideException;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,6 +22,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.Files;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * The MainGame class is responsible for coordinating the main logic of the game, and the primary interface for user
@@ -38,9 +42,13 @@ import java.util.Scanner;
 public class MainGame{
     private static MainGame instance = null; // the singleton instance
     public boolean initialized = false;
+    public boolean team_mode = false;
 
     public Player[] players = null;
+    public Team[] teams = null;
     public Map map = null;
+
+    public int n_teams;
 
     public String dir = null;
     public HTMLGenerator htmlGenerator = HTMLGenerator.getHTMLGenerator();
@@ -156,6 +164,53 @@ public class MainGame{
                 }while(!map.isPositionWinnable(starting_position)); // check that the treasure tile is reachable
 
                 player.setStartPosition(starting_position); // set position
+            }
+        }
+    }
+
+    /**
+     * Shuffling of the players array, to randomise turn sequence. For example, it is also used to randomise team allocation.
+     * This is a variant of Fisher-Yates shuffle, known as Durstenfeld's Shuffle (as mentioned in Knuth's The Art of
+     * Computer Programming), with the Java adaptation based on https://stackoverflow.com/a/1520212.
+     */
+    public void shufflePlayers(){
+        Random rnd = ThreadLocalRandom.current();
+        for (int i = players.length - 1; i > 0; i--){
+            int j = rnd.nextInt(i + 1);
+
+            // shuffling swap
+            Player p = players[j];
+            players[j] = players[i];
+            players[i] = p;
+        }
+    }
+
+    public void allocateTeams(int n_teams){
+        teams = new Team[n_teams]; // initialize if within range
+        shufflePlayers();
+
+        int players_idx = 0; // maintains an index to the players array
+        int team_size = (int) Math.floor((double) players.length / n_teams); // number of players (on average) per team
+
+        for(int i = 0; i < n_teams; i++){ // begin populating teams
+            teams[i] = new Team();
+
+            // how many players in the team - if the last team, must contain the remainder of the players
+            int team_n_players = (i < n_teams - 1) ? team_size : players.length - (n_teams - 1)*team_size;
+
+            try{
+                for(int j = players_idx; j < players_idx + team_n_players; j++){
+                    teams[i].join(players[j]); // join players to team
+                }
+
+                players_idx += team_n_players;
+
+            }catch(TeamOverrideException toe){
+                throw new SetupOperationPrecedenceException("Invalid attempt to join a team when players has already " +
+                                                            "joined to a team");
+            }catch(NullPositionException npe){ // wrap around SetupOperationPrecedenceException for better context
+                throw new SetupOperationPrecedenceException("Invalid attempt to join a team when player does not have " +
+                        "an initialised starting position.");
             }
         }
     }
@@ -294,6 +349,43 @@ public class MainGame{
         }
 
         setPlayerPositions(); // initialize the player positions
+
+        scanner = new Scanner(System.in); // resetting scanner to forcefully clear buffer
+
+        char in_char;
+        boolean valid_mode = false;
+
+        // repeatedly ask if playing in team mode or not
+        while(!valid_mode){
+            System.out.print("Do you wish to play in team mode, Y(es) or N(o)? : ");
+
+            in_char = scanner.next().charAt(0);
+
+            switch(Character.toLowerCase(in_char)){ // test against cases to carry out necessary logic
+                case 'n': team_mode = false; valid_mode = true; n_teams = players.length; break;
+                case 'y': team_mode = true; valid_mode = true; break;
+            }
+        }
+
+        scanner = new Scanner(System.in); // resetting scanner to forcefully clear buffer
+
+        // repeatedly ask for integer input for the number of teams, until valid input is provided
+        while(team_mode){
+            System.out.print("Kindly enter the number of teams between 2 and " + (players.length - 1) + " : ");
+
+            while(!scanner.hasNextInt()){
+                System.out.print("Kindly enter the number of teams between 2 and " + (players.length - 1) + " : ");
+                scanner.next();
+            }
+
+            n_teams = scanner.nextInt();
+            if(2 <= n_teams && n_teams < players.length) {
+                break;
+            }
+            System.out.println("Invalid number of teams entered.");
+        }
+
+        allocateTeams(n_teams);
 
         initialized = true; // allows startGame() to be called successfully;
     }
