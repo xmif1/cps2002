@@ -22,7 +22,7 @@ import static org.junit.Assert.*;
  * Tester class for the main game loop logic.
  * @author Xandru Mifsud
  */
-public class MainGameTest{
+public class GameTest {
     private final Game game = Game.getMainGame();
 
     // define the Map by means of a 2D TileType array
