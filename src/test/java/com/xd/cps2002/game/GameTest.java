@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
  * @author Xandru Mifsud
  */
 public class MainGameTest{
-    private final MainGame mainGame = MainGame.getMainGame();
+    private final Game game = Game.getMainGame();
 
     // define the Map by means of a 2D TileType array
     private final TileType[][] tiles = {{TileType.Grass, TileType.Grass, TileType.Grass, TileType.Grass, TileType.Grass},
@@ -34,7 +34,7 @@ public class MainGameTest{
 
     @Before
     public void setupMainGameTest(){
-        mainGame.players = new Player[2]; // initialize two players
+        game.players = new Player[2]; // initialize two players
     }
 
     /**
@@ -43,8 +43,8 @@ public class MainGameTest{
      */
     @Test
     public void singletonTest(){
-        MainGame new_mainGame = MainGame.getMainGame();
-        assertEquals(mainGame, new_mainGame);
+        Game new_Game = Game.getMainGame();
+        assertEquals(game, new_Game);
     }
 
     /**
@@ -55,7 +55,7 @@ public class MainGameTest{
     @Test(expected = InvalidNumberOfPlayersException.class)
     public void belowMin_NoOfPlayers_setupPlayersTest() throws InvalidNumberOfPlayersException{
         int n_players = 1;
-        mainGame.setupPlayers(n_players);
+        game.setupPlayers(n_players);
     }
 
     /**
@@ -66,7 +66,7 @@ public class MainGameTest{
     @Test(expected = InvalidNumberOfPlayersException.class)
     public void aboveMax_NoOfPlayers_setupPlayersTest() throws InvalidNumberOfPlayersException{
         int n_players = 9;
-        mainGame.setupPlayers(n_players);
+        game.setupPlayers(n_players);
     }
 
     /**
@@ -77,11 +77,11 @@ public class MainGameTest{
     @Test
     public void inrange_NoOfPlayers_setupPlayersTest() throws InvalidNumberOfPlayersException{
         int n_players = 5;
-        mainGame.setupPlayers(n_players);
+        game.setupPlayers(n_players);
 
-        assertEquals(5, mainGame.players.length);
+        assertEquals(5, game.players.length);
         for(int i = 0; i < 5; i++){
-            assertNotNull(mainGame.players[i]);
+            assertNotNull(game.players[i]);
         }
     }
 
@@ -92,8 +92,8 @@ public class MainGameTest{
      */
     @Test(expected = SetupOperationPrecedenceException.class)
     public void mapInitializedBeforePlayers_setupPlayersTest() throws InvalidNumberOfPlayersException{
-        mainGame.map = new BasicMap(tiles);
-        mainGame.setupPlayers(5);
+        game.map = new BasicMap(tiles);
+        game.setupPlayers(5);
     }
 
     /**
@@ -103,8 +103,8 @@ public class MainGameTest{
      */
     @Test(expected = SetupOperationPrecedenceException.class)
     public void noPlayersInitialized_setupMapTest() throws InvalidMapSizeException{
-        mainGame.players = null;
-        mainGame.setupMap(8);
+        game.players = null;
+        game.setupMap(8);
     }
 
     /**
@@ -115,7 +115,7 @@ public class MainGameTest{
     @Test(expected = InvalidMapSizeException.class)
     public void belowMin_MapSize_setupMapTest() throws InvalidMapSizeException{
         int map_size = 4;
-        mainGame.setupMap(map_size);
+        game.setupMap(map_size);
     }
 
     /**
@@ -126,7 +126,7 @@ public class MainGameTest{
     @Test(expected = InvalidMapSizeException.class)
     public void aboveMax_MapSize_setupMapTest() throws InvalidMapSizeException{
         int map_size = 51;
-        mainGame.setupMap(map_size);
+        game.setupMap(map_size);
     }
 
     /**
@@ -137,10 +137,10 @@ public class MainGameTest{
      */
     @Test(expected = InvalidMapSizeException.class)
     public void smallMap_Min5Players_setupMapTest() throws InvalidMapSizeException{
-        mainGame.players = new Player[5];
+        game.players = new Player[5];
 
         int map_size = 5;
-        mainGame.setupMap(map_size);
+        game.setupMap(map_size);
     }
 
     /**
@@ -151,10 +151,10 @@ public class MainGameTest{
     @Test
     public void inrange_MapSize_setupMapTest() throws InvalidMapSizeException{
         int map_size = 5;
-        mainGame.setupMap(map_size);
+        game.setupMap(map_size);
 
-        assertNotNull(mainGame.map);
-        assertEquals(5, mainGame.map.getSize());
+        assertNotNull(game.map);
+        assertEquals(5, game.map.getSize());
     }
 
     /**
@@ -163,10 +163,10 @@ public class MainGameTest{
      */
     @Test(expected = SetupOperationPrecedenceException.class)
     public void noPlayersInitialized_setPlayerPositionsTest(){
-        mainGame.map = new BasicMap(tiles);
+        game.map = new BasicMap(tiles);
 
-        mainGame.players = null;
-        mainGame.setPlayerPositions();
+        game.players = null;
+        game.setPlayerPositions();
     }
 
     /**
@@ -175,10 +175,10 @@ public class MainGameTest{
      */
     @Test(expected = SetupOperationPrecedenceException.class)
     public void noMapInitialized_setPlayerPositionsTest(){
-        mainGame.players = new Player[5];
+        game.players = new Player[5];
 
-        mainGame.map = null;
-        mainGame.setPlayerPositions();
+        game.map = null;
+        game.setPlayerPositions();
     }
 
     /**
@@ -187,17 +187,17 @@ public class MainGameTest{
      */
     @Test
     public void correct_setPlayerPositionsTest(){
-        mainGame.players = new Player[5];
+        game.players = new Player[5];
         for(int i = 0; i < 5; i++){
-            mainGame.players[i] = new Player();
+            game.players[i] = new Player();
         }
 
-        mainGame.map = new BasicMap(tiles);
-        mainGame.map.isPlayable();
+        game.map = new BasicMap(tiles);
+        game.map.isPlayable();
 
-        mainGame.setPlayerPositions();
+        game.setPlayerPositions();
         for(int i = 0; i < 5; i++){
-            assertNotNull(mainGame.players[i].getStartPosition());
+            assertNotNull(game.players[i].getStartPosition());
         }
     }
 
@@ -208,10 +208,10 @@ public class MainGameTest{
      */
     @Test(expected = SetupOperationPrecedenceException.class)
     public void noDirPathSpecified_writeHTMLFilesTest() throws IOException{
-        mainGame.map = new BasicMap(tiles);
-        mainGame.dir = null;
+        game.map = new BasicMap(tiles);
+        game.dir = null;
 
-        mainGame.writeHTMLFiles();
+        game.writeHTMLFiles();
     }
 
     /**
@@ -222,8 +222,8 @@ public class MainGameTest{
      */
     @Test(expected = SetupOperationPrecedenceException.class)
     public void notInitialized_getMovesTest(){
-        mainGame.initialized = false;
-        mainGame.getMoves();
+        game.initialized = false;
+        game.getMoves();
     }
 
     /**
@@ -234,8 +234,8 @@ public class MainGameTest{
      */
     @Test(expected = SetupOperationPrecedenceException.class)
     public void notInitialized_updateGameStateTest(){
-        mainGame.initialized = false;
-        mainGame.updateGameState();
+        game.initialized = false;
+        game.updateGameState();
     }
 
     /**
@@ -246,23 +246,23 @@ public class MainGameTest{
     @Test
     public void multipleWinners_updateGameStateTest(){
         // initialize a number of players
-        mainGame.players = new Player[3];
-        mainGame.players[0] = new Player();
-        mainGame.players[0].setStartPosition(new Position(2, 2)); // at treasure tile
-        mainGame.players[1] = new Player();
-        mainGame.players[1].setStartPosition(new Position(0, 0)); // not at treasure tile
-        mainGame.players[2] = new Player();
-        mainGame.players[2].setStartPosition(new Position(2, 2)); // at treasure tile
+        game.players = new Player[3];
+        game.players[0] = new Player();
+        game.players[0].setStartPosition(new Position(2, 2)); // at treasure tile
+        game.players[1] = new Player();
+        game.players[1].setStartPosition(new Position(0, 0)); // not at treasure tile
+        game.players[2] = new Player();
+        game.players[2].setStartPosition(new Position(2, 2)); // at treasure tile
 
-        mainGame.map = new BasicMap(tiles);
-        mainGame.map.isPlayable();
+        game.map = new BasicMap(tiles);
+        game.map.isPlayable();
 
-        mainGame.initialized = true;
-        ArrayList<Integer> winners = mainGame.updateGameState();
+        game.initialized = true;
+        ArrayList<Integer> winners = game.updateGameState();
 
         assertEquals(2, winners.size());
-        assertEquals(mainGame.players[0].get_pID(), (int) winners.get(0));
-        assertEquals(mainGame.players[2].get_pID(), (int) winners.get(1));
+        assertEquals(game.players[0].get_pID(), (int) winners.get(0));
+        assertEquals(game.players[2].get_pID(), (int) winners.get(1));
     }
 
     /**
@@ -273,19 +273,19 @@ public class MainGameTest{
     @Test
     public void deadPlayer_updateGameStateTest(){
         // initialize a number of players
-        mainGame.players = new Player[1];
-        mainGame.players[0] = new Player();
-        mainGame.players[0].setStartPosition(new Position(0, 2)); // at grass tile
-        mainGame.players[0].setTeam(new Team());
-        mainGame.players[0].setPosition(new Position(1, 2)); // at water tile
+        game.players = new Player[1];
+        game.players[0] = new Player();
+        game.players[0].setStartPosition(new Position(0, 2)); // at grass tile
+        game.players[0].setTeam(new Team());
+        game.players[0].setPosition(new Position(1, 2)); // at water tile
 
-        mainGame.map = new BasicMap(tiles);
-        mainGame.map.isPlayable();
+        game.map = new BasicMap(tiles);
+        game.map.isPlayable();
 
-        mainGame.initialized = true;
-        mainGame.updateGameState();
+        game.initialized = true;
+        game.updateGameState();
 
-        assertTrue(mainGame.players[0].getPosition().x == 0 && mainGame.players[0].getPosition().y == 2);
+        assertTrue(game.players[0].getPosition().x == 0 && game.players[0].getPosition().y == 2);
     }
 
     /**
@@ -296,8 +296,8 @@ public class MainGameTest{
      */
     @Test(expected = SetupOperationPrecedenceException.class)
     public void notInitialized_startGameTest(){
-        mainGame.initialized = false;
-        mainGame.startGame();
+        game.initialized = false;
+        game.startGame();
     }
 
     /**
@@ -307,8 +307,8 @@ public class MainGameTest{
      */
     @Test(expected = SetupOperationPrecedenceException.class)
     public void noMapInitialized_writeHTMLFilesTest() throws IOException{
-        mainGame.map = null;
-        mainGame.writeHTMLFiles();
+        game.map = null;
+        game.writeHTMLFiles();
     }
 
     /**
@@ -316,19 +316,19 @@ public class MainGameTest{
      */
     @Test
     public void mainGame_resetTest(){
-        mainGame.reset();
+        game.reset();
 
-        assertNull(mainGame.players);
-        assertNull(mainGame.map);
-        assertNull(mainGame.dir);
-        assertFalse(mainGame.initialized);
+        assertNull(game.players);
+        assertNull(game.map);
+        assertNull(game.dir);
+        assertFalse(game.initialized);
     }
 
     @After
     public void teardownMainGameTest(){
-        mainGame.players = null; //dereference
-        mainGame.map = null;
-        mainGame.dir = null;
-        mainGame.initialized = false;
+        game.players = null; //dereference
+        game.map = null;
+        game.dir = null;
+        game.initialized = false;
     }
 }
