@@ -57,7 +57,7 @@ public class MapCreator {
                     throw new IllegalArgumentException("Invalid map type.");
             }
 
-            // Keep regenerating the tiles of the map until it can be played by the user
+            // Keep regenerating the tiles of the map until it can be played by the players
             do {
                 instance.generate();
             } while(!instance.isPlayable());

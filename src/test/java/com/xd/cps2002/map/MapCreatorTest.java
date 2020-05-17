@@ -22,7 +22,7 @@ public class MapCreatorTest {
 
     @Test
     public void createMap_returnsBasicMapWithCorrectSize_ifGivenMapTypeBasic() {
-        // Create a "BasicMap" object of size 6 using "MapCreator"
+        // Create a "BasicMap" object of size 8 using "MapCreator"
         int size = 8;
         Map map = createMap("basic", size);
 
@@ -45,6 +45,19 @@ public class MapCreatorTest {
 
         // Check that the created map has the specified size
         assertEquals(size, map.getSize());
+    }
+
+    @Test
+    public void createMap_returnsBasicMapWithPlayableTiles_ifGivenMapTypeBasic() {
+        // Create a "BasicMap" object of size 13 using "MapCreator"
+        int size = 13;
+        Map map = createMap("basic", size);
+
+        // Check that the created map is of type BasicMap
+        assertTrue(map instanceof BasicMap);
+
+        // Check that the created map is playable (and hence the map tiles have been generated successfully)
+        assertTrue(map.isPlayable());
     }
 
     @Test
