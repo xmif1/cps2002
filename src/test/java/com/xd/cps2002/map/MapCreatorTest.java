@@ -1,5 +1,7 @@
 package com.xd.cps2002.map;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -12,8 +14,14 @@ public class MapCreatorTest {
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
+    @Before
+    public void setup() {
+        // Reset the singleton instance in "MapCreator" to null
+        MapCreator.instance = null;
+    }
+
     @Test
-    public void creatorMethod_returnsBasicMapWithCorrectSize_ifGivenMapTypeBasic() {
+    public void createMap_returnsBasicMapWithCorrectSize_ifGivenMapTypeBasic() {
         // Create a "BasicMap" object of size 6 using "MapCreator"
         int size = 8;
         Map map = createMap("basic", size);
@@ -26,10 +34,10 @@ public class MapCreatorTest {
     }
 
     @Test
-    public void creatorMethod_returnsBasicMapWithCorrectSize_ifGivenMapTypeBasicWithDifferentCasing() {
+    public void createMap_returnsBasicMapWithCorrectSize_ifGivenMapTypeBasicWithDifferentCasing() {
         // Create a "BasicMap" object of size 6 using "MapCreator"
         // The "mapType" argument is now given in a different casing to see if this affects "MapCreator"
-        int size = 8;
+        int size = 12;
         Map map = createMap("BaSiC", size);
 
         // Check that the created map is of type BasicMap
@@ -40,7 +48,21 @@ public class MapCreatorTest {
     }
 
     @Test
-    public void creatorMethod_throwsIllegalArgumentException_ifMapTypeDoesNotExist() {
+    public void createMap_returnsSameInstance_ifCalledTwice() {
+        // Create a "BasicMap" object of size 6 using "MapCreator"
+        // The "mapType" argument is now given in a different casing to see if this affects "MapCreator"
+        int size = 12;
+
+        // Try to create two map instances
+        Map firstMap = createMap("Basic", size);
+        Map secondMap = createMap("Basic", size);
+
+        // Check that the two map instances are actually the same
+        assertSame(firstMap, secondMap);
+    }
+
+    @Test
+    public void createMap_throwsIllegalArgumentException_ifMapTypeDoesNotExist() {
         // Expect the method to throw an IllegalArgumentException
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("Invalid map type.");

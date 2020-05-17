@@ -20,11 +20,15 @@ public class BasicMapTest {
      */
     private BasicMap basicMap;
     /**
-     * Default map size used in most of the tests.
+     * Map size used the {@link BasicMapTest#defaultTiles} set of tiles.
      */
     private final int defaultSize = 5;
     /**
-     * Default pre-generated map used in tests requiring a priori knowledge of the tiles
+     * Treasure position used the {@link BasicMapTest#defaultTiles} set of tiles.
+     */
+    private Position defaultTreasurePos;
+    /**
+     * Default pre-generated set of tiles used in tests requiring a priori knowledge of the tiles
      */
     private TileType[][] defaultTiles;
 
@@ -44,7 +48,8 @@ public class BasicMapTest {
         }
 
         // Add a treasure tile at the very first tile
-        defaultTiles[0][0] = TileType.Treasure;
+        defaultTreasurePos = new Position(0,0);
+        defaultTiles[defaultTreasurePos.x][defaultTreasurePos.y] = TileType.Treasure;
 
         // Create a new empty BasicMap object with a pre-generated set of tiles
         basicMap = new BasicMap(defaultTiles);
@@ -97,6 +102,16 @@ public class BasicMapTest {
 
         // Check that the map size was set correctly
         assertEquals(defaultSize, basicMap.getSize());
+    }
+
+    @Test
+    public void BasicMap_setsTreasurePosMember_IfGivenA2DArrayofTilesWithEqualDimensions() {
+        // Try to initialize the map with a pre-generated 2D array of tiles with size 5x5 (both lists have equal length)
+        basicMap = new BasicMap(defaultTiles);
+
+        //Check that the "treasurePos" member is set to the expected position
+        assertEquals(defaultTreasurePos.x, basicMap.treasurePos.x);
+        assertEquals(defaultTreasurePos.y, basicMap.treasurePos.y);
     }
 
     @Test
@@ -502,6 +517,19 @@ public class BasicMapTest {
                 assertNotNull(basicMap.getTileType(i, j));
             }
         }
+    }
+
+    @Test
+    public void generate_setsTreasurePosMember_whenCalled() {
+        // Create a new empty 7 x 7 tile map and randomly generate the tiles
+        int size = 7;
+        basicMap = new BasicMap(size);
+        basicMap.generate();
+
+        // Check that the "treasurePos" member is set
+        assertNotNull(basicMap.treasurePos);
+        // Check that the position at "treasurePos" is a treasure tile
+        assertEquals(TileType.Treasure, basicMap.getTileType(basicMap.treasurePos));
     }
 
     @Test public void isPlayable_returnsTrue_IfTheTreasureCanBeReachedFrom75PercentOfTiles() {
