@@ -44,8 +44,11 @@ public abstract class Map {
      * Constructor used to initialize an empty {@code Map} object.
      * @param n size of the {@code n} x {@code n} square map
      * @throws IllegalArgumentException if the method is given an invalid size parameter (outside of the range 5-50)
+     *
+     * @implNote This constructor has a {@code protected} access modifier to stop client code from instantiating the
+     * class directly. However, unit tests and subclasses can still call the constructor normally.
      */
-    public Map(int n)
+    protected Map(int n)
     {
         // If map size is invalid (not between 5-50) throw an exception
         if(n < 5 || n > 50) {
@@ -68,8 +71,11 @@ public abstract class Map {
      * @param tiles a 2D array of {@link TileType} elements which represents the placement of the tiles in the map
      * @throws IllegalArgumentException if {@code tiles} is null, empty or if the lists in the 2D array do not have the
      * same lengths.
+     *
+     * @implNote This constructor has a {@code protected} access modifier to stop client code from instantiating the
+     * class directly. However, unit tests and subclasses can still call the constructor normally.
      */
-    public Map(TileType[][] tiles) {
+    protected Map(TileType[][] tiles) {
         // If the given 2D tile array is actually null, throw an exception
         if(tiles == null) {
             throw new IllegalArgumentException("The lists in the 2D array of tiles cannot be null.");

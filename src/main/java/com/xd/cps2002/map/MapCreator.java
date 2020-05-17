@@ -29,11 +29,11 @@ public class MapCreator {
      * The {@code instance} member stores the Singleton instance of the map accessed by classes outside of the
      * {@link com.xd.cps2002.map} package.
      *
-     * @implNote  This is declared as {@code protected} instead of {@code private} to allow unit tests in the same
-     * package to easily reset the instance between tests. However, external methods still are not given direct access
-     * to this member.
+     * @implNote  Its access modifier is set as {@code default} instead of {@code private} to allow unit tests in the
+     * same package to easily reset the instance between tests. However, external methods still are not given direct
+     * access to this member.
      */
-    protected static Map instance;
+     static Map instance;
 
     /** Factory method used to create different types of {@link Map} objects.
      * @param mapType A string representing the type of map to be created.
@@ -56,6 +56,11 @@ public class MapCreator {
                 default:
                     throw new IllegalArgumentException("Invalid map type.");
             }
+
+            // Keep regenerating the tiles of the map until it can be played by the user
+            do {
+                instance.generate();
+            } while(!instance.isPlayable());
         }
 
         // Return the singleton instance
