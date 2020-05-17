@@ -126,7 +126,7 @@ public abstract class Map {
         // Store the given 2D tile array in the "tiles" member
         this.tiles = tiles;
 
-        // Initialize "reachableTiles" to null
+        // Initialize "winnableTiles" to null
         winnableTiles = null;
     }
 

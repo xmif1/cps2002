@@ -66,4 +66,31 @@ public class MapCreator {
         // Return the singleton instance
         return instance;
     }
+
+    /** Factory method used to create different types of {@link Map} objects with a preset set of tiles (for testing).
+     * @param mapType A string representing the type of map to be created.
+     * @param tiles a 2D array of {@link TileType} elements which represents the placement of the tiles in the map
+     * @return A Map object with the type represented by {@code mapType}
+     *
+     * @apiNote This method creates a new {@link Map} instance only the first time it is called. This means that the
+     * method is guaranteed to return a map of the requested type only the first time it is called.
+     * */
+    public static Map createMap(String mapType, TileType[][] tiles) {
+        // Change mapType to lowercase to avoid having case sensitivity
+        mapType = mapType.toLowerCase();
+
+        // If the singleton instance has not been created yet, create one according to the map type specified in the
+        // parameter "mapType"
+        if(instance == null) {
+            switch (mapType) {
+                case "basic":
+                    instance = new BasicMap(tiles); break;
+                default:
+                    throw new IllegalArgumentException("Invalid map type.");
+            }
+        }
+
+        // Return the singleton instance
+        return instance;
+    }
 }

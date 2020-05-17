@@ -31,7 +31,7 @@ public class HTMLGeneratorTest{
                                         {TileType.Grass, TileType.Grass, TileType.Treasure, TileType.Water, TileType.Water},
                                         {TileType.Grass, TileType.Grass, TileType.Grass, TileType.Water, TileType.Water},
                                         {TileType.Grass, TileType.Grass, TileType.Grass, TileType.Grass, TileType.Water}};
-    private final Map map = MapCreator.createMap("basic", 5); // initialize a BasicMap based on the tiles above
+    private final Map map = MapCreator.createMap("basic", tiles); // initialize a BasicMap based on the tiles above
     private final HTMLGenerator htmlGenerator = HTMLGenerator.getHTMLGenerator(); // get HTMLGenerator singleton instance
 
     /**

@@ -33,9 +33,6 @@ public class MainGameTest{
                                         {TileType.Grass, TileType.Grass, TileType.Grass, TileType.Water, TileType.Water},
                                         {TileType.Grass, TileType.Grass, TileType.Grass, TileType.Grass, TileType.Water}};
 
-    // Default map size used when creating maps in most unit tests
-    private final int testMapSize = 5;
-
     @Before
     public void setupMainGameTest(){
         mainGame.players = new Player[2]; // initialize two players
@@ -96,7 +93,7 @@ public class MainGameTest{
      */
     @Test(expected = SetupOperationPrecedenceException.class)
     public void mapInitializedBeforePlayers_setupPlayersTest() throws InvalidNumberOfPlayersException{
-        mainGame.map = MapCreator.createMap("basic", testMapSize);
+        mainGame.map = MapCreator.createMap("basic", tiles);
         mainGame.setupPlayers(5);
     }
 
@@ -167,7 +164,7 @@ public class MainGameTest{
      */
     @Test(expected = SetupOperationPrecedenceException.class)
     public void noPlayersInitialized_setPlayerPositionsTest(){
-        mainGame.map = MapCreator.createMap("basic", testMapSize);
+        mainGame.map = MapCreator.createMap("basic", tiles);
 
         mainGame.players = null;
         mainGame.setPlayerPositions();
@@ -196,7 +193,7 @@ public class MainGameTest{
             mainGame.players[i] = new Player();
         }
 
-        mainGame.map = MapCreator.createMap("basic", testMapSize);
+        mainGame.map = MapCreator.createMap("basic", tiles);
         mainGame.map.isPlayable();
 
         mainGame.setPlayerPositions();
@@ -212,7 +209,7 @@ public class MainGameTest{
      */
     @Test(expected = SetupOperationPrecedenceException.class)
     public void noDirPathSpecified_writeHTMLFilesTest() throws IOException{
-        mainGame.map = MapCreator.createMap("basic", testMapSize);
+        mainGame.map = MapCreator.createMap("basic", tiles);
         mainGame.dir = null;
 
         mainGame.writeHTMLFiles();
@@ -258,7 +255,7 @@ public class MainGameTest{
         mainGame.players[2] = new Player();
         mainGame.players[2].setStartPosition(new Position(2, 2)); // at treasure tile
 
-        mainGame.map = MapCreator.createMap("basic", testMapSize);
+        mainGame.map = MapCreator.createMap("basic", tiles);
         mainGame.map.isPlayable();
 
         mainGame.initialized = true;
@@ -283,7 +280,7 @@ public class MainGameTest{
         mainGame.players[0].setTeam(new Team());
         mainGame.players[0].setPosition(new Position(1, 2)); // at water tile
 
-        mainGame.map = MapCreator.createMap("basic", testMapSize);
+        mainGame.map = MapCreator.createMap("basic", tiles);
         mainGame.map.isPlayable();
 
         mainGame.initialized = true;
