@@ -6,7 +6,7 @@ import com.xd.cps2002.player.Position;
 
 /**
  * The {@code Map} abstract class provides a common interface for all the different types of map types. This acts as the
- * abstract "product" class used to implement the factory design pattern.
+ * abstract "product" class used to implement the factory design pattern for Maps.
  *
  * This class was implemented as an abstract class rather than an interface since the only functionality that would be
  * carried out differently by each subclass is the map generation and the way that that map is verified to be playable.
