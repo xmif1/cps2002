@@ -445,14 +445,11 @@ public class BasicMapTest {
     }
 
     @Test
-    public void generate_generatesCorrectNumberOfWaterTiles_whenCalled() {
+    public void generate_generatesCorrectNumberOfWaterTiles_whenCalledUsingDefaultWaterToTileRatios() {
         // Create a new empty 12 x 12 tile map and randomly generate the tiles
         int size = 12;
         basicMap = new BasicMap(size);
         basicMap.generate();
-
-        // Calculate the number of map tiles that need to be generated (10% of all tiles)
-        int expectedCount = (int) Math.floor(size * size * 0.10);
 
         // Count the number of water tiles generated
         int waterCount = 0;
@@ -462,8 +459,11 @@ public class BasicMapTest {
             }
         }
 
-        // Check that 10% of the map tiles are in fact water tiles
-        assertEquals(expectedCount, waterCount);
+        // Find the actual ratio of water tiles to map tiles that were generated
+        double actualRatio = waterCount/((double) size * size);
+
+        // Check that the actual ratio is in the default range (between 1% and 10 percent)
+        assertTrue(0.01 <= actualRatio && actualRatio <= 0.10);
     }
 
     @Test

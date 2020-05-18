@@ -13,10 +13,16 @@ import java.util.Stack;
 public class BasicMap extends Map {
 
     /**
-     * Constant value defining the ratio of water tiles to the total number of tiles in the map. For this map type 10%
-     * of all of the map tiles are set to be water tiles.
+     * Value defining the lower bound of the ratio of water tiles to the total number of tiles in the map. For this map
+     * type by default at least 1% of all of the map tiles are set to be water tiles.
      */
-    private final double waterTileRatio = 0.10;
+    private double minWaterTileRatio = 0.01;
+
+    /**
+     * Value defining the upper bound of the ratio of water tiles to the total number of tiles in the map. For this map
+     * type by default at most 10% of all of the map tiles are set to be water tiles.
+     */
+    private double maxWaterTileRatio = 0.10;
 
     /**
      * Defines the minimum percentage of tiles in the map from which a player needs to be able to reach the treasure.
@@ -57,8 +63,11 @@ public class BasicMap extends Map {
      * @apiNote Note that this function should also set the {@link Map#treasurePos} member so that it can be used later
      * in the function {@link Map#isPlayable()}.
      *
-     * @implNote The function generates one treasure tile and a number of water tiles according to
-     * {@link BasicMap#waterTileRatio} and the total number of tiles in the map. It also makes sure that none of the
+     * @implNote The function generates one treasure tile and randomly generates a number of water tiles. The ratio
+     * of randomly generated water tiles to maps tiles is within the lower and upper bounds specified by the members
+     * {@link BasicMap#minWaterTileRatio} and {@link BasicMap#maxWaterTileRatio}.
+     *
+     * {@link BasicMap#minWaterTileRatio} and the total number of tiles in the map. It also makes sure that none of the
      * water tiles that are generated are placed adjacent to the treasure tile.
      */
     @Override
@@ -78,8 +87,12 @@ public class BasicMap extends Map {
         // Store the position of the treasure tile in the "treasurePos" member
         treasurePos = new Position(treasureX, treasureY);
 
+        // Choose ratio of water tiles to map tiles to be generated in the map
+        // Note: the percentage is chosen in the range between "minWaterTileRatio" and "maxWaterTileRatio".
+        double randWaterTileRatio = (r.nextDouble() * (maxWaterTileRatio-minWaterTileRatio)) + minWaterTileRatio;
+
         // Calculate the number of water tiles that need to be generated
-        int waterTilesQuota = (int) Math.floor(size * size * waterTileRatio);
+        int waterTilesQuota = (int) Math.floor(size * size * randWaterTileRatio);
 
         // Try to place all of the water tiles in randomly generated positions
         while(waterTilesQuota > 0) {
