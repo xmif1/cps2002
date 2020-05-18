@@ -22,29 +22,27 @@ import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * The MainGame class is responsible for coordinating the main logic of the game, and the primary interface for user
- * input and provision of output to the user. It implements a Singleton design pattern, and is designed to be the
- * primary interface to the game API, providing descriptive and detailed errors. Moreover, it handles the majority of
- * setup and is designed to prevent the execution of setup steps in an invalid procedural order, if done so through this
- * class. Otherwise access to the sub-systems is left unhindered by this class.
+ * input and provision of output to the user. It is designed to be the primary interface to the game API, providing
+ * descriptive and detailed errors. Moreover, it handles the majority of setup and is designed to prevent the execution
+ * of setup steps in an invalid procedural order, if done so through this class. Otherwise access to the sub-systems is
+ * left unhindered by this class. It follows the Singleton design pattern, allowing better granular control over the
+ * creation of entities, especially Map.
  *
  * The setup sequence via this class is intended to be executed in the following manner, with a number of checks to
  * ensure so:
  *
  * [label:start setupPlayers(int n_players) -{@literal >} setupMap(int map_size) -{@literal >} setPlayerPositions()]
- * -{@literal >} allocateTeams(int n_teams) |-{@literal >} reset() goto:start
+ * -{@literal >} allocateTeams(int n_teams)
  *
  * @author Xandru Mifsud
  */
 public class Game {
     private static Game instance = null; // the singleton instance
     public boolean initialized = false;
-    public boolean team_mode = false;
 
     public Player[] players = null;
     public Team[] teams = null;
     public Map map = null;
-
-    public int n_teams;
 
     public String dir = null;
     public HTMLGenerator htmlGenerator = HTMLGenerator.getHTMLGenerator();
@@ -64,23 +62,6 @@ public class Game {
             instance = new Game();
         }
         return instance;
-    }
-
-    /**
-     * Dereferences the MainGame instance to null.
-     */
-    public static void dereferenceMainGame(){
-        instance = null;
-    }
-
-    /**
-     * Sets the MainGame.players and MainGame.map to null, allowing for the setup functions to be called again sequentially.
-     */
-    public void reset(){
-        players = null;
-        map = null;
-        dir = null;
-        initialized = false;
     }
 
     /**
