@@ -445,7 +445,7 @@ public class BasicMapTest {
     }
 
     @Test
-    public void generate_generatesCorrectNumberOfWaterTiles_whenCalledUsingDefaultWaterToTileRatios() {
+    public void generate_generatesCorrectNumberOfWaterTiles_whenCalledUsingDefaultWaterToTilePercentages() {
         // Create a new empty 12 x 12 tile map and randomly generate the tiles
         int size = 12;
         basicMap = new BasicMap(size);
@@ -534,16 +534,16 @@ public class BasicMapTest {
 
     /**
      * This unit test simultaneously checks that the functions {@link BasicMap#generate()} and
-     * {@link BasicMap#setWaterTileRatios(double, double)} both work as intended.
+     * {@link BasicMap#setWaterTilePercentage(int, int)} both work as intended.
      */
     @Test
-    public void generate_generatesCorrectNumberOfWaterTiles_whenWaterToTileRatiosHaveBeenChanged() {
+    public void generate_generatesCorrectNumberOfWaterTiles_whenWaterToTilePercentagesHaveBeenChanged() {
         // Create a new empty 12 x 12 tile map
         int size = 12;
         basicMap = new BasicMap(size);
 
         // Change the minimum and maximum ratios of water tiles to map tiles in the map to 40-70%
-        basicMap.setWaterTileRatios(0.4, 0.7);
+        basicMap.setWaterTilePercentage(40, 70);
 
         // Randomly generate the tiles in the map
         basicMap.generate();
@@ -563,7 +563,8 @@ public class BasicMapTest {
         assertTrue(0.4 <= actualRatio && actualRatio <= 0.7);
     }
 
-    @Test public void isPlayable_returnsTrue_IfTheTreasureCanBeReachedFrom75PercentOfTiles() {
+    @Test
+    public void isPlayable_returnsTrue_IfTheTreasureCanBeReachedFrom75PercentOfTiles() {
         // Create a new 10x10 map with a strip of water tiles dividing it (80% of the map is playable)
         int size = 10;
         TileType[][] tiles = new TileType[size][size];

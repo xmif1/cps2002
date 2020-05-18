@@ -13,16 +13,26 @@ import java.util.Stack;
 public class BasicMap extends Map {
 
     /**
-     * Value defining the lower bound of the ratio of water tiles to the total number of tiles in the map. For this map
-     * type by default at least 1% of all of the map tiles are set to be water tiles.
+     * Value defining the lower bound of the percentage of map tiles which are actually water tiles. For this map type
+     * by default at least 1% of all of the map tiles are set to be water tiles.
+     *
+     * @implNote This is defined as an integer instead of a float since the user only needs to be able to set the value
+     * to whole percentages, otherwise the changes may not make much of a difference. Moreover, this also avoids any
+     * strange behaviour to due floating point arithmetic when the upper and lower bound percentages are equal or close
+     * to one another.
      */
-    private double minWaterTileRatio = 0.01;
+    private int minWaterTilePercent = 1;
 
     /**
-     * Value defining the upper bound of the ratio of water tiles to the total number of tiles in the map. For this map
-     * type by default at most 10% of all of the map tiles are set to be water tiles.
+     * Value defining the lower bound of the percentage of map tiles which are actually water tiles. For this map type
+     * by default at least 1% of all of the map tiles are set to be water tiles.
+     *
+     * @implNote This is defined as an integer instead of a float since the user only needs to be able to set the value
+     * to whole percentages, otherwise the changes may not make much of a difference. Moreover, this also avoids any
+     * strange behaviour to due floating point arithmetic when the upper and lower bound percentages are equal or close
+     * to one another.
      */
-    private double maxWaterTileRatio = 0.10;
+    private int maxWaterTilePercent = 10;
 
     /**
      * Defines the minimum percentage of tiles in the map from which a player needs to be able to reach the treasure.
@@ -57,10 +67,21 @@ public class BasicMap extends Map {
         super(tiles);
     }
 
-    public void setWaterTileRatios(double minWaterTileRatio, double maxWaterTileRatio) {
+    /**
+     * This function is used to change the default percentages of water tiles in the entire map when generating the map.
+     *
+     * @param minWaterTilePercent An integer from 0 to 99 representing the minimum percentage of water tiles to
+     *                            be generated in the map.
+     * @param maxWaterTilePercent An integer from 0 to 99 representing the maximum percentage of water tiles to
+     *                            be generated in the map.
+     *
+     * @implNote The functionality for changing these percentages was not included in the constructor since changing
+     * these values is completely optional given that they already have a default value when the object is created.
+     */
+    public void setWaterTilePercentage(int minWaterTilePercent, int maxWaterTilePercent) {
         // Set the water tile to map tiles ratios to the given parameters
-        this.minWaterTileRatio = minWaterTileRatio;
-        this.maxWaterTileRatio = maxWaterTileRatio;
+        this.minWaterTilePercent = minWaterTilePercent;
+        this.maxWaterTilePercent = maxWaterTilePercent;
     }
 
     /**
@@ -69,10 +90,10 @@ public class BasicMap extends Map {
      * @apiNote Note that this function should also set the {@link Map#treasurePos} member so that it can be used later
      * in the function {@link Map#isPlayable()}.
      *
-     * @implNote The function generates one treasure tile and randomly generates a number of water tiles. The ratio
+     * @implNote The function generates one treasure tile and randomly generates a number of water tiles. The percentage
      * of randomly generated water tiles to maps tiles is within the lower and upper bounds specified by the members
-     * {@link BasicMap#minWaterTileRatio} and {@link BasicMap#maxWaterTileRatio}. It also makes sure that none of the
-     * water tiles that are generated are placed adjacent to the treasure tile.
+     * {@link BasicMap#minWaterTilePercent} and {@link BasicMap#maxWaterTilePercent}. The function also makes sure that
+     * none of the water tiles that are generated are placed adjacent to the treasure tile.
      */
     @Override
     public void generate() {
@@ -91,12 +112,12 @@ public class BasicMap extends Map {
         // Store the position of the treasure tile in the "treasurePos" member
         treasurePos = new Position(treasureX, treasureY);
 
-        // Choose ratio of water tiles to map tiles to be generated in the map
+        // Choose percentage of water tiles to map tiles to be generated in the map
         // Note: the percentage is chosen in the range between "minWaterTileRatio" and "maxWaterTileRatio".
-        double randWaterTileRatio = (r.nextDouble() * (maxWaterTileRatio-minWaterTileRatio)) + minWaterTileRatio;
+        float randWaterTilePercentage = r.nextInt( maxWaterTilePercent - minWaterTilePercent) + minWaterTilePercent;
 
         // Calculate the number of water tiles that need to be generated
-        int waterTilesQuota = (int) Math.floor(size * size * randWaterTileRatio);
+        int waterTilesQuota = (int) Math.ceil(size * size * (randWaterTilePercentage/100));
 
         // Try to place all of the water tiles in randomly generated positions
         while(waterTilesQuota > 0) {
