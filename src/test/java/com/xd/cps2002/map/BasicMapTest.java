@@ -532,6 +532,35 @@ public class BasicMapTest {
         assertEquals(TileType.Treasure, basicMap.getTileType(basicMap.treasurePos));
     }
 
+    /**
+     * TODO This unit test tests the {@link Map}
+     */
+    @Test
+    public void generate_generatesCorrectNumberOfWaterTiles_whenWaterToTileRatiosHaveBeenChanged() {
+        // Create a new empty 12 x 12 tile map
+        int size = 12;
+        basicMap = new BasicMap(size);
+
+        // Change the minimum and maximum ratios of water tiles to map tiles in the map to 40-70%
+        basicMap.setWaterTileRatios(0.4, 0.7);
+
+        basicMap.generate();
+
+        // Count the number of water tiles generated
+        int waterCount = 0;
+        for(int i = 0; i < size; i++) {
+            for(int j = 0; j < size; j++) {
+                if(basicMap.getTileType(i,j) == TileType.Water) waterCount++;
+            }
+        }
+
+        // Find the actual ratio of water tiles to map tiles that were generated
+        double actualRatio = waterCount/((double) size * size);
+
+        // Check that the actual ratio is in the default range (between 1% and 10 percent)
+        assertTrue(0.4 <= actualRatio && actualRatio <= 0.7);
+    }
+
     @Test public void isPlayable_returnsTrue_IfTheTreasureCanBeReachedFrom75PercentOfTiles() {
         // Create a new 10x10 map with a strip of water tiles dividing it (80% of the map is playable)
         int size = 10;

@@ -57,6 +57,12 @@ public class BasicMap extends Map {
         super(tiles);
     }
 
+    public void setWaterTileRatios(double minWaterTileRatio, double maxWaterTileRatio) {
+        // Set the water tile to map tiles ratios to the given parameters
+        this.minWaterTileRatio = minWaterTileRatio;
+        this.maxWaterTileRatio = maxWaterTileRatio;
+    }
+
     /**
      * Generates the tiles for the {@code BasicMap} object randomly.
      *
@@ -65,9 +71,7 @@ public class BasicMap extends Map {
      *
      * @implNote The function generates one treasure tile and randomly generates a number of water tiles. The ratio
      * of randomly generated water tiles to maps tiles is within the lower and upper bounds specified by the members
-     * {@link BasicMap#minWaterTileRatio} and {@link BasicMap#maxWaterTileRatio}.
-     *
-     * {@link BasicMap#minWaterTileRatio} and the total number of tiles in the map. It also makes sure that none of the
+     * {@link BasicMap#minWaterTileRatio} and {@link BasicMap#maxWaterTileRatio}. It also makes sure that none of the
      * water tiles that are generated are placed adjacent to the treasure tile.
      */
     @Override
