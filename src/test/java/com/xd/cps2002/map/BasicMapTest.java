@@ -533,7 +533,8 @@ public class BasicMapTest {
     }
 
     /**
-     * TODO This unit test tests the {@link Map}
+     * This unit test simultaneously checks that the functions {@link BasicMap#generate()} and
+     * {@link BasicMap#setWaterTileRatios(double, double)} both work as intended.
      */
     @Test
     public void generate_generatesCorrectNumberOfWaterTiles_whenWaterToTileRatiosHaveBeenChanged() {
@@ -544,6 +545,7 @@ public class BasicMapTest {
         // Change the minimum and maximum ratios of water tiles to map tiles in the map to 40-70%
         basicMap.setWaterTileRatios(0.4, 0.7);
 
+        // Randomly generate the tiles in the map
         basicMap.generate();
 
         // Count the number of water tiles generated
