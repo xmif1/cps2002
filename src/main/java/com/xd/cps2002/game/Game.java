@@ -39,7 +39,7 @@ public class Game{
     private boolean init_players, init_map, init_positions, init_teams;
 
     public String dir = null;
-    
+
     /**
      * Private constructor to initialize an MainGame instance (if one does not already exist).
      */
@@ -55,6 +55,16 @@ public class Game{
             instance = new Game();
         }
         return instance;
+    }
+
+    /**
+     * Resets the game state.
+     */
+    public void reset(){
+        players = null;
+        map = null;
+        dir = null;
+        init_players = init_map = init_positions = init_teams = false;
     }
 
     /**

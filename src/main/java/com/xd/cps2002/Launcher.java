@@ -15,12 +15,11 @@ import java.util.Scanner;
  * @author Xandru Mifsud
  */
 public class Launcher{
-    static Game game; // hold singleton instance
 
     public static void main(String[] args){
-        game = Game.getMainGame(); // get instance
-        initialiseGame(); // setup game
-        ArrayList<Integer> winners = startGame(); // start game
+        Game game = Game.getMainGame(); // get instance
+        initialiseGame(game); // setup game
+        ArrayList<Integer> winners = startGame(game); // start game
 
         // print all the winners, and then exit
         System.out.println("Congratulations to the following winners!");
@@ -47,7 +46,7 @@ public class Launcher{
      * handling to return the game to a correct state. When caught, they provide the programmer with the opportunity to
      * take further action, eg. by re-prompting for input.
      */
-    public static void initialiseGame(){
+    public static void initialiseGame(Game game){
         boolean team_mode = false;
         int n_players;
         int n_teams;
@@ -176,7 +175,7 @@ public class Launcher{
      * @throws SetupOperationPrecedenceException is thrown when there is an attempted call to getMoves() before a call
      * to initializeGame()
      */
-    public static void getMoves(){
+    public static void getMoves(Game game){
         if(!game.isInitialised()){
             throw new SetupOperationPrecedenceException("Attempted call to getMoves() before initializeGame().");
         }
@@ -223,7 +222,7 @@ public class Launcher{
      * @throws SetupOperationPrecedenceException is thrown when there is an attempted call to updateGameState() before a
      * call to initializeGame()
      */
-    public static ArrayList<Integer> updateGameState(){
+    public static ArrayList<Integer> updateGameState(Game game){
         if(!game.isInitialised()){
             throw new SetupOperationPrecedenceException("Attempted call to updateGameState() when game variables have not" +
                     " been initialized.");
@@ -254,7 +253,7 @@ public class Launcher{
      * @throws SetupOperationPrecedenceException is thrown when there is an attempted call to startGame() before a call
      * to initializeGame()
      */
-    public static ArrayList<Integer> startGame(){
+    public static ArrayList<Integer> startGame(Game game){
         if(!game.isInitialised()){
             throw new SetupOperationPrecedenceException("Attempted call to startGame() before initializeGame().");
         }
@@ -275,8 +274,8 @@ public class Launcher{
                     System.exit(1);
                 }
 
-                getMoves(); // ask players to play their respective moves
-                winners = updateGameState(); // then update the game state variables accordingly
+                getMoves(game); // ask players to play their respective moves
+                winners = updateGameState(game); // then update the game state variables accordingly
             }
 
             return winners;
