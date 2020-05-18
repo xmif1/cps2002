@@ -28,6 +28,20 @@ public class MapCreatorTest {
         MapCreator.instance = null;
     }
 
+    /**
+     * This teardown method is important to avoid the static map instances created in these tests from interfering with
+     * the unit tests of other classes. This is important since most unit tests assume that "MapCreator" will always
+     * return the map instance that they requested. However, this may not be the case if the unit tests are not run in
+     * in order; for example, if a unit test from {@link com.xd.cps2002.game.HTMLGeneratorTest} is run right after one
+     * of the tests in this class.
+     */
+
+    @After
+    public void teardown() {
+        // Reset the singleton instance in "MapCreator" to null after each test
+        MapCreator.instance = null;
+    }
+
     /* Tests for the version of the "createMap" function which take map size as an argument */
 
     @Test
