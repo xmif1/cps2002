@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.xd.cps2002.map.BasicMap;
 import com.xd.cps2002.map.Map;
+import com.xd.cps2002.map.MapCreator;
 import com.xd.cps2002.map.TileType;
 import com.xd.cps2002.player.Team;
 import com.xd.cps2002.player.player_exceptions.NullPositionException;
@@ -30,7 +31,7 @@ public class HTMLGeneratorTest{
                                         {TileType.Grass, TileType.Grass, TileType.Treasure, TileType.Water, TileType.Water},
                                         {TileType.Grass, TileType.Grass, TileType.Grass, TileType.Water, TileType.Water},
                                         {TileType.Grass, TileType.Grass, TileType.Grass, TileType.Grass, TileType.Water}};
-    private final Map map = new BasicMap(tiles); // initialize a BasicMap based on the tiles above
+    private final Map map = MapCreator.createMap("basic", tiles); // initialize a BasicMap based on the tiles above
     private final HTMLGenerator htmlGenerator = HTMLGenerator.getHTMLGenerator(); // get HTMLGenerator singleton instance
 
     /**

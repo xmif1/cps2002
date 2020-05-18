@@ -131,10 +131,7 @@ public class MainGame{
             throw new InvalidMapSizeException(map_size, "For 5 to 8 players, the minimum map size is 8x8.");
         }
         else{ // else initialize map
-            do{
-                map = MapCreator.createMap("basic", map_size);
-                map.generate();
-            } while(!map.isPlayable()); // attempt map creation until generated map is playable
+            map = MapCreator.createMap("basic", map_size);
         }
     }
 

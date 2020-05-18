@@ -8,8 +8,7 @@ import java.util.Stack;
 
 /**
  * The {@code BasicMap} class is a concrete implementation of the {@link} Map class, and it contains the implementations
- * of the {@link Map#generate()} and {@link Map#isPlayable()} functions particular to this type of map. This is the
- * concrete map implementation
+ * of the {@link Map#generate()} and {@link Map#isPlayable()} functions particular to this type of map.
  */
 public class BasicMap extends Map {
 
@@ -30,8 +29,11 @@ public class BasicMap extends Map {
      * class.
      * @param n size of the {@code n} x {@code n} square map
      * @throws IllegalArgumentException if the method is given an invalid size parameter (outside of the range 5-50)
+     *
+     * @implNote This constructor has a {@code protected} access modifier to stop client code from instantiating the
+     * class directly. However, unit tests can still call the constructor normally.
      */
-    public BasicMap(int n) {
+    protected BasicMap(int n) {
         // Initialize Map object using the Map class constructor
         super(n);
     }
@@ -44,7 +46,7 @@ public class BasicMap extends Map {
      * same lengths.
      */
 
-    public BasicMap(TileType[][] tiles) {
+    protected BasicMap(TileType[][] tiles) {
         // Initialize Map object using the Map class constructor
         super(tiles);
     }
