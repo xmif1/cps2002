@@ -1,12 +1,8 @@
 package com.xd.cps2002;
 
 import com.xd.cps2002.game.Game;
-import com.xd.cps2002.game.game_exceptions.InvalidMapSizeException;
-import com.xd.cps2002.game.game_exceptions.InvalidNumberOfPlayersException;
-import com.xd.cps2002.game.game_exceptions.SetupOperationPrecedenceException;
-import com.xd.cps2002.player.Player;
-import com.xd.cps2002.player.PlayerStatus;
-import com.xd.cps2002.player.Position;
+import com.xd.cps2002.game.game_exceptions.*;
+import com.xd.cps2002.player.*;
 import com.xd.cps2002.player.player_exceptions.MoveException;
 
 import java.io.IOException;
@@ -23,7 +19,7 @@ public class Launcher{
 
     public static void main(String[] args){
         game = Game.getMainGame(); // get instance
-        initializeGame(); // setup game
+        initialiseGame(); // setup game
         ArrayList<Integer> winners = startGame(); // start game
 
         // print all the winners, and then exit
@@ -37,8 +33,8 @@ public class Launcher{
     }
 
     /**
-     * The following is an initialization sequence, obeying the precedence rules described above. If implementing one's
-     * own initialization sequence, the following may serve as a template and guide in doing so.
+     * The following is an initialisation sequence, obeying the precedence rules described above. If implementing one's
+     * own initialisation sequence, the following may serve as a template and guide in doing so.
      *
      * The function consists of minimal conditional logic constructs, and is mainly composed of looping constructs. In
      * this manner, all logic has been encapsulated within the MainGame methods called: setupPlayers, setupMap,
@@ -51,7 +47,7 @@ public class Launcher{
      * handling to return the game to a correct state. When caught, they provide the programmer with the opportunity to
      * take further action, eg. by re-prompting for input.
      */
-    public static void initializeGame(){
+    public static void initialiseGame(){
         boolean team_mode = false;
         int n_players;
         int n_teams;
@@ -61,11 +57,11 @@ public class Launcher{
         // print a welcome message
         System.out.println("Welcome! Ready for a treasure hunt? The rules of the game are simple:\n\n" +
 
-                "Each player must use the U(p), D(down), L(eft), and R(ight) keys to move\n" +
-                "along the map. Each player gets one (valid) move per round. The first to\n" +
-                "find the treasure, wins! Beware however - land on a water tile, and you\n" +
-                "have to start all over again! Are you up to the challenge?\n" +
-                "-------------------------------------------------------------------------");
+                           "Each player must use the U(p), D(down), L(eft), and R(ight) keys to move\n" +
+                           "along the map. Each player gets one (valid) move per round. The first to\n" +
+                           "find the treasure, wins! Beware however - land on a water tile, and you\n" +
+                           "have to start all over again! Are you up to the challenge?\n" +
+                           "-------------------------------------------------------------------------");
 
         // repeatedly ask for integer input for the number of players, until valid input is provided
         while(true){
@@ -157,8 +153,6 @@ public class Launcher{
         }
 
         game.allocateTeams(n_teams);
-
-        game.setInitialized();
     }
 
     /* --------------------------------------------- Game Play Sequence ----------------------------------------------
@@ -183,7 +177,7 @@ public class Launcher{
      * to initializeGame()
      */
     public static void getMoves(){
-        if(!game.isInitialized()){
+        if(!game.isInitialised()){
             throw new SetupOperationPrecedenceException("Attempted call to getMoves() before initializeGame().");
         }
         else {
@@ -230,7 +224,7 @@ public class Launcher{
      * call to initializeGame()
      */
     public static ArrayList<Integer> updateGameState(){
-        if(!game.isInitialized()){
+        if(!game.isInitialised()){
             throw new SetupOperationPrecedenceException("Attempted call to updateGameState() when game variables have not" +
                     " been initialized.");
         }
@@ -261,7 +255,7 @@ public class Launcher{
      * to initializeGame()
      */
     public static ArrayList<Integer> startGame(){
-        if(!game.isInitialized()){
+        if(!game.isInitialised()){
             throw new SetupOperationPrecedenceException("Attempted call to startGame() before initializeGame().");
         }
         else{

@@ -1,24 +1,17 @@
 package com.xd.cps2002.game;
 
-import com.xd.cps2002.game.game_exceptions.InvalidMapSizeException;
-import com.xd.cps2002.game.game_exceptions.InvalidNumberOfPlayersException;
-import com.xd.cps2002.game.game_exceptions.SetupOperationPrecedenceException;
-import com.xd.cps2002.map.Map;
-import com.xd.cps2002.map.MapCreator;
-import com.xd.cps2002.player.Player;
-import com.xd.cps2002.player.Position;
-import com.xd.cps2002.player.Team;
-import com.xd.cps2002.player.player_exceptions.NullPositionException;
-import com.xd.cps2002.player.player_exceptions.TeamOverrideException;
+import com.xd.cps2002.game.game_exceptions.*;
+import com.xd.cps2002.map.*;
+import com.xd.cps2002.player.*;
+import com.xd.cps2002.player.player_exceptions.*;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Random;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.Files;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.Random;
 
 /**
  * The MainGame class is responsible for coordinating the main logic of the game, and the primary interface for user
@@ -36,21 +29,21 @@ import java.util.concurrent.ThreadLocalRandom;
  *
  * @author Xandru Mifsud
  */
-public class Game {
+public class Game{
     private static Game instance = null; // the singleton instance
-    public boolean initialized = false;
 
-    public Player[] players = null;
-    public Team[] teams = null;
-    public Map map = null;
+    private Player[] players = null;
+    private Team[] teams = null;
+    private Map map = null;
+    private HTMLGenerator htmlGenerator = HTMLGenerator.getHTMLGenerator();
+    private boolean init_players, init_map, init_positions, init_teams;
 
     public String dir = null;
-    public HTMLGenerator htmlGenerator = HTMLGenerator.getHTMLGenerator();
-
+    
     /**
      * Private constructor to initialize an MainGame instance (if one does not already exist).
      */
-    private Game(){ }
+    private Game(){init_players = init_map = init_positions = init_teams = false;}
 
     /**
      * Returns an MainGame instance; in the case that an instance already exists, it returns the exisiting one.
@@ -65,13 +58,36 @@ public class Game {
     }
 
     /**
+     * @return boolean which is True only when all of init_players, init_map, init_positions and init_teams are true.
+     */
+    public boolean isInitialised(){
+        return init_players && init_map && init_positions && init_teams;
+    }
+
+    /**
+     * Simple getter for the Game instance's players array.
+     * @return Player[] array with all player instances set for the current Game instance.
+     */
+    public Player[] getPlayers(){
+        return players;
+    }
+
+    /**
+     * Simple getter for the Game instance's Map instance.
+     * @return Map with the Map instance set for the current Game instance.
+     */
+    public Map getMap(){
+        return map;
+    }
+
+    /**
      * Initializes n_players Player instances, if n_players is not less than 2 or greater then 8.
      * @param n_players is the number of players to be initialized.
      * @throws SetupOperationPrecedenceException is thrown if a Map instances has already been created.
      * @throws InvalidNumberOfPlayersException is thrown if the number of players is {@literal <} 2 or {@literal >} 8.
      */
     public void setupPlayers(int n_players) throws InvalidNumberOfPlayersException{
-        if(map != null){
+        if(init_map){
             throw new SetupOperationPrecedenceException("Invalid attempt to setup Player instances after a Map instance" +
                     " has already been initialized.");
         }
@@ -81,6 +97,8 @@ public class Game {
             for(int i = 0; i < n_players; i++){
                 players[i] = new Player();
             }
+
+            init_players = true; // mark as initialised
         }
         else{
             throw new InvalidNumberOfPlayersException(n_players); // else throw exception
@@ -98,7 +116,7 @@ public class Game {
      */
     public void setupMap(int map_size) throws InvalidMapSizeException{
 
-        if(players == null){ // if players have not been initialized i.e. MainGame.players is null
+        if(!init_players){ // if players have not been initialized i.e. MainGame.players is null
             throw new SetupOperationPrecedenceException("Invalid attempt to setup Map instance before Player instances.");
         }
         else if(51 <= map_size || map_size <= 4){ // else if map_size is outside the global minimum and maximum size
@@ -112,6 +130,8 @@ public class Game {
                 map = MapCreator.createMap("basic", map_size);
                 map.generate();
             } while(!map.isPlayable()); // attempt map creation until generated map is playable
+
+            init_map = true; // mark as initialised
         }
     }
 
@@ -122,11 +142,11 @@ public class Game {
      */
     public void setPlayerPositions(){
 
-        if(players == null){ // if players have not been initialized i.e. MainGame.players is null
+        if(!init_players){ // if players have not been initialized i.e. MainGame.players is null
             throw new SetupOperationPrecedenceException("Invalid attempt to set players positions when no Players " +
                     "initialized.");
         }
-        else if(map == null){ // else if a Map instance has not already been created
+        else if(!init_map){ // else if a Map instance has not already been created
             throw new SetupOperationPrecedenceException("Invalid attempt to set players positions when no Map has been" +
                     " initialized.");
         }
@@ -141,6 +161,8 @@ public class Game {
                 }while(!map.isPositionWinnable(starting_position)); // check that the treasure tile is reachable
 
                 player.setStartPosition(starting_position); // set position
+
+                init_positions = true; // mark as initialised
             }
         }
     }
@@ -150,7 +172,7 @@ public class Game {
      * This is a variant of Fisher-Yates shuffle, known as Durstenfeld's Shuffle (as mentioned in Knuth's The Art of
      * Computer Programming), with the Java adaptation based on https://stackoverflow.com/a/1520212.
      */
-    public void shufflePlayers(){
+    private void shufflePlayers(){
         Random rnd = ThreadLocalRandom.current();
         for (int i = players.length - 1; i > 0; i--){
             int j = rnd.nextInt(i + 1);
@@ -190,6 +212,8 @@ public class Game {
                         "an initialised starting position.");
             }
         }
+
+        init_teams = true;
     }
 
     /**
@@ -225,7 +249,7 @@ public class Game {
      * @throws IOException is thrown when there is a failure in persisting to disk [generally fatal].
      */
     public void writeHTMLFiles() throws IOException{
-        if(map == null){ // if map is not set, throw a SetupOperationPrecedenceException
+        if(!init_map){ // if map is not set, throw a SetupOperationPrecedenceException
             throw new SetupOperationPrecedenceException("Cannot call generation of HTML file before map creation.");
         } // since players has precedence over map, map being initialized => players being initialized
         else if(dir == null){ // if directory not set, throw a SetupOperationPrecedenceException
