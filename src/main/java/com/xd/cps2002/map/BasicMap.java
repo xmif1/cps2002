@@ -70,20 +70,27 @@ public class BasicMap extends Map {
     /**
      * This function is used to change the default percentages of water tiles in the entire map when generating the map.
      *
-     * @param minWaterTilePercent An integer from 0 to 100 representing the minimum percentage of water tiles to
+     * @param minWaterTilePercent An integer from 0 to 64 representing the minimum percentage of water tiles to
      *                            be generated in the map.
-     * @param maxWaterTilePercent An integer from 0 to 100 representing the maximum percentage of water tiles to
+     * @param maxWaterTilePercent An integer from 0 to 64 representing the maximum percentage of water tiles to
      *                            be generated in the map.
+     *
+     * @apiNote Note that to allow the user to choose a single fixed percentage of water tiles, the parameters
+     * {@code minWaterTilePercent} and {@code maxWaterTilePercent} can both be set to the same value.
      *
      * @implNote The functionality for changing these percentages was not included in the constructor since changing
      * these values is completely optional given that they already have a default value when the object is created.
+     *
+     * Moreover, the function only allows a percentage as high as 64% since in the worst case (a 5x5 map) this is the
+     * maximum percentage of water tiles allowed. This is due to the restriction that tiles next to the treasure tile
+     * cannot be set to water tiles.
      */
     public void setWaterTilePercentage(int minWaterTilePercent, int maxWaterTilePercent) {
         // If either percentage is not in range, throw an exception
-        if(minWaterTilePercent < 0 || minWaterTilePercent > 100
-                || maxWaterTilePercent < 0 || maxWaterTilePercent > 100) {
+        if(minWaterTilePercent < 0 || minWaterTilePercent > 64
+                || maxWaterTilePercent < 0 || maxWaterTilePercent > 64) {
             throw new IllegalArgumentException("The minimum and maximum percentage of water tiles must both be in " +
-                    "the range from 0 to 100 (inclusive).");
+                    "the range from 0 to 64 (inclusive).");
         }
 
         // If the minimum percentage is larger than the maximum, throw an exception
