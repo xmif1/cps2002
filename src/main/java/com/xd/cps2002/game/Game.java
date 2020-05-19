@@ -74,6 +74,8 @@ public class Game{
         return init_players && init_map && init_positions && init_teams;
     }
 
+    // ----- GETTERS -----
+
     /**
      * Simple getter for the Game instance's players array.
      * @return Player[] array with all player instances set for the current Game instance.
@@ -90,18 +92,15 @@ public class Game{
         return map;
     }
 
+    // ----- SETTERS -----
+
     /**
      * Initializes n_players Player instances, if n_players is not less than 2 or greater then 8.
      * @param n_players is the number of players to be initialized.
-     * @throws SetupOperationPrecedenceException is thrown if a Map instances has already been created.
      * @throws InvalidNumberOfPlayersException is thrown if the number of players is {@literal <} 2 or {@literal >} 8.
      */
-    public void setupPlayers(int n_players) throws InvalidNumberOfPlayersException{
-        if(init_map){
-            throw new SetupOperationPrecedenceException("Invalid attempt to setup Player instances after a Map instance" +
-                    " has already been initialized.");
-        }
-        else if(2 <= n_players && n_players <= 8){ // validation check
+    public void setPlayers(int n_players) throws InvalidNumberOfPlayersException{
+        if(2 <= n_players && n_players <= 8){ // validation check
             players = new Player[n_players]; // initialize if within range
 
             for(int i = 0; i < n_players; i++){
@@ -121,15 +120,12 @@ public class Game{
      * ii.  The map_size is not less than 5 and not greater than 50.
      * iii. If the number of players is at least 5, than the minimum map_size is at least 8.
      * @param map_size is the size of the map.
+     * @param players is an array of Player instances.
      * @throws SetupOperationPrecedenceException is thrown if MainGame.players is null. [Criteria i. above]
      * @throws InvalidMapSizeException is thrown if the map_size is invalid. [Criteria ii. {@literal &} iii. above]
      */
-    public void setupMap(int map_size) throws InvalidMapSizeException{
-
-        if(!init_players){ // if players have not been initialized i.e. MainGame.players is null
-            throw new SetupOperationPrecedenceException("Invalid attempt to setup Map instance before Player instances.");
-        }
-        else if(51 <= map_size || map_size <= 4){ // else if map_size is outside the global minimum and maximum size
+    public void setMap(int map_size, Player[] players) throws InvalidMapSizeException{
+        if(51 <= map_size || map_size <= 4){ // else if map_size is outside the global minimum and maximum size
             throw new InvalidMapSizeException(map_size);
         }
         else if(5 <= players.length && map_size <= 7){ // else if the map_size is too small for 5 or more players
@@ -145,35 +141,24 @@ public class Game{
         }
     }
 
+    // -----------------
+
     /**
      * Initializes the starting position for all the Player instance in MainGame.players.
-     * @throws SetupOperationPrecedenceException is thrown if a Map instance has not already been created, or if
-     *         MainGame.players is null.
      */
-    public void setPlayerPositions(){
+    public void setPlayerPositions(Player[] players, Map map){
+        // for each player, initialize starting position
+        for(Player player : players){
+            Position starting_position;
+            do{
+                // randomly generate position within map size
+                starting_position = new Position(new Random().nextInt(map.getSize()),
+                                                 new Random().nextInt(map.getSize()));
+            }while(!map.isPositionWinnable(starting_position)); // check that the treasure tile is reachable
 
-        if(!init_players){ // if players have not been initialized i.e. MainGame.players is null
-            throw new SetupOperationPrecedenceException("Invalid attempt to set players positions when no Players " +
-                    "initialized.");
-        }
-        else if(!init_map){ // else if a Map instance has not already been created
-            throw new SetupOperationPrecedenceException("Invalid attempt to set players positions when no Map has been" +
-                    " initialized.");
-        }
-        else{
-            // for each player, initialize starting position
-            for(Player player : players){
-                Position starting_position;
-                do{
-                    // randomly generate position within map size
-                    starting_position = new Position(new Random().nextInt(map.getSize()),
-                                                     new Random().nextInt(map.getSize()));
-                }while(!map.isPositionWinnable(starting_position)); // check that the treasure tile is reachable
+            player.setStartPosition(starting_position); // set position
 
-                player.setStartPosition(starting_position); // set position
-
-                init_positions = true; // mark as initialised
-            }
+            init_positions = true; // mark as initialised
         }
     }
 
@@ -181,8 +166,10 @@ public class Game{
      * Shuffling of the players array, to randomise turn sequence. For example, it is also used to randomise team allocation.
      * This is a variant of Fisher-Yates shuffle, known as Durstenfeld's Shuffle (as mentioned in Knuth's The Art of
      * Computer Programming), with the Java adaptation based on https://stackoverflow.com/a/1520212.
+     *
+     * @param players is the array of Player instances to be shuffled.
      */
-    private void shufflePlayers(){
+    private void shufflePlayers(Player[] players){
         Random rnd = ThreadLocalRandom.current();
         for (int i = players.length - 1; i > 0; i--){
             int j = rnd.nextInt(i + 1);
@@ -194,9 +181,9 @@ public class Game{
         }
     }
 
-    public void allocateTeams(int n_teams){
+    public void allocateTeams(int n_teams, Player[] players){
         teams = new Team[n_teams]; // initialize if within range
-        shufflePlayers();
+        shufflePlayers(players);
 
         int players_idx = 0; // maintains an index to the players array
         int team_size = (int) Math.floor((double) players.length / n_teams); // number of players (on average) per team
@@ -256,17 +243,15 @@ public class Game{
 
     /**
      * Convenience function for generating and persisting to disk the HTML map file for each player instance in players.
+     * @param players is the array of Player instances for which an HTML map is to be generated.
+     * @param map is a Map instance on which the HTML maps are to be built.
      * @throws IOException is thrown when there is a failure in persisting to disk [generally fatal].
      */
-    public void writeHTMLFiles() throws IOException{
-        if(!init_map){ // if map is not set, throw a SetupOperationPrecedenceException
-            throw new SetupOperationPrecedenceException("Cannot call generation of HTML file before map creation.");
-        } // since players has precedence over map, map being initialized => players being initialized
-        else if(dir == null){ // if directory not set, throw a SetupOperationPrecedenceException
+    public void writeHTMLFiles(Player[] players, Map map) throws IOException{
+        if(dir == null){ // if directory not set, throw a SetupOperationPrecedenceException
             throw new SetupOperationPrecedenceException("Directory to write HTML files not specified.");
         }
         else{
-
             for(Player player : players){ // generate and persist to disk the HTML map for each player instance
                 FileWriter writer = new FileWriter(dir + System.getProperty("file.separator") +
                                                    "player_" + player.get_pID() + "_map.html");

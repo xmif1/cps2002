@@ -50,7 +50,7 @@ public class GameTest {
     @Test(expected = InvalidNumberOfPlayersException.class)
     public void belowMin_NoOfPlayers_setupPlayersTest() throws InvalidNumberOfPlayersException{
         int n_players = 1;
-        game.setupPlayers(n_players);
+        game.setPlayers(n_players);
     }
 
     /**
@@ -61,7 +61,7 @@ public class GameTest {
     @Test(expected = InvalidNumberOfPlayersException.class)
     public void aboveMax_NoOfPlayers_setupPlayersTest() throws InvalidNumberOfPlayersException{
         int n_players = 9;
-        game.setupPlayers(n_players);
+        game.setPlayers(n_players);
     }
 
     /**
@@ -72,7 +72,7 @@ public class GameTest {
     @Test
     public void inrange_NoOfPlayers_setupPlayersTest() throws InvalidNumberOfPlayersException{
         int n_players = 5;
-        game.setupPlayers(n_players);
+        game.setPlayers(n_players);
 
         assertEquals(5, game.getPlayers().length);
         for(int i = 0; i < 5; i++){
@@ -88,7 +88,7 @@ public class GameTest {
     @Test(expected = SetupOperationPrecedenceException.class)
     public void mapInitializedBeforePlayers_setupPlayersTest() throws InvalidNumberOfPlayersException{
         game.map = new BasicMap(tiles);
-        game.setupPlayers(5);
+        game.setPlayers(5);
     }
 
     /**
@@ -98,7 +98,7 @@ public class GameTest {
      */
     @Test(expected = SetupOperationPrecedenceException.class)
     public void noPlayersInitialized_setupMapTest() throws InvalidMapSizeException{
-        game.setupMap(8);
+        game.setMap(8);
     }
 
     /**
@@ -109,7 +109,7 @@ public class GameTest {
     @Test(expected = InvalidMapSizeException.class)
     public void belowMin_MapSize_setupMapTest() throws InvalidMapSizeException{
         int map_size = 4;
-        game.setupMap(map_size);
+        game.setMap(map_size);
     }
 
     /**
@@ -120,7 +120,7 @@ public class GameTest {
     @Test(expected = InvalidMapSizeException.class)
     public void aboveMax_MapSize_setupMapTest() throws InvalidMapSizeException{
         int map_size = 51;
-        game.setupMap(map_size);
+        game.setMap(map_size);
     }
 
     /**
@@ -134,7 +134,7 @@ public class GameTest {
         game.players = new Player[5];
 
         int map_size = 5;
-        game.setupMap(map_size);
+        game.setMap(map_size);
     }
 
     /**
@@ -145,7 +145,7 @@ public class GameTest {
     @Test
     public void inrange_MapSize_setupMapTest() throws InvalidMapSizeException{
         int map_size = 5;
-        game.setupMap(map_size);
+        game.setMap(map_size);
 
         assertNotNull(game.getMap());
         assertEquals(5, game.getMap().getSize());

@@ -45,6 +45,8 @@ public class Launcher{
      * Invalid input is handled by an extensive collection of custom exceptions. These exceptions carry out any necessary
      * handling to return the game to a correct state. When caught, they provide the programmer with the opportunity to
      * take further action, eg. by re-prompting for input.
+     *
+     * @param game is an instance of (singleton) Game which maintains the game state variables and updates them.
      */
     public static void initialiseGame(Game game){
         boolean team_mode = false;
@@ -75,7 +77,7 @@ public class Launcher{
                 n_players = scanner.nextInt();
                 n_teams = n_players;
 
-                game.setupPlayers(n_players);
+                game.setPlayers(n_players);
                 break; // if InvalidNumberOfPlayersException is not thrown, break
             }
             catch(InvalidNumberOfPlayersException ignored){ }
@@ -93,7 +95,7 @@ public class Launcher{
             }
 
             try{
-                game.setupMap(scanner.nextInt());
+                game.setMap(scanner.nextInt(), game.getPlayers());
                 break; // if InvalidMapSizeException is not thrown, break
             }
             catch(InvalidMapSizeException ignored){ }
@@ -114,7 +116,7 @@ public class Launcher{
             }
         }
 
-        game.setPlayerPositions(); // initialize the player positions
+        game.setPlayerPositions(game.getPlayers(), game.getMap()); // initialize the player positions
 
         scanner = new Scanner(System.in); // resetting scanner to forcefully clear buffer
 
@@ -151,7 +153,7 @@ public class Launcher{
             System.out.println("Invalid number of teams entered.");
         }
 
-        game.allocateTeams(n_teams);
+        game.allocateTeams(n_teams, game.getPlayers());
     }
 
     /* --------------------------------------------- Game Play Sequence ----------------------------------------------
@@ -172,6 +174,7 @@ public class Launcher{
      * For this reason, and since this methods primarily handles input by means of the Scanner class, no testing is
      * required beyond that of mocking, which is beyond the scope of this assignment specification.
      *
+     * @param game is an instance of (singleton) Game which maintains the game state variables and updates them.
      * @throws SetupOperationPrecedenceException is thrown when there is an attempted call to getMoves() before a call
      * to initializeGame()
      */
@@ -218,6 +221,7 @@ public class Launcher{
      * move. It is responsible for taking the necessary action when a player either dies by landing on a water tile,
      * or wins by landing on the treasure tile.
      *
+     * @param game is an instance of (singleton) Game which maintains the game state variables and updates them.
      * @return ArrayList of type Integer, of the winners if any, containing their unique identifier.
      * @throws SetupOperationPrecedenceException is thrown when there is an attempted call to updateGameState() before a
      * call to initializeGame()
@@ -228,7 +232,7 @@ public class Launcher{
                     " been initialized.");
         }
         else {
-            ArrayList<Integer> winners = new ArrayList<Integer>();
+            ArrayList<Integer> winners = new ArrayList<>();
 
             for(Player player : game.getPlayers()){
                 PlayerStatus status = game.getMap().getTileType(player.getPosition()).statusAfterMove; // get status of player
@@ -249,6 +253,7 @@ public class Launcher{
      * Define the main game game sequence, through a number of calls to getMoves() and updateGameState(), as well as
      * writeHTMLFiles().
      *
+     * @param game is an instance of (singleton) Game which maintains the game state variables and updates them.
      * @return ArrayList of type Integer, of the winners if any, containing their unique identifier.
      * @throws SetupOperationPrecedenceException is thrown when there is an attempted call to startGame() before a call
      * to initializeGame()
@@ -258,13 +263,13 @@ public class Launcher{
             throw new SetupOperationPrecedenceException("Attempted call to startGame() before initializeGame().");
         }
         else{
-            ArrayList<Integer> winners = new ArrayList<Integer>();
+            ArrayList<Integer> winners = new ArrayList<>();
 
             // this is the main game sequence
             while(winners.size() == 0){ // loop until a player lands on the Treasure tile
                 // generate current maps
                 try{
-                    game.writeHTMLFiles();
+                    game.writeHTMLFiles(game.getPlayers(), game.getMap());
                 }
                 // if persistence to disk fails, this is generally a fatal error beyond the scope of the program
                 catch(IOException ioe){
