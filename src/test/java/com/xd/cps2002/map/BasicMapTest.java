@@ -542,7 +542,7 @@ public class BasicMapTest {
         int size = 12;
         basicMap = new BasicMap(size);
 
-        // Change the minimum and maximum ratios of water tiles to map tiles in the map to 40-70%
+        // Change the minimum and maximum percentages of water tiles to map tiles in the map to 40-70%
         basicMap.setWaterTilePercentage(40, 70);
 
         // Randomly generate the tiles in the map
@@ -559,8 +559,38 @@ public class BasicMapTest {
         // Find the actual ratio of water tiles to map tiles that were generated
         double actualRatio = waterCount/((double) size * size);
 
-        // Check that the actual ratio is in the default range (between 1% and 10 percent)
+        // Check that the actual ratio is in the range between 40% to 70%
         assertTrue(0.4 <= actualRatio && actualRatio <= 0.7);
+    }
+
+    @Test
+    public void setWaterTilePercentage_throwsIllegalArgumentException_ifMinimumPercentageIsNegative() {
+        // Expect the unit test to throw an IllegalArgumentException
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("The minimum and maximum percentage of water tiles must be in the " +
+                "range from 0 to 100 (inclusive).");
+
+        // Create a new empty 12 x 12 tile map
+        int size = 12;
+        basicMap = new BasicMap(size);
+
+        // Try to change the minimum and maximum percentages of water tiles such that the minimum is negative
+        basicMap.setWaterTilePercentage(-30, 50);
+    }
+
+    @Test
+    public void setWaterTilePercentage_throwsIllegalArgumentException_ifMinimumPercentageIsLargerThan100() {
+        // Expect the unit test to throw an IllegalArgumentException
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("The minimum and maximum percentage of water tiles must be in the " +
+                "range from 0 to 100 (inclusive).");
+
+        // Create a new empty 12 x 12 tile map
+        int size = 12;
+        basicMap = new BasicMap(size);
+
+        // Try to change the minimum and maximum percentages of water tiles such that the minimum is larger than 100%
+        basicMap.setWaterTilePercentage(101, 50);
     }
 
     @Test

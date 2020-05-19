@@ -70,15 +70,20 @@ public class BasicMap extends Map {
     /**
      * This function is used to change the default percentages of water tiles in the entire map when generating the map.
      *
-     * @param minWaterTilePercent An integer from 0 to 99 representing the minimum percentage of water tiles to
+     * @param minWaterTilePercent An integer from 0 to 100 representing the minimum percentage of water tiles to
      *                            be generated in the map.
-     * @param maxWaterTilePercent An integer from 0 to 99 representing the maximum percentage of water tiles to
+     * @param maxWaterTilePercent An integer from 0 to 100 representing the maximum percentage of water tiles to
      *                            be generated in the map.
      *
      * @implNote The functionality for changing these percentages was not included in the constructor since changing
      * these values is completely optional given that they already have a default value when the object is created.
      */
     public void setWaterTilePercentage(int minWaterTilePercent, int maxWaterTilePercent) {
+        if(minWaterTilePercent < 0 || minWaterTilePercent > 100) {
+            throw new IllegalArgumentException("The minimum and maximum percentage of water tiles must be in the " +
+                    "range from 0 to 100 (inclusive).");
+        }
+
         // Set the water tile to map tiles ratios to the given parameters
         this.minWaterTilePercent = minWaterTilePercent;
         this.maxWaterTilePercent = maxWaterTilePercent;
