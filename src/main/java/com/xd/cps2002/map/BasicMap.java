@@ -127,7 +127,11 @@ public class BasicMap extends Map {
 
         // Choose percentage of water tiles to map tiles to be generated in the map
         // Note: the percentage is chosen in the range between "minWaterTileRatio" and "maxWaterTileRatio".
-        float randWaterTilePercentage = r.nextInt( maxWaterTilePercent - minWaterTilePercent) + minWaterTilePercent;
+        // If the percentages are equal, it always chooses "minWaterTileRatio"
+        int percentageRange = maxWaterTilePercent - minWaterTilePercent;
+        float randWaterTilePercentage = (percentageRange > 0) ?
+                r.nextInt( maxWaterTilePercent - minWaterTilePercent) + minWaterTilePercent :
+                minWaterTilePercent;
 
         // Calculate the number of water tiles that need to be generated
         int waterTilesQuota = (int) Math.ceil(size * size * (randWaterTilePercentage/100));

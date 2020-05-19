@@ -563,6 +563,40 @@ public class BasicMapTest {
         assertTrue(0.4 <= actualRatio && actualRatio <= 0.7);
     }
 
+    /**
+     * This unit test simultaneously checks the edge case when the function {@link BasicMap#generate()} is fixed at a
+     * specific ratio of water tiles by setting both of the parameters in
+     * {@link BasicMap#setWaterTilePercentage(int, int)} to the same percentage.
+     */
+    @Test
+    public void generate_generatesCorrectNumberOfWaterTiles_whenWaterToTilePercentagesHaveBeenChangedToBeEqual() {
+        // Create a new empty 12 x 12 tile map
+        int size = 12;
+        basicMap = new BasicMap(size);
+
+        // Change the minimum and maximum percentages of water tiles to map tiles in the map to be both 53%
+        // A prime number was chosen to see how the function handles a number which is not an exact divisor of the
+        // number of tiles in the map
+        basicMap.setWaterTilePercentage(53, 53);
+
+        // Randomly generate the tiles in the map
+        basicMap.generate();
+
+        // Count the number of water tiles generated
+        int waterCount = 0;
+        for(int i = 0; i < size; i++) {
+            for(int j = 0; j < size; j++) {
+                if(basicMap.getTileType(i,j) == TileType.Water) waterCount++;
+            }
+        }
+
+        // Find the actual ratio of water tiles to map tiles that were generated
+        double actualRatio = waterCount/((double) size * size);
+
+        // Check that the actual ratio is within 1% of the percentage it was set to (due to rounding)
+        assertEquals(0.53, actualRatio, 0.01);
+    }
+
     @Test
     public void setWaterTilePercentage_throwsIllegalArgumentException_ifMinimumPercentageIsNegative() {
         // Expect the unit test to throw an IllegalArgumentException
