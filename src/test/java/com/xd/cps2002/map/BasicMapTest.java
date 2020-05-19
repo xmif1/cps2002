@@ -567,8 +567,8 @@ public class BasicMapTest {
     public void setWaterTilePercentage_throwsIllegalArgumentException_ifMinimumPercentageIsNegative() {
         // Expect the unit test to throw an IllegalArgumentException
         expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("The minimum and maximum percentage of water tiles must be in the " +
-                "range from 0 to 100 (inclusive).");
+        expectedException.expectMessage("The minimum and maximum percentage of water tiles must both be in " +
+                "the range from 0 to 100 (inclusive).");
 
         // Create a new empty 12 x 12 tile map
         int size = 12;
@@ -582,8 +582,8 @@ public class BasicMapTest {
     public void setWaterTilePercentage_throwsIllegalArgumentException_ifMinimumPercentageIsLargerThan100() {
         // Expect the unit test to throw an IllegalArgumentException
         expectedException.expect(IllegalArgumentException.class);
-        expectedException.expectMessage("The minimum and maximum percentage of water tiles must be in the " +
-                "range from 0 to 100 (inclusive).");
+        expectedException.expectMessage("The minimum and maximum percentage of water tiles must both be in " +
+                "the range from 0 to 100 (inclusive).");
 
         // Create a new empty 12 x 12 tile map
         int size = 12;
@@ -591,6 +591,36 @@ public class BasicMapTest {
 
         // Try to change the minimum and maximum percentages of water tiles such that the minimum is larger than 100%
         basicMap.setWaterTilePercentage(101, 50);
+    }
+
+    @Test
+    public void setWaterTilePercentage_throwsIllegalArgumentException_ifMaximumPercentageIsNegative() {
+        // Expect the unit test to throw an IllegalArgumentException
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("The minimum and maximum percentage of water tiles must both be in " +
+                "the range from 0 to 100 (inclusive).");
+
+        // Create a new empty 12 x 12 tile map
+        int size = 12;
+        basicMap = new BasicMap(size);
+
+        // Try to change the minimum and maximum percentages of water tiles such that the maximum is negative
+        basicMap.setWaterTilePercentage(10, -90);
+    }
+
+    @Test
+    public void setWaterTilePercentage_throwsIllegalArgumentException_ifMaximumPercentageIsLargerThan100() {
+        // Expect the unit test to throw an IllegalArgumentException
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("The minimum and maximum percentage of water tiles must both be in " +
+                "the range from 0 to 100 (inclusive).");
+
+        // Create a new empty 12 x 12 tile map
+        int size = 12;
+        basicMap = new BasicMap(size);
+
+        // Try to change the minimum and maximum percentages of water tiles such that the maximum is larger than 100
+        basicMap.setWaterTilePercentage(10, 101);
     }
 
     @Test
