@@ -624,6 +624,22 @@ public class BasicMapTest {
     }
 
     @Test
+    public void setWaterTilePercentage_throwsIllegalArgumentException_ifMinimumPercentageIsLargerThanMaximumPercentage() {
+        // Expect the unit test to throw an IllegalArgumentException
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("The minimum percentage of water tiles cannot be larger than the " +
+                "maximum percentage.");
+
+        // Create a new empty 12 x 12 tile map
+        int size = 12;
+        basicMap = new BasicMap(size);
+
+        // Try to change the minimum and maximum percentages of water tiles such that the minimum is larger than the
+        // maximum
+        basicMap.setWaterTilePercentage(20, 19);
+    }
+
+    @Test
     public void isPlayable_returnsTrue_IfTheTreasureCanBeReachedFrom75PercentOfTiles() {
         // Create a new 10x10 map with a strip of water tiles dividing it (80% of the map is playable)
         int size = 10;

@@ -79,10 +79,17 @@ public class BasicMap extends Map {
      * these values is completely optional given that they already have a default value when the object is created.
      */
     public void setWaterTilePercentage(int minWaterTilePercent, int maxWaterTilePercent) {
+        // If either percentage is not in range, throw an exception
         if(minWaterTilePercent < 0 || minWaterTilePercent > 100
                 || maxWaterTilePercent < 0 || maxWaterTilePercent > 100) {
             throw new IllegalArgumentException("The minimum and maximum percentage of water tiles must both be in " +
                     "the range from 0 to 100 (inclusive).");
+        }
+
+        // If the minimum percentage is larger than the maximum, throw an exception
+        if(minWaterTilePercent > maxWaterTilePercent) {
+            throw new IllegalArgumentException("The minimum percentage of water tiles cannot be larger than the " +
+                    "maximum percentage.");
         }
 
         // Set the water tile to map tiles ratios to the given parameters
