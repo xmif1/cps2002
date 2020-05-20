@@ -72,10 +72,20 @@ public class Game{
     }
 
     /**
-     * @return boolean which is True only when all of init_players, init_map, init_positions and init_teams are true.
+     * @return boolean which is True only when all of init_players, init_map, init_positions, init_teams, and is_set are true.
      */
     public boolean isInitialised(){
         return init_players && init_map && init_positions && init_teams && is_set;
+    }
+
+    public void initialise(int n_players, int n_teams, int map_size) throws InvalidNumberOfPlayersException,
+            InvalidMapSizeException, InvalidNumberOfTeamsException{
+        players = genPlayers(n_players); // generate n_players Player instances
+        map = genMap(map_size, players); // generate map of size map_size, based on number of players in players
+        players = genPlayerPositions(players, map); // generate starting positions based on players and map
+        teams = genTeams(n_teams, players); // generate n_teams Team instances
+
+        is_set = true;
     }
 
     // ----- GETTERS -----
@@ -163,13 +173,14 @@ public class Game{
     public Player[] genPlayers(int n_players) throws InvalidNumberOfPlayersException{
         Player[] players;
 
-        if(2 <= n_players && n_players <= 8){ // validation check
+        if(isValidNPlayers(n_players)){ // validation check
             players = new Player[n_players]; // initialize if within range
 
             for(int i = 0; i < n_players; i++){
                 players[i] = new Player();
             }
 
+            init_players = true; // mark as initialised
             return players;
         }
         else{
@@ -202,6 +213,7 @@ public class Game{
                 map.generate();
             } while(!map.isPlayable()); // attempt map creation until generated map is playable
 
+            init_map = true; // mark as initialised
             return map;
         }
     }
@@ -229,36 +241,42 @@ public class Game{
         return players;
     }
 
-    public void genTeams(int n_teams, Player[] players){
-        teams = new Team[n_teams]; // initialize if within range
-        shufflePlayers(players);
+    public Team[] genTeams(int n_teams, Player[] players) throws InvalidNumberOfTeamsException{
+        if(isValidNTeams(n_teams, players.length) || n_teams == players.length){
+            teams = new Team[n_teams]; // initialize if within range
+            shufflePlayers(players);
 
-        int players_idx = 0; // maintains an index to the players array
-        int team_size = (int) Math.floor((double) players.length / n_teams); // number of players (on average) per team
+            int players_idx = 0; // maintains an index to the players array
+            int team_size = (int) Math.floor((double) players.length / n_teams); // number of players (on average) per team
 
-        for(int i = 0; i < n_teams; i++){ // begin populating teams
-            teams[i] = new Team();
+            for (int i = 0; i < n_teams; i++) { // begin populating teams
+                teams[i] = new Team();
 
-            // how many players in the team - if the last team, must contain the remainder of the players
-            int team_n_players = (i < n_teams - 1) ? team_size : players.length - (n_teams - 1)*team_size;
+                // how many players in the team - if the last team, must contain the remainder of the players
+                int team_n_players = (i < n_teams - 1) ? team_size : players.length - (n_teams - 1) * team_size;
 
-            try{
-                for(int j = players_idx; j < players_idx + team_n_players; j++){
-                    teams[i].join(players[j]); // join players to team
+                try {
+                    for (int j = players_idx; j < players_idx + team_n_players; j++) {
+                        teams[i].join(players[j]); // join players to team
+                    }
+
+                    players_idx += team_n_players;
+
+                } catch (TeamOverrideException toe) {
+                    throw new SetupOperationPrecedenceException("Invalid attempt to join a team when players has already"
+                            + " joined to a team");
+                } catch (NullPositionException npe) { // wrap around SetupOperationPrecedenceException for better context
+                    throw new SetupOperationPrecedenceException("Invalid attempt to join a team when player does not have"
+                            + " an initialised starting position.");
                 }
-
-                players_idx += team_n_players;
-
-            }catch(TeamOverrideException toe){
-                throw new SetupOperationPrecedenceException("Invalid attempt to join a team when players has already " +
-                                                            "joined to a team");
-            }catch(NullPositionException npe){ // wrap around SetupOperationPrecedenceException for better context
-                throw new SetupOperationPrecedenceException("Invalid attempt to join a team when player does not have " +
-                        "an initialised starting position.");
             }
-        }
 
-        init_teams = true;
+            init_teams = true; // mark as initialised
+            return teams;
+        }
+        else{
+            throw new InvalidNumberOfTeamsException(n_teams); // else throw exception
+        }
     }
 
     // -------- UTILITY FUNCTIONS ---------

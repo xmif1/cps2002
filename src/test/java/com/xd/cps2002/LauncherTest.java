@@ -61,7 +61,7 @@ public class LauncherTest{
      * @throws SetupOperationPrecedenceException is thrown when there is an attempted call to updateGameState() before a
      * call to initializeGame() (not expected).
      */
-    @Test
+    /*@Test
     public void multipleWinners_updateGameStateTest(){
         // initialize a number of players
         Player[] players = new Player[3];
@@ -80,14 +80,14 @@ public class LauncherTest{
         assertEquals(2, winners.size());
         assertEquals(game.getPlayers()[0].get_pID(), (int) winners.get(0));
         assertEquals(game.getPlayers()[2].get_pID(), (int) winners.get(1));
-    }
+    }*/
 
     /**
      * Tests that a player is reset if they land on a water tile.
      * @throws SetupOperationPrecedenceException is thrown when there is an attempted call to updateGameState() before a
      * call to initializeGame() (not expected).
      */
-    @Test
+    /*@Test
     public void deadPlayer_updateGameStateTest(){
         // initialize a number of players
         Player[] players = new Player[1];
@@ -103,7 +103,7 @@ public class LauncherTest{
 
         assertEquals(0, game.getPlayers()[0].getPosition().x);
         assertEquals(2, game.getPlayers()[0].getPosition().y);
-    }
+    }*/
 
     /**
      * Tests that a SetupOperationPrecedenceException is thrown when startGame() is called and MainGame.initialized is

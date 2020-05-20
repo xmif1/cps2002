@@ -139,7 +139,14 @@ public class Launcher{
             }while(game.isValidNTeams(n_teams, n_players));
         }
 
-        game.initialise(n_players, n_teams, map_size);
+        try{
+            game.initialise(n_players, n_teams, map_size);
+        }
+        catch(InvalidNumberOfPlayersException | InvalidMapSizeException | InvalidNumberOfTeamsException e){
+            e.printStackTrace();
+            System.err.println("Fatal error has occurred during game initialisation. Exiting...");
+            System.exit(1);
+        }
     }
 
     /* --------------------------------------------- Game Play Sequence ----------------------------------------------
@@ -166,7 +173,7 @@ public class Launcher{
      */
     public static void getMoves(Game game){
         if(!game.isInitialised()){
-            throw new SetupOperationPrecedenceException("Attempted call to getMoves() before initializeGame().");
+            throw new SetupOperationPrecedenceException("Attempted call to getMoves() before initialiseGame().");
         }
         else {
             System.out.println("------------------------------------------------------------------------\n");
@@ -182,7 +189,7 @@ public class Launcher{
                 while (true) {
                     System.out.print("Do you wish to move U(p), D(own), L(eft), or R(ight)? : ");
 
-                    try {
+                    try{
                         // if MoveException is thrown, then the character input is invalid
                         new_position = player.move(scanner.next().charAt(0));
 
@@ -190,10 +197,11 @@ public class Launcher{
                         if(game.getMap().isValidPosition(new_position)) {
                             player.setPosition(new_position); // set the position and break
                             break;
-                        } else { // else if character input is valid but the move is outside the map boundary, loop again
+                        }
+                        else{ // else if character input is valid but the move is outside the map boundary, loop again
                             System.out.println("Invalid input provided. The move is outside of the map boundary.");
                         }
-                    } catch (MoveException ignored) {
+                    }catch(MoveException ignored){
                     }
                 }
 
@@ -246,7 +254,7 @@ public class Launcher{
      */
     public static ArrayList<Integer> startGame(Game game){
         if(!game.isInitialised()){
-            throw new SetupOperationPrecedenceException("Attempted call to startGame() before initializeGame().");
+            throw new SetupOperationPrecedenceException("Attempted call to startGame() before initialiseGame().");
         }
         else{
             ArrayList<Integer> winners = new ArrayList<>();
