@@ -17,7 +17,7 @@ import java.util.Scanner;
 public class Launcher{
 
     public static void main(String[] args){
-        Game game = Game.getMainGame(); // get instance
+        Game game = Game.getGame(); // get instance
         initialiseGame(game); // setup game
         ArrayList<Integer> winners = startGame(game); // start game
 
@@ -52,6 +52,7 @@ public class Launcher{
         boolean team_mode = false;
         int n_players;
         int n_teams;
+        int map_size;
 
         Scanner scanner = new Scanner(System.in); // for input by user
 
@@ -64,8 +65,8 @@ public class Launcher{
                            "have to start all over again! Are you up to the challenge?\n" +
                            "-------------------------------------------------------------------------");
 
-        // repeatedly ask for integer input for the number of players, until valid input is provided
-        while(true){
+        // repeatedly ask for integer input for the number of players, until valid input is provided, and initialize players
+        do{
             System.out.print("Kindly enter the number of players between 2 and 8: ");
 
             while(!scanner.hasNextInt()){
@@ -73,20 +74,15 @@ public class Launcher{
                 scanner.next();
             }
 
-            try{
-                n_players = scanner.nextInt();
-                n_teams = n_players;
+            n_players = scanner.nextInt();
+        }while(!game.isValidNPlayers(n_players));
 
-                game.setPlayers(n_players);
-                break; // if InvalidNumberOfPlayersException is not thrown, break
-            }
-            catch(InvalidNumberOfPlayersException ignored){ }
-        }
+        n_teams = n_players; // initially, set number of teams = number of players (i.e. non-cooperative playing)
 
         scanner = new Scanner(System.in); // resetting scanner to forcefully clear buffer
 
-        // repeatedly ask for integer input for the map size, until valid input is provided
-        while(true){
+        // repeatedly ask for integer input for the map size, until valid input is provided, and initialize map
+        do{
             System.out.print("Kindly enter a map size between 5 and 50, or 8 and 50 if more than 4 players: ");
 
             while(!scanner.hasNextInt()){
@@ -94,12 +90,8 @@ public class Launcher{
                 scanner.next();
             }
 
-            try{
-                game.setMap(scanner.nextInt(), game.getPlayers());
-                break; // if InvalidMapSizeException is not thrown, break
-            }
-            catch(InvalidMapSizeException ignored){ }
-        }
+            map_size = scanner.nextInt();
+        }while(!game.isValidMapSize(map_size, n_players));
 
         scanner = new Scanner(System.in); // resetting scanner to forcefully clear buffer
 
@@ -116,15 +108,13 @@ public class Launcher{
             }
         }
 
-        game.setPlayerPositions(game.getPlayers(), game.getMap()); // initialize the player positions
-
         scanner = new Scanner(System.in); // resetting scanner to forcefully clear buffer
 
         char in_char;
         boolean valid_mode = false;
 
         // repeatedly ask if playing in team mode or not
-        while(!valid_mode){
+        do{
             System.out.print("Do you wish to play in team mode, Y(es) or N(o)? : ");
 
             in_char = scanner.next().charAt(0);
@@ -133,27 +123,23 @@ public class Launcher{
                 case 'n': team_mode = false; valid_mode = true; break;
                 case 'y': team_mode = true; valid_mode = true; break;
             }
-        }
+        }while(!valid_mode);
 
         scanner = new Scanner(System.in); // resetting scanner to forcefully clear buffer
 
         // repeatedly ask for integer input for the number of teams, until valid input is provided
-        while(team_mode){
-            System.out.print("Kindly enter the number of teams between 2 and " + (n_players - 1) + " : ");
-
-            while(!scanner.hasNextInt()){
+        if(team_mode){
+            do{
                 System.out.print("Kindly enter the number of teams between 2 and " + (n_players - 1) + " : ");
-                scanner.next();
-            }
 
-            n_teams = scanner.nextInt();
-            if(2 <= n_teams && n_teams < n_players) {
-                break;
-            }
-            System.out.println("Invalid number of teams entered.");
+                while(!scanner.hasNextInt()){
+                    System.out.print("Kindly enter the number of teams between 2 and " + (n_players - 1) + " : ");
+                    scanner.next();
+                }
+            }while(game.isValidNTeams(n_teams, n_players));
         }
 
-        game.allocateTeams(n_teams, game.getPlayers());
+        game.initialise(n_players, n_teams, map_size);
     }
 
     /* --------------------------------------------- Game Play Sequence ----------------------------------------------

@@ -21,11 +21,15 @@ import java.util.Random;
  * left unhindered by this class. It follows the Singleton design pattern, allowing better granular control over the
  * creation of entities, especially Map.
  *
- * The setup sequence via this class is intended to be executed in the following manner, with a number of checks to
- * ensure so:
+ * The setup sequence via this class is intended to be executed in the following manner,
  *
- * [label:start setupPlayers(int n_players) -{@literal >} setupMap(int map_size) -{@literal >} setPlayerPositions()]
- * -{@literal >} allocateTeams(int n_teams)
+ * [label:start genPlayers(int n_players) -{@literal >} genMap(int map_size, Player[] players) -{@literal >}
+ * genPlayerPositions(Player[] players, Map map)] -{@literal >} genTeams(int n_teams, Player[] players)
+ *
+ * With the specification of n_players, n_teams and map_size, a call to initialise() will execute the above sequence
+ * accordingly. Setters for the state variables are not provided intentionally, to enforce use of the Game class only
+ * through the initialise() method. However, all of the aforementioned functions are public, so that anyone can create
+ * their own setup sequence, at their own responsibility.
  *
  * @author Xandru Mifsud
  */
@@ -36,21 +40,21 @@ public class Game{
     private Team[] teams = null;
     private Map map = null;
     private HTMLGenerator htmlGenerator = HTMLGenerator.getHTMLGenerator();
-    private boolean init_players, init_map, init_positions, init_teams;
+    private boolean init_players, init_map, init_positions, init_teams, is_set;
 
     public String dir = null;
 
     /**
-     * Private constructor to initialize an MainGame instance (if one does not already exist).
+     * Private constructor to initialize an Game instance (if one does not already exist).
      */
-    private Game(){init_players = init_map = init_positions = init_teams = false;}
+    private Game(){init_players = init_map = init_positions = init_teams = is_set = false;}
 
     /**
-     * Returns an MainGame instance; in the case that an instance already exists, it returns the exisiting one.
+     * Returns a Game instance; in the case that an instance already exists, it returns the exisiting one.
      * Else it creates a new instance and returns it.
-     * @return MainGame instance is the singleton to be returned.
+     * @return Game instance is the singleton to be returned.
      */
-    public static Game getMainGame(){
+    public static Game getGame(){
         if(instance == null){
             instance = new Game();
         }
@@ -64,14 +68,14 @@ public class Game{
         players = null;
         map = null;
         dir = null;
-        init_players = init_map = init_positions = init_teams = false;
+        init_players = init_map = init_positions = init_teams = is_set = false;
     }
 
     /**
      * @return boolean which is True only when all of init_players, init_map, init_positions and init_teams are true.
      */
     public boolean isInitialised(){
-        return init_players && init_map && init_positions && init_teams;
+        return init_players && init_map && init_positions && init_teams && is_set;
     }
 
     // ----- GETTERS -----
@@ -92,14 +96,73 @@ public class Game{
         return map;
     }
 
+    /**
+     * Simple getter for the Game instance's teams array.
+     * @return Teams[] array with all the team instances set for the current Game instance.
+     */
+    public Team[] getTeams(){
+        return teams;
+    }
+
     // ----- SETTERS -----
+
+    /**
+     * Simple function to set the directory path at which to write the generated HTML maps.
+     * @param dir is the directory path specified by the user, in which to write the HTML files.
+     * @throws IOException is thrown whenever the path specified is not a directory.
+     */
+    public void setHTMLDirectory(String dir) throws IOException{
+        Path path;
+
+        try {
+            path = Paths.get(dir);
+        }
+        catch(Exception e){
+            throw new IOException(); // throw an IOException
+        }
+
+        if(Files.exists(path) && Files.isDirectory(path)){ // if valid directory, set dir to specified path
+            if(System.getProperty("file.separator").charAt(0) == (dir.charAt(dir.length()-1))){
+                this.dir = dir.substring(0, dir.length() - 1);
+            }
+            else {
+                this.dir = dir;
+            }
+        }
+        else{
+            throw new IOException(); // else throw an IOException
+        }
+    }
+
+    // -------VALIDATION CHECKS--------
+
+    public boolean isValidNPlayers(int n_players){
+        return 2 <= n_players && n_players <= 8;
+    }
+
+    public boolean isValidMapSize(int map_size, int n_players){
+        // else if the map_size is too small for 5 or more players
+        if(51 <= map_size || map_size <= 4){ // else if map_size is outside the global minimum and maximum size
+            return false;
+        }
+        else return 5 > n_players || map_size > 7;
+    }
+
+    public boolean isValidNTeams(int n_teams, int n_players){
+        return 2 <= n_teams && n_teams < n_players;
+    }
+
+    // --------SETUP FUNCTIONS--------
 
     /**
      * Initializes n_players Player instances, if n_players is not less than 2 or greater then 8.
      * @param n_players is the number of players to be initialized.
+     * @return players is the array of initialised Player instances.
      * @throws InvalidNumberOfPlayersException is thrown if the number of players is {@literal <} 2 or {@literal >} 8.
      */
-    public void setPlayers(int n_players) throws InvalidNumberOfPlayersException{
+    public Player[] genPlayers(int n_players) throws InvalidNumberOfPlayersException{
+        Player[] players;
+
         if(2 <= n_players && n_players <= 8){ // validation check
             players = new Player[n_players]; // initialize if within range
 
@@ -107,7 +170,7 @@ public class Game{
                 players[i] = new Player();
             }
 
-            init_players = true; // mark as initialised
+            return players;
         }
         else{
             throw new InvalidNumberOfPlayersException(n_players); // else throw exception
@@ -121,10 +184,10 @@ public class Game{
      * iii. If the number of players is at least 5, than the minimum map_size is at least 8.
      * @param map_size is the size of the map.
      * @param players is an array of Player instances.
-     * @throws SetupOperationPrecedenceException is thrown if MainGame.players is null. [Criteria i. above]
+     * @return map is the initialised Map instance.
      * @throws InvalidMapSizeException is thrown if the map_size is invalid. [Criteria ii. {@literal &} iii. above]
      */
-    public void setMap(int map_size, Player[] players) throws InvalidMapSizeException{
+    public Map genMap(int map_size, Player[] players) throws InvalidMapSizeException{
         if(51 <= map_size || map_size <= 4){ // else if map_size is outside the global minimum and maximum size
             throw new InvalidMapSizeException(map_size);
         }
@@ -132,21 +195,24 @@ public class Game{
             throw new InvalidMapSizeException(map_size, "For 5 to 8 players, the minimum map size is 8x8.");
         }
         else{ // else initialize map
+            Map map;
+
             do{
                 map = MapCreator.createMap("basic", map_size);
                 map.generate();
             } while(!map.isPlayable()); // attempt map creation until generated map is playable
 
-            init_map = true; // mark as initialised
+            return map;
         }
     }
 
-    // -----------------
-
     /**
-     * Initializes the starting position for all the Player instance in MainGame.players.
+     * Initializes the starting position for all the Player instances players, based on the passed Map instance map.
+     * @param players is an array of Player instances for which the starting positions are to be initialised.
+     * @param map is a Map instance on which the starting positions are to be initialised.
+     * @return players array with starting positions initialised.
      */
-    public void setPlayerPositions(Player[] players, Map map){
+    public Player[] genPlayerPositions(Player[] players, Map map){
         // for each player, initialize starting position
         for(Player player : players){
             Position starting_position;
@@ -157,31 +223,13 @@ public class Game{
             }while(!map.isPositionWinnable(starting_position)); // check that the treasure tile is reachable
 
             player.setStartPosition(starting_position); // set position
-
-            init_positions = true; // mark as initialised
         }
+
+        init_positions = true; // mark as initialised
+        return players;
     }
 
-    /**
-     * Shuffling of the players array, to randomise turn sequence. For example, it is also used to randomise team allocation.
-     * This is a variant of Fisher-Yates shuffle, known as Durstenfeld's Shuffle (as mentioned in Knuth's The Art of
-     * Computer Programming), with the Java adaptation based on https://stackoverflow.com/a/1520212.
-     *
-     * @param players is the array of Player instances to be shuffled.
-     */
-    private void shufflePlayers(Player[] players){
-        Random rnd = ThreadLocalRandom.current();
-        for (int i = players.length - 1; i > 0; i--){
-            int j = rnd.nextInt(i + 1);
-
-            // shuffling swap
-            Player p = players[j];
-            players[j] = players[i];
-            players[i] = p;
-        }
-    }
-
-    public void allocateTeams(int n_teams, Player[] players){
+    public void genTeams(int n_teams, Player[] players){
         teams = new Team[n_teams]; // initialize if within range
         shufflePlayers(players);
 
@@ -213,31 +261,24 @@ public class Game{
         init_teams = true;
     }
 
+    // -------- UTILITY FUNCTIONS ---------
+
     /**
-     * Simple function to set the directory path at which to write the generated HTML maps.
-     * @param dir is the directory path specified by the user, in which to write the HTML files.
-     * @throws IOException is thrown whenever the path specified is not a directory.
+     * Shuffling of the players array, to randomise turn sequence. For example, it is also used to randomise team allocation.
+     * This is a variant of Fisher-Yates shuffle, known as Durstenfeld's Shuffle (as mentioned in Knuth's The Art of
+     * Computer Programming), with the Java adaptation based on https://stackoverflow.com/a/1520212.
+     *
+     * @param players is the array of Player instances to be shuffled.
      */
-    public void setHTMLDirectory(String dir) throws IOException{
-        Path path;
+    private void shufflePlayers(Player[] players){
+        Random rnd = ThreadLocalRandom.current();
+        for (int i = players.length - 1; i > 0; i--){
+            int j = rnd.nextInt(i + 1);
 
-        try {
-            path = Paths.get(dir);
-        }
-        catch(Exception e){
-            throw new IOException(); // throw an IOException
-        }
-
-        if(Files.exists(path) && Files.isDirectory(path)){ // if valid directory, set dir to specified path
-            if(System.getProperty("file.separator").charAt(0) == (dir.charAt(dir.length()-1))){
-                this.dir = dir.substring(0, dir.length() - 1);
-            }
-            else {
-                this.dir = dir;
-            }
-        }
-        else{
-            throw new IOException(); // else throw an IOException
+            // shuffling swap
+            Player p = players[j];
+            players[j] = players[i];
+            players[i] = p;
         }
     }
 
@@ -257,7 +298,7 @@ public class Game{
                                                    "player_" + player.get_pID() + "_map.html");
 
                 // iterate through the html ArrayList and persist
-                for (String ln : htmlGenerator.genPlayerMap(player, map)){
+                for(String ln : htmlGenerator.genPlayerMap(player, map)){
                     writer.write(ln);
                 }
                 writer.close();

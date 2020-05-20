@@ -2,6 +2,7 @@ package com.xd.cps2002;
 
 import com.xd.cps2002.game.Game;
 import com.xd.cps2002.game.game_exceptions.*;
+import com.xd.cps2002.map.Map;
 import com.xd.cps2002.player.*;
 import com.xd.cps2002.map.BasicMap;
 import com.xd.cps2002.map.TileType;
@@ -30,7 +31,7 @@ public class LauncherTest{
 
     @Before
     public void setupLauncherTest(){
-        game = Game.getMainGame();
+        game = Game.getGame();
     }
 
     /**
@@ -63,16 +64,16 @@ public class LauncherTest{
     @Test
     public void multipleWinners_updateGameStateTest(){
         // initialize a number of players
-        game.players = new Player[3];
-        game.players[0] = new Player();
-        game.players[0].setStartPosition(new Position(2, 2)); // at treasure tile
-        game.players[1] = new Player();
-        game.players[1].setStartPosition(new Position(0, 0)); // not at treasure tile
-        game.players[2] = new Player();
-        game.players[2].setStartPosition(new Position(2, 2)); // at treasure tile
+        Player[] players = new Player[3];
+        players[0] = new Player();
+        players[0].setStartPosition(new Position(2, 2)); // at treasure tile
+        players[1] = new Player();
+        players[1].setStartPosition(new Position(0, 0)); // not at treasure tile
+        players[2] = new Player();
+        players[2].setStartPosition(new Position(2, 2)); // at treasure tile
 
-        game.map = new BasicMap(tiles);
-        game.getMap().isPlayable();
+        Map map = new BasicMap(tiles);
+        map.isPlayable();
 
         ArrayList<Integer> winners = Launcher.updateGameState(game);
 
@@ -89,14 +90,14 @@ public class LauncherTest{
     @Test
     public void deadPlayer_updateGameStateTest(){
         // initialize a number of players
-        game.players = new Player[1];
-        game.players[0] = new Player();
-        game.players[0].setStartPosition(new Position(0, 2)); // at grass tile
-        game.players[0].setTeam(new Team());
-        game.players[0].setPosition(new Position(1, 2)); // at water tile
+        Player[] players = new Player[1];
+        players[0] = new Player();
+        players[0].setStartPosition(new Position(0, 2)); // at grass tile
+        players[0].setTeam(new Team());
+        players[0].setPosition(new Position(1, 2)); // at water tile
 
-        game.map = new BasicMap(tiles);
-        game.getMap().isPlayable();
+        Map map = new BasicMap(tiles);
+        map.isPlayable();
 
         Launcher.updateGameState(game);
 
