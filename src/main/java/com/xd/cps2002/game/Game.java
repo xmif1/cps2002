@@ -27,9 +27,10 @@ import java.util.Random;
  * genPlayerPositions(Player[] players, Map map)] -{@literal >} genTeams(int n_teams, Player[] players)
  *
  * With the specification of n_players, n_teams and map_size, a call to initialise() will execute the above sequence
- * accordingly. Setters for the state variables are not provided intentionally, to enforce use of the Game class only
- * through the initialise() method. However, all of the aforementioned functions are public, so that anyone can create
- * their own setup sequence, at their own responsibility.
+ * accordingly. Setters for the state variables are provided, however they cannot be called if initialise() has been
+ * called prior, to enforce use of the Game class only through the initialise() method. However, all of the
+ * aforementioned functions are public, so that anyone can create their own setup sequence, at their own responsibility
+ * for maintaining state consistency.
  *
  * @author Xandru Mifsud
  */
@@ -40,14 +41,14 @@ public class Game{
     private Team[] teams = null;
     private Map map = null;
     private HTMLGenerator htmlGenerator = HTMLGenerator.getHTMLGenerator();
-    private boolean init_players, init_map, init_positions, init_teams, is_set;
+    private boolean is_set;
 
     public String dir = null;
 
     /**
      * Private constructor to initialize an Game instance (if one does not already exist).
      */
-    private Game(){init_players = init_map = init_positions = init_teams = is_set = false;}
+    private Game(){is_set = false;}
 
     /**
      * Returns a Game instance; in the case that an instance already exists, it returns the exisiting one.
@@ -68,18 +69,31 @@ public class Game{
         players = null;
         map = null;
         dir = null;
-        init_players = init_map = init_positions = init_teams = is_set = false;
+        is_set = false;
     }
 
     /**
-     * @return boolean which is True only when all of init_players, init_map, init_positions, init_teams, and is_set are true.
+     * Simple function to check whether a Game instance has been initialised. is_set is only set by the initialise()
+     * method, and hence isInitialised() only returns true if initialise() has been called.
+     * @return boolean which is True only when is_set os true.
      */
     public boolean isInitialised(){
-        return init_players && init_map && init_positions && init_teams && is_set;
+        return is_set;
     }
 
+    /**
+     * Initialises the state variables of the Game instance in a consistent manner, else an exception is thrown if this
+     * cannot be done.
+     * @param n_players is the number of Player instances to initialise (2 <= n_players <= 8).
+     * @param n_teams is the number of teams to initialise and divide the players into (2 <= n_teams <= n_players - 1).
+     * @param map_size is the grid size of the map (5 <= map_size <= 50 if n_players < 5, 8 <= map_size <= 50 otherwise).
+     * @throws InvalidNumberOfPlayersException is propagated forward from genPlayers(n_players).
+     * @throws InvalidMapSizeException is propagated forward from genMap(map_size, players).
+     * @throws InvalidNumberOfTeamsException is propagated forward from genTeams(n_teams, players).
+     */
     public void initialise(int n_players, int n_teams, int map_size) throws InvalidNumberOfPlayersException,
             InvalidMapSizeException, InvalidNumberOfTeamsException{
+
         players = genPlayers(n_players); // generate n_players Player instances
         map = genMap(map_size, players); // generate map of size map_size, based on number of players in players
         players = genPlayerPositions(players, map); // generate starting positions based on players and map
@@ -117,6 +131,48 @@ public class Game{
     // ----- SETTERS -----
 
     /**
+     * Setter for the Player[] players array, given that initialise() has not been called prior.
+     * @param players is the Player[] array to attempt to set this.players to.
+     * @throws SetupOperationPrecedenceException is thrown when initialise() was called prior i.e. is_set == true;
+     */
+    public void setPlayers(Player[] players) throws SetupOperationPrecedenceException{
+        if(is_set){ // if initialise() called prior
+            throw new SetupOperationPrecedenceException("Cannot set Game.players after call to initialise().");
+        }
+        else {
+            this.players = players;
+        }
+    }
+
+    /**
+     * Setter for the Map map instance, given that initialise() has not been called prior.
+     * @param map is the Map instance to attempt to set this.map to.
+     * @throws SetupOperationPrecedenceException is thrown when initialise() was called prior i.e. is_set == true;
+     */
+    public void setMap(Map map) throws SetupOperationPrecedenceException{
+        if(is_set){ // if initialise() called prior
+            throw new SetupOperationPrecedenceException("Cannot set Game.map after call to initialise().");
+        }
+        else {
+            this.map = map;
+        }
+    }
+
+    /**
+     * Setter for the Team[] teams array, given that initialise() has not been called prior.
+     * @param teams is the Team[] teams array to attempt to set this.teams to.
+     * @throws SetupOperationPrecedenceException is thrown when initialise() was called prior i.e. is_set == true;
+     */
+    public void setTeams(Team[] teams) throws SetupOperationPrecedenceException{
+        if(is_set){ // if initialise() called prior
+            throw new SetupOperationPrecedenceException("Cannot set Game.teams after call to initialise().");
+        }
+        else {
+            this.teams = teams;
+        }
+    }
+
+    /**
      * Simple function to set the directory path at which to write the generated HTML maps.
      * @param dir is the directory path specified by the user, in which to write the HTML files.
      * @throws IOException is thrown whenever the path specified is not a directory.
@@ -146,10 +202,20 @@ public class Game{
 
     // -------VALIDATION CHECKS--------
 
+    /**
+     * @param n_players is an integer to be checked if it falls within the range 2 <= n_players <= 8;
+     * @return true if in range, false otherwise.
+     */
     public boolean isValidNPlayers(int n_players){
         return 2 <= n_players && n_players <= 8;
     }
 
+    /**
+     * If n_players < 5, and 5 <= map_size <= 50, or 5 <= n_players and 8 <= map_size <= 50, return true.
+     * @param map_size is an integer to be checked if it falls within one of the two ranges above, given a value of n_players.
+     * @param n_players is the number of players, which shall determine the minimum map size.
+     * @return true if in range, false otherwise.
+     */
     public boolean isValidMapSize(int map_size, int n_players){
         // else if the map_size is too small for 5 or more players
         if(51 <= map_size || map_size <= 4){ // else if map_size is outside the global minimum and maximum size
@@ -158,6 +224,11 @@ public class Game{
         else return 5 > n_players || map_size > 7;
     }
 
+    /**
+     * @param n_teams is the number of teams, which must fall between 2 and n_players - 1 (both inclusive).
+     * @param n_players the number of players to be partitioned into teams.
+     * @return true if in range, false otherwise.
+     */
     public boolean isValidNTeams(int n_teams, int n_players){
         return 2 <= n_teams && n_teams < n_players;
     }
@@ -180,7 +251,6 @@ public class Game{
                 players[i] = new Player();
             }
 
-            init_players = true; // mark as initialised
             return players;
         }
         else{
@@ -213,7 +283,6 @@ public class Game{
                 map.generate();
             } while(!map.isPlayable()); // attempt map creation until generated map is playable
 
-            init_map = true; // mark as initialised
             return map;
         }
     }
@@ -237,10 +306,16 @@ public class Game{
             player.setStartPosition(starting_position); // set position
         }
 
-        init_positions = true; // mark as initialised
         return players;
     }
 
+    /**
+     * Initialises n_teams instances of Team and allocates players proportionally between the Team instances.
+     * @param n_teams is the number of teams to create.
+     * @param players is a Player[] array of Player instances to be grouped into n_teams teams.
+     * @return teams array with n_team initialised Team instances.
+     * @throws InvalidNumberOfTeamsException if the number of teams is invalid (not in range 2 <= n_teams < players.length).
+     */
     public Team[] genTeams(int n_teams, Player[] players) throws InvalidNumberOfTeamsException{
         if(isValidNTeams(n_teams, players.length) || n_teams == players.length){
             teams = new Team[n_teams]; // initialize if within range
@@ -271,7 +346,6 @@ public class Game{
                 }
             }
 
-            init_teams = true; // mark as initialised
             return teams;
         }
         else{
