@@ -68,6 +68,7 @@ public class Game{
     public void reset(){
         players = null;
         map = null;
+        teams = null;
         dir = null;
         is_set = false;
     }
