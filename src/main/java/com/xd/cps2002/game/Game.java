@@ -131,26 +131,26 @@ public class Game{
     // ----- SETTERS -----
 
     /**
-     * Setter for the Player[] players array, given that initialise() has not been called prior.
+     * Setter for the Player[] players array, given that setPlayers() or initialise() have not been called prior.
      * @param players is the Player[] array to attempt to set this.players to.
-     * @throws SetupOperationPrecedenceException is thrown when initialise() was called prior i.e. is_set == true;
+     * @throws SetupOperationPrecedenceException is thrown when setPlayer() or initialise() was called prior.
      */
     public void setPlayers(Player[] players) throws SetupOperationPrecedenceException{
-        if(is_set){ // if initialise() called prior
+        if(this.players != null){ // if setPlayer() called explicitly or via initialise() prior
             throw new SetupOperationPrecedenceException("Cannot set Game.players after call to initialise().");
         }
-        else {
+        else{
             this.players = players;
         }
     }
 
     /**
-     * Setter for the Map map instance, given that initialise() has not been called prior.
+     * Setter for the Map map instance, given that setMap() or initialise() have not been called prior.
      * @param map is the Map instance to attempt to set this.map to.
-     * @throws SetupOperationPrecedenceException is thrown when initialise() was called prior i.e. is_set == true;
+     * @throws SetupOperationPrecedenceException is thrown when setMap() or initialise() was called prior.
      */
     public void setMap(Map map) throws SetupOperationPrecedenceException{
-        if(is_set){ // if initialise() called prior
+        if(this.map != null){ // if setMap() called explicitly or via initialise() prior
             throw new SetupOperationPrecedenceException("Cannot set Game.map after call to initialise().");
         }
         else {
@@ -159,12 +159,12 @@ public class Game{
     }
 
     /**
-     * Setter for the Team[] teams array, given that initialise() has not been called prior.
+     * Setter for the Team[] teams array, given that setTeams() or initialise() have not been called prior.
      * @param teams is the Team[] teams array to attempt to set this.teams to.
      * @throws SetupOperationPrecedenceException is thrown when initialise() was called prior i.e. is_set == true;
      */
     public void setTeams(Team[] teams) throws SetupOperationPrecedenceException{
-        if(is_set){ // if initialise() called prior
+        if(this.teams != null){ // if setTeams() called explicitly or via initialise() prior
             throw new SetupOperationPrecedenceException("Cannot set Game.teams after call to initialise().");
         }
         else {
@@ -311,10 +311,18 @@ public class Game{
 
     /**
      * Initialises n_teams instances of Team and allocates players proportionally between the Team instances.
+     * Allocation of the number of players per team is done greedily, by taking the floor of n_teams/players.length,
+     * and the last team having the remainder.
+     * If 2*n_teams > n_players, then n_teams - 1 will contain 1 players, and the last team will contain
+     *                                   n_players - n_teams + 1 players
+     * This is not restricted since it is not (technically) an invalid case. One can add further external checks if they
+     * choose to restrict 2*n_teams <= n_players.
      * @param n_teams is the number of teams to create.
      * @param players is a Player[] array of Player instances to be grouped into n_teams teams.
      * @return teams array with n_team initialised Team instances.
      * @throws InvalidNumberOfTeamsException if the number of teams is invalid (not in range 2 <= n_teams < players.length).
+     * @throws SetupOperationPrecedenceException if player instances do not have an initialised starting position or if
+     * they have already been joined to a team.
      */
     public Team[] genTeams(int n_teams, Player[] players) throws InvalidNumberOfTeamsException{
         if(isValidNTeams(n_teams, players.length) || n_teams == players.length){
@@ -324,7 +332,7 @@ public class Game{
             int players_idx = 0; // maintains an index to the players array
             int team_size = (int) Math.floor((double) players.length / n_teams); // number of players (on average) per team
 
-            for (int i = 0; i < n_teams; i++) { // begin populating teams
+            for(int i = 0; i < n_teams; i++) { // begin populating teams
                 teams[i] = new Team();
 
                 // how many players in the team - if the last team, must contain the remainder of the players

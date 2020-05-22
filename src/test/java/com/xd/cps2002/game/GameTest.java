@@ -43,12 +43,149 @@ public class GameTest {
         assertEquals(game, new_Game);
     }
 
+    //----- TESTING SETTERS -----
+
+    /**
+     * Tests that if players array is null, then setPlayers sets players accordingly.
+     * @throws SetupOperationPrecedenceException is thrown when setPlayer() or initialise() was called prior i.e. players
+     * array is not null (not expected).
+     */
+    @Test
+    public void playersSet_setPlayersTest(){
+        game.setPlayers(new Player[2]);
+        assertNotNull(game.getPlayers());
+    }
+
+    /**
+     * Tests that if players array is not null, then a SetupOperationPrecedenceException is thrown (trying to set to an
+     * inconsistent state, potentially).
+     * @throws SetupOperationPrecedenceException is thrown when setPlayer() or initialise() was called prior i.e. players
+     * array is not null (expected).
+     */
+    @Test(expected = SetupOperationPrecedenceException.class)
+    public void playersNotNull_setPlayersTest(){
+        game.setPlayers(new Player[2]);
+        assertNotNull(game.getPlayers()); // should pass - if not, test playersSet_setPlayersTest should fail too
+
+        game.setPlayers(new Player[2]); // should throw exception since trying to set players array twice
+    }
+
+    /**
+     * Tests that if map instance is null, then setMap sets the map instance accordingly.
+     * @throws SetupOperationPrecedenceException is thrown when setMap() or initialise() was called prior i.e. map
+     * instance is not null (not expected).
+     */
+    @Test
+    public void mapSet_setMapTest(){
+        game.setMap(new BasicMap(5));
+        assertNotNull(game.getMap());
+    }
+
+    /**
+     * Tests that if map instance is not null, then a SetupOperationPrecedenceException is thrown (trying to set to an
+     * inconsistent state, potentially).
+     * @throws SetupOperationPrecedenceException is thrown when setMap() or initialise() was called prior i.e. map
+     * instance is not null (expected).
+     */
+    @Test(expected = SetupOperationPrecedenceException.class)
+    public void mapNotNull_setMapTest(){
+        game.setMap(new BasicMap(5));
+        assertNotNull(game.getMap()); // should pass - if not, test mapSet_setMapTest should fail too
+
+        game.setMap(new BasicMap(5)); // should throw exception since trying to set map instance twice
+    }
+
+    /**
+     * Tests that if teams array is null, then setTeams sets teams accordingly.
+     * @throws SetupOperationPrecedenceException is thrown when setTeams() or initialise() was called prior i.e. teams
+     * array is not null (not expected).
+     */
+    @Test
+    public void teamSet_setTeamsTest(){
+        game.setTeams(new Team[2]);
+        assertNotNull(game.getTeams());
+    }
+
+    /**
+     * Tests that if teams array is not null, then a SetupOperationPrecedenceException is thrown (trying to set to an
+     * inconsistent state, potentially).
+     * @throws SetupOperationPrecedenceException is thrown when setTeams() or initialise() was called prior i.e. teams
+     * array is not null (expected).
+     */
+    @Test(expected = SetupOperationPrecedenceException.class)
+    public void teamNotNull_setTeamsTest(){
+        game.setTeams(new Team[2]);
+        assertNotNull(game.getTeams()); // should pass - if not, test teamsSet_setTeamsTest should fail too
+
+        game.setTeams(new Team[2]); // should throw exception since trying to set teams array twice
+    }
+
+    // ----- TESTING VALIDATION CHECK FUNCTIONS -----
+
+    /**
+     * Tests that false is returned when the number of players is less than 2.
+     */
+    @Test
+    public void belowMin_NoOfPlayers_isValidNPlayersTest(){
+        assertFalse(game.isValidNPlayers(1));
+    }
+
+    /**
+     * Tests that false is returned when the number of players is greater than 8.
+     */
+    @Test
+    public void aboveMax_NoOfPlayers_isValidNPlayersTest(){
+        assertFalse(game.isValidNPlayers(9));
+    }
+
+    /**
+     * Tests that false is returned when the map_size is less than 5, for any value of n_player.
+     */
+    @Test
+    public void belowMin_MapSize_isValidMapSizeTest(){
+        assertFalse(game.isValidMapSize(4, 1));
+    }
+
+    /**
+     * Tests that false is returned when the map_size is greater than 50, for any value of n_player.
+     */
+    @Test
+    public void aboveMax_MapSize_isValidMapSizeTest(){
+        assertFalse(game.isValidMapSize(51, 1));
+    }
+
+    /**
+     * Tests that false is returned when the map_size is greater than 5 but less than 8, for n_player >= 5.
+     */
+    @Test
+    public void smallMap_Min5Players_MapSize_isValidMapSizeTest(){
+        assertFalse(game.isValidMapSize(6, 5));
+    }
+
+    /**
+     * Tests that false is returned when n_teams < 2, for any value of n_players.
+     */
+    @Test
+    public void belowMin_NoOfTeams_isValidNTeamsTest(){
+        assertFalse(game.isValidNTeams(1, 5));
+    }
+
+    /**
+     * Tests that false is returned when n_teams >= n_players.
+     */
+    @Test
+    public void aboveMax_NoOfTeams_isValidNTeamsTest(){
+        assertFalse(game.isValidNTeams(5, 5));
+    }
+
+    // ----- TESTING SETUP FUNCTIONS -----
+
     /**
      * Tests that an InvalidNumberOfPlayersException is thrown when the number of players is less than 2.
      * @throws InvalidNumberOfPlayersException is thrown if the number of players is {@literal <} 2 or {@literal >} 8 (expected).
      */
     @Test(expected = InvalidNumberOfPlayersException.class)
-    public void belowMin_NoOfPlayers_setupPlayersTest() throws InvalidNumberOfPlayersException{
+    public void belowMin_NoOfPlayers_genPlayersTest() throws InvalidNumberOfPlayersException{
         int n_players = 1;
         game.genPlayers(n_players);
     }
@@ -58,7 +195,7 @@ public class GameTest {
      * @throws InvalidNumberOfPlayersException is thrown if the number of players is {@literal <} 2 or {@literal >} 8 (expected).
      */
     @Test(expected = InvalidNumberOfPlayersException.class)
-    public void aboveMax_NoOfPlayers_setupPlayersTest() throws InvalidNumberOfPlayersException{
+    public void aboveMax_NoOfPlayers_genPlayersTest() throws InvalidNumberOfPlayersException{
         int n_players = 9;
         game.genPlayers(n_players);
     }
@@ -68,7 +205,7 @@ public class GameTest {
      * @throws InvalidNumberOfPlayersException is thrown if the number of players is {@literal <} 2 or {@literal >} 8 (not expected).
      */
     @Test
-    public void inrange_NoOfPlayers_setupPlayersTest() throws InvalidNumberOfPlayersException{
+    public void inrange_NoOfPlayers_genPlayersTest() throws InvalidNumberOfPlayersException{
         int n_players = 5;
         Player[] players = game.genPlayers(n_players);
 
@@ -83,7 +220,7 @@ public class GameTest {
      * @throws InvalidMapSizeException is thrown if the map_size is invalid (expected).
      */
     @Test(expected = InvalidMapSizeException.class)
-    public void belowMin_MapSize_setupMapTest() throws InvalidMapSizeException{
+    public void belowMin_MapSize_genMapTest() throws InvalidMapSizeException{
         game.genMap(4, new Player[2]);
     }
 
@@ -92,7 +229,7 @@ public class GameTest {
      * @throws InvalidMapSizeException is thrown if the map_size is invalid (expected).
      */
     @Test(expected = InvalidMapSizeException.class)
-    public void aboveMax_MapSize_setupMapTest() throws InvalidMapSizeException{
+    public void aboveMax_MapSize_genMapTest() throws InvalidMapSizeException{
         game.genMap(51, new Player[2]);
     }
 
@@ -102,7 +239,7 @@ public class GameTest {
      * @throws InvalidMapSizeException is thrown if the map_size is invalid (expected).
      */
     @Test(expected = InvalidMapSizeException.class)
-    public void smallMap_Min5Players_setupMapTest() throws InvalidMapSizeException{
+    public void smallMap_Min5Players_genMapTest() throws InvalidMapSizeException{
         game.genMap(5, new Player[5]);
     }
 
@@ -111,7 +248,7 @@ public class GameTest {
      * @throws InvalidMapSizeException is thrown if the map_size is invalid (not expected).
      */
     @Test
-    public void inrange_MapSize_setupMapTest() throws InvalidMapSizeException{
+    public void inrange_MapSize_genMapTest() throws InvalidMapSizeException{
         int map_size = 5;
         Map map = game.genMap(map_size, new Player[2]);
 
@@ -123,7 +260,7 @@ public class GameTest {
      * Tests that all player positions have been initialized correctly.
      */
     @Test
-    public void correct_setPlayerPositionsTest(){
+    public void correct_genPlayerPositionsTest(){
         Player[] players = new Player[5];
         for(int i = 0; i < 5; i++){
             players[i] = new Player();
@@ -136,6 +273,91 @@ public class GameTest {
         for(int i = 0; i < 5; i++){
             assertNotNull(players[i].getStartPosition());
         }
+    }
+
+    /**
+     * Tests that an InvalidNumberOfTeamsException is thrown when n_teams < 2, for any length of the players array.
+     * @throws InvalidNumberOfTeamsException is thrown if n_teams is invalid (expected).
+     * @throws SetupOperationPrecedenceException if player instances do not have an initialised starting position or if
+     * they have already been joined to a team (not expected).
+     */
+    @Test(expected = InvalidNumberOfTeamsException.class)
+    public void belowMin_NoOfTeams_genTeamsTest() throws InvalidNumberOfTeamsException{
+        game.genTeams(2, new Player[1]);
+    }
+
+    /**
+     * Tests that an InvalidNumberOfTeamsException is thrown when n_teams > n_players.
+     * @throws InvalidNumberOfTeamsException is thrown if n_teams is invalid (expected).
+     * @throws SetupOperationPrecedenceException if player instances do not have an initialised starting position or if
+     * they have already been joined to a team (not expected).
+     */
+    @Test(expected = InvalidNumberOfTeamsException.class)
+    public void aboveMax_NoOfTeams_genTeamsTest() throws InvalidNumberOfTeamsException{
+        game.genTeams(6, new Player[5]);
+    }
+
+    /**
+     * Tests that the correct number of Team instances are initialised.
+     * @throws InvalidNumberOfTeamsException is thrown if n_teams is invalid (not expected).
+     * @throws SetupOperationPrecedenceException if player instances do not have an initialised starting position or if
+     * they have already been joined to a team (not expected).
+     */
+    @Test
+    public void inrange_CorrectNumberOfTeams_genTeamsTest() throws InvalidNumberOfTeamsException{
+        // initialising 6 player instances as position (0,0)
+        Player[] players = new Player[6];
+        for(int i = 0; i < players.length; i++){
+            players[i] = new Player();
+            players[i].setStartPosition(new Position(0, 0));
+        }
+
+        assertEquals(5, game.genTeams(5, players).length);
+    }
+
+    /**
+     * Tests that each team has exactly one player when n_teams = n_players.
+     * @throws InvalidNumberOfTeamsException is thrown if n_teams is invalid (not expected).
+     * @throws SetupOperationPrecedenceException if player instances do not have an initialised starting position or if
+     * they have already been joined to a team (not expected).
+     */
+    @Test
+    public void inrange_NTeamsEqualsNPlayers_genTeamsTest() throws InvalidNumberOfTeamsException{
+        // initialising 6 player instances as position (0,0)
+        Player[] players = new Player[6];
+        for(int i = 0; i < players.length; i++){
+            players[i] = new Player();
+            players[i].setStartPosition(new Position(0, 0));
+        }
+
+        Team[] teams = game.genTeams(6, players); // initialise teams
+
+        for(Team t : teams){
+            assertEquals(1, t.players.size());
+        }
+    }
+
+    /**
+     * Tests that each team a proper distribution on the number of players, when n_teams < n_players.
+     * @throws InvalidNumberOfTeamsException is thrown if n_teams is invalid (not expected).
+     * @throws SetupOperationPrecedenceException if player instances do not have an initialised starting position or if
+     * they have already been joined to a team (not expected).
+     */
+    @Test
+    public void inrange_PlayerDistribution_genTeamsTest() throws InvalidNumberOfTeamsException{
+        // initialising 6 player instances as position (0,0)
+        Player[] players = new Player[7];
+        for(int i = 0; i < players.length; i++){
+            players[i] = new Player();
+            players[i].setStartPosition(new Position(0, 0));
+        }
+
+        // Since 7/3 > 2 but < 3, then 2 teams should have 2 players while the last team should have 3 players.
+        Team[] teams = game.genTeams(3, players); // initialise teams
+
+        assertEquals(2, teams[0].players.size());
+        assertEquals(2, teams[1].players.size());
+        assertEquals(3, teams[2].players.size());
     }
 
     /**
