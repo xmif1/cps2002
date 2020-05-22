@@ -298,6 +298,46 @@ public class GameTest {
     }
 
     /**
+     * Tests that a SetupOperationPrecedenceException is thrown when a Player instance does not have a start position.
+     * @throws InvalidNumberOfTeamsException is thrown if n_teams is invalid (not expected).
+     * @throws SetupOperationPrecedenceException if player instances do not have an initialised starting position or if
+     * they have already been joined to a team (expected).
+     */
+    @Test(expected = SetupOperationPrecedenceException.class)
+    public void noStartPosition_genTeamsTest() throws InvalidNumberOfTeamsException{
+        Player[] players = new Player[2];
+
+        // initialise position for player 0
+        players[0] = new Player();
+        players[0].setStartPosition(new Position(0,0));
+
+        // but do not initialise position for player 1
+        players[1] = new Player();
+
+        game.genTeams(2, players);
+    }
+
+    /**
+     * Tests that a SetupOperationPrecedenceException is thrown when a Player instance has already joined a team.
+     * @throws InvalidNumberOfTeamsException is thrown if n_teams is invalid (not expected).
+     * @throws SetupOperationPrecedenceException if player instances do not have an initialised starting position or if
+     * they have already been joined to a team (expected).
+     */
+    @Test(expected = SetupOperationPrecedenceException.class)
+    public void playerAlreadyJoinedTeam_genTeamsTest() throws InvalidNumberOfTeamsException{
+        Player[] players = new Player[2];
+
+        // initialise position and team for player 0
+        players[0] = new Player();
+        players[0].setStartPosition(new Position(0,0));
+        players[0].setTeam(new Team());
+
+        players[1] = new Player();
+
+        game.genTeams(2, players);
+    }
+
+    /**
      * Tests that the correct number of Team instances are initialised.
      * @throws InvalidNumberOfTeamsException is thrown if n_teams is invalid (not expected).
      * @throws SetupOperationPrecedenceException if player instances do not have an initialised starting position or if

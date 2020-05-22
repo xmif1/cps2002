@@ -15,6 +15,7 @@ import java.util.Scanner;
  * @author Xandru Mifsud
  */
 public class Launcher{
+    static boolean isInitialised = false;
 
     public static void main(String[] args){
         Game game = Game.getGame(); // get instance
@@ -139,9 +140,15 @@ public class Launcher{
             }while(game.isValidNTeams(n_teams, n_players));
         }
 
+        // attempt to setup Game instance - if fails, there is some fatal inconsistency!
         try{
             game.initialise(n_players, n_teams, map_size);
+
+            if(game.isInitialised()){
+                isInitialised = true;
+            }
         }
+        // if fatal, print stack trace and exit with status code 1
         catch(InvalidNumberOfPlayersException | InvalidMapSizeException | InvalidNumberOfTeamsException e){
             e.printStackTrace();
             System.err.println("Fatal error has occurred during game initialisation. Exiting...");
@@ -172,7 +179,7 @@ public class Launcher{
      * to initializeGame()
      */
     public static void getMoves(Game game){
-        if(!game.isInitialised()){
+        if(!isInitialised){
             throw new SetupOperationPrecedenceException("Attempted call to getMoves() before initialiseGame().");
         }
         else {
@@ -186,7 +193,7 @@ public class Launcher{
                 Position new_position;
 
                 // repeatedly ask for input until the move specified is valid
-                while (true) {
+                while(true) {
                     System.out.print("Do you wish to move U(p), D(own), L(eft), or R(ight)? : ");
 
                     try{
@@ -221,7 +228,7 @@ public class Launcher{
      * call to initializeGame()
      */
     public static ArrayList<Integer> updateGameState(Game game){
-        if(!game.isInitialised()){
+        if(!isInitialised){
             throw new SetupOperationPrecedenceException("Attempted call to updateGameState() when game variables have not" +
                     " been initialized.");
         }
@@ -253,7 +260,7 @@ public class Launcher{
      * to initializeGame()
      */
     public static ArrayList<Integer> startGame(Game game){
-        if(!game.isInitialised()){
+        if(!isInitialised){
             throw new SetupOperationPrecedenceException("Attempted call to startGame() before initialiseGame().");
         }
         else{
