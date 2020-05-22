@@ -137,7 +137,9 @@ public class Launcher{
                     System.out.print("Kindly enter the number of teams between 2 and " + (n_players - 1) + " : ");
                     scanner.next();
                 }
-            }while(game.isValidNTeams(n_teams, n_players));
+
+                n_teams = scanner.nextInt();
+            }while(!game.isValidNTeams(n_teams, n_players));
         }
 
         // attempt to setup Game instance - if fails, there is some fatal inconsistency!
