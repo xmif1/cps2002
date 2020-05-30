@@ -738,7 +738,7 @@ public class BasicMapTest {
 
     @Test
     public void isPlayable_returnsTrue_IfTheTreasureCanBeReachedFrom75PercentOfTiles() {
-        // Create a new 10x10 map with a strip of water tiles dividing it
+        // Create a new 10x10 map with a strip of water tiles dividing it in the penultimate row
         // Note, that the water tiles dividing the map take up 10% of the map. Thus, the map has two grass sections:
         // one which makes up 80% of the map, and one which makes up 10% of the map.
         int size = 10;
@@ -762,20 +762,20 @@ public class BasicMapTest {
     }
 
     @Test public void isPlayable_returnsFalse_IfTheTreasureCannotBeReachedFrom75PercentOfTiles() {
-        // Create a new 10x10 map with a strip of water tiles dividing it
+        // Create a new 10x10 map with a strip of water tiles dividing it in the row before the penultimate one
         // Note, that the water tiles dividing the map take up 10% of the map. Thus, the map has two grass sections:
-        // one which makes up 80% of the map, and one which makes up 10% of the map.
+        // one which makes up 70% of the map, and one which makes up 20% of the map.
         int size = 10;
         TileType[][] tiles = new TileType[size][size];
         for(int i = 0; i < size; i++) {
-            // Create a strip of water tiles in row 8 (the penultimate row)
+            // Create a strip of water tiles in row 7 (the row before the penultimate one)
             TileType tile = (i == 8) ? TileType.Water : TileType.Grass;
             for(int j = 0; j < size; j++) {
                 tiles[i][j] = tile;
             }
         }
 
-        // Put the treasure tile in the smaller (10%) section
+        // Put the treasure tile in the smaller (20%) section
         tiles[9][9] = TileType.Treasure;
 
         // Create a new map with the tiles created above
@@ -810,14 +810,14 @@ public class BasicMapTest {
      */
     @Test
     public void isPlayable_correctlyAdjustsItsResult_WhenTheMinimumPercentageOfPlayableTilesIsChanged() {
-        // Create a new 10x10 map with a strip of water tiles dividing it
+        // Create a new 10x10 map with a strip of water tiles dividing it in the row before the penultimate one
         // Note, that the water tiles dividing the map take up 10% of the map. Thus, the map has two grass sections:
         // one which makes up 80% of the map, and one which makes up 10% of the map.
         int size = 10;
         TileType[][] tiles = new TileType[size][size];
         for(int i = 0; i < size; i++) {
-            // Create a strip of water tiles in row 8 (the penultimate row)
-            TileType tile = (i == 8) ? TileType.Water : TileType.Grass;
+            // Create a strip of water tiles in row 7 (the row before the penultimate one)
+            TileType tile = (i == 7) ? TileType.Water : TileType.Grass;
             for(int j = 0; j < size; j++) {
                 tiles[i][j] = tile;
             }
@@ -829,8 +829,8 @@ public class BasicMapTest {
         // Create a new map with the tiles created above
         basicMap = new BasicMap(tiles);
 
-        // Set the minimum number of playable tiles to 10% (just enough for the map to be considered playable)
-        basicMap.setMinPlayableTilesPercentage(10);
+        // Set the minimum number of playable tiles to 20% (just enough for the map to be considered playable)
+        basicMap.setMinPlayableTilesPercentage(20);
 
         // Check that the function returns true (instead of of false like when the default percentage is used)
         assertTrue(basicMap.isPlayable());
