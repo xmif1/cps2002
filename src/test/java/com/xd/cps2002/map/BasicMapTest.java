@@ -560,7 +560,7 @@ public class BasicMapTest {
         // Find the actual ratio of water tiles to map tiles that were generated
         double actualRatio = waterCount/((double) size * size);
 
-        // Check that the actual ratio is in the range between 30% to 60%
+        // Check that the actual ratio is in the range between 30% and 60%
         assertTrue(0.3 <= actualRatio && actualRatio <= 0.6);
     }
 
