@@ -445,14 +445,11 @@ public class BasicMapTest {
     }
 
     @Test
-    public void generate_generatesCorrectNumberOfWaterTiles_whenCalled() {
+    public void generate_generatesCorrectNumberOfWaterTiles_whenCalledUsingDefaultWaterToTilePercentages() {
         // Create a new empty 12 x 12 tile map and randomly generate the tiles
         int size = 12;
         basicMap = new BasicMap(size);
         basicMap.generate();
-
-        // Calculate the number of map tiles that need to be generated (10% of all tiles)
-        int expectedCount = (int) Math.floor(size * size * 0.10);
 
         // Count the number of water tiles generated
         int waterCount = 0;
@@ -462,8 +459,11 @@ public class BasicMapTest {
             }
         }
 
-        // Check that 10% of the map tiles are in fact water tiles
-        assertEquals(expectedCount, waterCount);
+        // Find the actual ratio of water tiles to map tiles that were generated
+        double actualRatio = waterCount/((double) size * size);
+
+        // Check that the actual ratio is in the default range (between 1% and 10 percent)
+        assertTrue(0.01 <= actualRatio && actualRatio <= 0.10);
     }
 
     @Test
@@ -532,12 +532,219 @@ public class BasicMapTest {
         assertEquals(TileType.Treasure, basicMap.getTileType(basicMap.treasurePos));
     }
 
-    @Test public void isPlayable_returnsTrue_IfTheTreasureCanBeReachedFrom75PercentOfTiles() {
-        // Create a new 10x10 map with a strip of water tiles dividing it (80% of the map is playable)
+    /**
+     * This unit checks that the function {@link BasicMap#generate()} correctly adjusts the number of water tiles that
+     * it generates when the function {@link BasicMap#setWaterTilePercentage(int, int)} is used to change the minimum
+     * and maximum percentages of water tiles.
+     */
+    @Test
+    public void generate_generatesCorrectNumberOfWaterTiles_whenWaterToTilePercentagesHaveBeenChanged() {
+        // Create a new empty 12 x 12 tile map
+        int size = 12;
+        basicMap = new BasicMap(size);
+
+        // Change the minimum and maximum percentages of water tiles to map tiles in the map to 30-60%
+        basicMap.setWaterTilePercentage(30, 60);
+
+        // Randomly generate the tiles in the map
+        basicMap.generate();
+
+        // Count the number of water tiles generated
+        int waterCount = 0;
+        for(int i = 0; i < size; i++) {
+            for(int j = 0; j < size; j++) {
+                if(basicMap.getTileType(i,j) == TileType.Water) waterCount++;
+            }
+        }
+
+        // Find the actual ratio of water tiles to map tiles that were generated
+        double actualRatio = waterCount/((double) size * size);
+
+        // Check that the actual ratio is in the range between 30% and 60%
+        assertTrue(0.3 <= actualRatio && actualRatio <= 0.6);
+    }
+
+    /**
+     * This unit test checks the edge case when the function {@link BasicMap#generate()} is fixed at a specific ratio of
+     * water tiles by setting both of the parameters in {@link BasicMap#setWaterTilePercentage(int, int)} to the same
+     * percentage.
+     */
+    @Test
+    public void generate_generatesCorrectNumberOfWaterTiles_whenWaterToTilePercentagesHaveBeenChangedToBeEqual() {
+        // Create a new empty 12 x 12 tile map
+        int size = 12;
+        basicMap = new BasicMap(size);
+
+        // Change the minimum and maximum percentages of water tiles to map tiles in the map to be both 53%
+        // A prime number was chosen to see how the function handles a number which is not an exact divisor of the
+        // number of tiles in the map
+        basicMap.setWaterTilePercentage(53, 53);
+
+        // Randomly generate the tiles in the map
+        basicMap.generate();
+
+        // Count the number of water tiles generated
+        int waterCount = 0;
+        for(int i = 0; i < size; i++) {
+            for(int j = 0; j < size; j++) {
+                if(basicMap.getTileType(i,j) == TileType.Water) waterCount++;
+            }
+        }
+
+        // Find the actual ratio of water tiles to map tiles that were generated
+        double actualRatio = waterCount/((double) size * size);
+
+        // Check that the actual ratio is within 1% of the percentage it was set to (due to rounding)
+        assertEquals(0.53, actualRatio, 0.01);
+    }
+
+    /**
+     * This unit test checks the edge case when the function {@link BasicMap#generate()} is set to not generate any
+     * water tiles by setting both of the parameters in {@link BasicMap#setWaterTilePercentage(int, int)} to 0%.
+     */
+    @Test
+    public void generate_generatesNoWaterTiles_whenWaterToTilePercentagesAreBothZero() {
+        // Create a new empty 12 x 12 tile map
+        int size = 12;
+        basicMap = new BasicMap(size);
+
+        // Change the minimum and maximum percentages of water tiles to map tiles in the map to be both 0%
+        basicMap.setWaterTilePercentage(0, 0);
+
+        // Randomly generate the tiles in the map
+        basicMap.generate();
+
+        // Count the number of water tiles generated
+        int waterCount = 0;
+        for(int i = 0; i < size; i++) {
+            for(int j = 0; j < size; j++) {
+                if(basicMap.getTileType(i,j) == TileType.Water) waterCount++;
+            }
+        }
+
+        // Expect the map to have no water tiles
+        assertEquals(0, waterCount);
+    }
+
+    /**
+     * This unit test is meant to show that map generate still works in the absolute worst case: when you have a 5 x 5
+     * sized map and want to have 64% of the tiles in the map be water tiles. Even with the restriction that water tiles
+     * cannot be placed next to the treasure tile, this case should always work. However, if the user could set the
+     * percentage to even 1% higher, the function might deadlock since it may not have enough space to place the
+     * remaining tile (assuming that 9 tiles are taken up by the treasure tile and its adjacent tiles).
+     */
+    @Test
+    public void generate_generatesCorrectNumberOfWaterTiles_whenPercentagesHaveBeenSetToMaximumInASmallMap() {
+        // Create a new empty 5 x 5 tile map (smallest available map)
+        int size = 5;
+        basicMap = new BasicMap(size);
+
+        // Change the minimum and maximum percentages of water tiles to map tiles in the map to be both 64%
+        basicMap.setWaterTilePercentage(64, 64);
+
+        // Randomly generate the tiles in the map
+        basicMap.generate();
+
+        // Count the number of water tiles generated
+        int waterCount = 0;
+        for(int i = 0; i < size; i++) {
+            for(int j = 0; j < size; j++) {
+                if(basicMap.getTileType(i,j) == TileType.Water) waterCount++;
+            }
+        }
+
+        // Find the actual ratio of water tiles to map tiles that were generated
+        double actualRatio = waterCount/((double) size * size);
+
+        // Check that the actual ratio is within 1% of the percentage it was set to (due to rounding)
+        assertEquals(0.64, actualRatio, 0.01);
+    }
+
+    @Test
+    public void setWaterTilePercentage_throwsIllegalArgumentException_ifMinimumPercentageIsNegative() {
+        // Expect the unit test to throw an IllegalArgumentException
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("The minimum and maximum percentage of water tiles must both be in " +
+                "the range from 0 to 64 (inclusive).");
+
+        // Create a new empty 12 x 12 tile map
+        int size = 12;
+        basicMap = new BasicMap(size);
+
+        // Try to change the minimum and maximum percentages of water tiles such that the minimum is negative
+        basicMap.setWaterTilePercentage(-30, 50);
+    }
+
+    @Test
+    public void setWaterTilePercentage_throwsIllegalArgumentException_ifMinimumPercentageIsLargerThan64() {
+        // Expect the unit test to throw an IllegalArgumentException
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("The minimum and maximum percentage of water tiles must both be in " +
+                "the range from 0 to 64 (inclusive).");
+
+        // Create a new empty 12 x 12 tile map
+        int size = 12;
+        basicMap = new BasicMap(size);
+
+        // Try to change the minimum and maximum percentages of water tiles such that the minimum is larger than 64%
+        basicMap.setWaterTilePercentage(101, 50);
+    }
+
+    @Test
+    public void setWaterTilePercentage_throwsIllegalArgumentException_ifMaximumPercentageIsNegative() {
+        // Expect the unit test to throw an IllegalArgumentException
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("The minimum and maximum percentage of water tiles must both be in " +
+                "the range from 0 to 64 (inclusive).");
+
+        // Create a new empty 12 x 12 tile map
+        int size = 12;
+        basicMap = new BasicMap(size);
+
+        // Try to change the minimum and maximum percentages of water tiles such that the maximum is negative
+        basicMap.setWaterTilePercentage(10, -90);
+    }
+
+    @Test
+    public void setWaterTilePercentage_throwsIllegalArgumentException_ifMaximumPercentageIsLargerThan64() {
+        // Expect the unit test to throw an IllegalArgumentException
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("The minimum and maximum percentage of water tiles must both be in " +
+                "the range from 0 to 64 (inclusive).");
+
+        // Create a new empty 12 x 12 tile map
+        int size = 12;
+        basicMap = new BasicMap(size);
+
+        // Try to change the minimum and maximum percentages of water tiles such that the maximum is larger than 64%
+        basicMap.setWaterTilePercentage(10, 65);
+    }
+
+    @Test
+    public void setWaterTilePercentage_throwsIllegalArgumentException_ifMinimumPercentageIsLargerThanMaximumPercentage() {
+        // Expect the unit test to throw an IllegalArgumentException
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("The minimum percentage of water tiles cannot be larger than the " +
+                "maximum percentage.");
+
+        // Create a new empty 12 x 12 tile map
+        int size = 12;
+        basicMap = new BasicMap(size);
+
+        // Try to change the minimum and maximum percentages of water tiles such that the minimum is larger than the
+        // maximum
+        basicMap.setWaterTilePercentage(20, 19);
+    }
+
+    @Test
+    public void isPlayable_returnsTrue_IfTheTreasureCanBeReachedFrom75PercentOfTiles() {
+        // Create a new 10x10 map with a strip of water tiles dividing it in the penultimate row
+        // Note, that the water tiles dividing the map take up 10% of the map. Thus, the map has two grass sections:
+        // one which makes up 80% of the map, and one which makes up 10% of the map.
         int size = 10;
         TileType[][] tiles = new TileType[size][size];
         for(int i = 0; i < size; i++) {
-            // Create a strip of water tiles in row 8
+            // Create a strip of water tiles in row 8 (the penultimate row)
             TileType tile = (i == 8) ? TileType.Water : TileType.Grass;
             for(int j = 0; j < size; j++) {
                 tiles[i][j] = tile;
@@ -550,16 +757,18 @@ public class BasicMapTest {
         // Create a new map with the tiles created above
         basicMap = new BasicMap(tiles);
 
-        // Check that the function returns true
+        // Check that the function returns true (given that 75% of the tiles should be playable by default)
         assertTrue(basicMap.isPlayable());
     }
 
     @Test public void isPlayable_returnsFalse_IfTheTreasureCannotBeReachedFrom75PercentOfTiles() {
-        // Create a new 10x10 map with a strip of water tiles dividing it (20% of the map is playable)
+        // Create a new 10x10 map with a strip of water tiles dividing it in the row before the penultimate one
+        // Note, that the water tiles dividing the map take up 10% of the map. Thus, the map has two grass sections:
+        // one which makes up 70% of the map, and one which makes up 20% of the map.
         int size = 10;
         TileType[][] tiles = new TileType[size][size];
         for(int i = 0; i < size; i++) {
-            // Create a strip of water tiles in row 8
+            // Create a strip of water tiles in row 7 (the row before the penultimate one)
             TileType tile = (i == 8) ? TileType.Water : TileType.Grass;
             for(int j = 0; j < size; j++) {
                 tiles[i][j] = tile;
@@ -572,7 +781,7 @@ public class BasicMapTest {
         // Create a new map with the tiles created above
         basicMap = new BasicMap(tiles);
 
-        // Check that the function returns true
+        // Check that the function returns false (given that 75% of the tiles should be playable by default)
         assertFalse(basicMap.isPlayable());
     }
 
@@ -588,6 +797,73 @@ public class BasicMapTest {
 
         // Try to check if the map is playable without generating the tiles first
         basicMap.isPlayable();
+    }
+
+    /**
+     * This unit test is meant to check that changing the minimum percentage of playable tiles using
+     * {@link BasicMap#setWaterTilePercentage(int, int)} has an effect on the result of the function
+     * {@link BasicMap#isPlayable()}. The test case is almost exactly the same as
+     * {@link BasicMapTest#isPlayable_returnsFalse_IfTheTreasureCannotBeReachedFrom75PercentOfTiles()},
+     *  except for the fact that {@link BasicMap#setWaterTilePercentage(int, int)} is called. Thus, any
+     *  any changes in the outcome of calling {@link BasicMap#isPlayable()} should be only due to
+     *  calling this function.
+     */
+    @Test
+    public void isPlayable_correctlyAdjustsItsResult_WhenTheMinimumPercentageOfPlayableTilesIsChanged() {
+        // Create a new 10x10 map with a strip of water tiles dividing it in the row before the penultimate one
+        // Note, that the water tiles dividing the map take up 10% of the map. Thus, the map has two grass sections:
+        // one which makes up 80% of the map, and one which makes up 10% of the map.
+        int size = 10;
+        TileType[][] tiles = new TileType[size][size];
+        for(int i = 0; i < size; i++) {
+            // Create a strip of water tiles in row 7 (the row before the penultimate one)
+            TileType tile = (i == 7) ? TileType.Water : TileType.Grass;
+            for(int j = 0; j < size; j++) {
+                tiles[i][j] = tile;
+            }
+        }
+
+        // Put the treasure tile in the smaller (10%) section
+        tiles[9][9] = TileType.Treasure;
+
+        // Create a new map with the tiles created above
+        basicMap = new BasicMap(tiles);
+
+        // Set the minimum number of playable tiles to 20% (just enough for the map to be considered playable)
+        basicMap.setMinPlayableTilesPercentage(20);
+
+        // Check that the function returns true (instead of of false like when the default percentage is used)
+        assertTrue(basicMap.isPlayable());
+    }
+
+    @Test
+    public void setMinPlayableTilesPercentage_throwsIllegalArgumentException_IfPercentageIsLessThan12() {
+        // Expect the function to throw the IllegalArgumentException
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("The percentage of playable must be in the range from 12 to 100 " +
+                "(inclusive).");
+
+        // Create a new empty 8 x 8 tile map
+        int size = 8;
+        basicMap = new BasicMap(size);
+
+        // Try to set the minimum percentage of playable tiles to a percentage less than 12%
+        basicMap.setMinPlayableTilesPercentage(11);
+    }
+
+    @Test
+    public void setMaxPlayableTilesPercentage_throwsIllegalArgumentException_IfPercentageIsLargerThan100() {
+        // Expect the function to throw the IllegalArgumentException
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("The percentage of playable must be in the range from 12 to 100 " +
+                "(inclusive).");
+
+        // Create a new empty 8 x 8 tile map
+        int size = 8;
+        basicMap = new BasicMap(size);
+
+        // Try to set the minimum percentage of playable tiles to a percentage larger than 100%
+        basicMap.setMinPlayableTilesPercentage(101);
     }
 
     @Test public void isPositionWinnable_correctlyReturnsIfATileIsWinnable_ifGivenAValidPosition() {
