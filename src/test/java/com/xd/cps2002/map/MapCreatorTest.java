@@ -106,8 +106,8 @@ public class MapCreatorTest {
         // Check that the created map is of type BasicMap
         assertTrue(map instanceof BasicMap);
 
-        // The playability percentage of the map is set to 75% in case this was accidentally set to a wrong percentage
-        // by
+        // The playability percentage of the map is set to 75% in case this was accidentally set to a lower percentage
+        // by "MapCreator"
         BasicMap safeMap = (BasicMap) map;
         safeMap.setMinPlayableTilesPercentage(75);
 
@@ -138,17 +138,72 @@ public class MapCreatorTest {
 
         // Check that the actual ratio is in the range between 0% and 10%
         assertTrue(0.0 <= actualRatio && actualRatio <= 0.1);
+    }
+
+    /* Tests for the generation of "hazardous" maps */
+
+    @Test
+    public void createMapOfSize_returnsBasicMapWithCorrectSize_ifGivenMapTypeHazardous() {
+        // Create a "hazardous" map of size 16 using "MapCreator"
+        int size = 16;
+        Map map = createMap("safe", size);
+
+        // Check that the created map is of type BasicMap
+        assertTrue(map instanceof BasicMap);
 
         // Check that the created map has the specified size
         assertEquals(size, map.getSize());
+    }
+
+    @Test
+    public void createMapOfSize_returnsBasicMapWithAtLeast75PlayableTiles_ifGivenMapTypeHazardous() {
+        // Create a "hazardous" map of size 13 using "MapCreator"
+        int size = 13;
+        Map map = createMap("hazardous", size);
+
+        // Check that the created map is of type BasicMap
+        assertTrue(map instanceof BasicMap);
+
+        // The playability percentage of the map is set to 60% in case this was accidentally set to a lower percentage
+        // by "MapCreator"
+        BasicMap safeMap = (BasicMap) map;
+        safeMap.setMinPlayableTilesPercentage(60);
+
+        // Check that the created map is at least 60% playable (and hence the map tiles have been generated
+        // successfully)
+        assertTrue(safeMap.isPlayable());
+    }
+
+    @Test
+    public void createMapOfSize_returnsBasicMapWith0To10PercentWaterTiles_ifGivenMapTypeSafeHazardous() {
+        // Create a "hazardous" map object of size 16 using "MapCreator"
+        int size = 16;
+        Map map = createMap("hazardous", size);
+
+        // Check that the created map is of type BasicMap
+        assertTrue(map instanceof BasicMap);
+
+        // Count the number of water tiles generated
+        int waterCount = 0;
+        for(int i = 0; i < size; i++) {
+            for(int j = 0; j < size; j++) {
+                if(map.getTileType(i,j) == TileType.Water) waterCount++;
+            }
+        }
+
+        // Find the actual ratio of water tiles to map tiles that were generated
+        double actualRatio = waterCount/((double) size * size);
+
+        // Check that the actual ratio is in the range between 25% and 35%
+        assertTrue(.25 <= actualRatio && actualRatio <= 0.35);
     }
 
     /* Tests for the version of the "createMap" function which take an array of tiles as an argument */
 
     @Test
     public void createMapWithTiles_returnsBasicMapWithCorrectSize_ifGivenMapTypeBasic() {
-        // Create a "safe" map using "MapCreator" with an array of tiles as one of the parameters
-        Map map = createMap("safe", testTiles);
+        // Create a "BasicMap" object using "MapCreator" with an array of tiles as one of the parameters
+        Map map = createMap("basic", testTiles);
 
         // Check that the created map is of type BasicMap
         assertTrue(map instanceof BasicMap);
@@ -159,9 +214,9 @@ public class MapCreatorTest {
 
     @Test
     public void createMapWithTiles_returnsBasicMapWithCorrectSize_ifGivenMapTypeBasicWithDifferentCasing() {
-        // Create a "safe" map using "MapCreator" with an array of tiles as one of the parameters
+        // Create a "BasicMap" object using "MapCreator" with an array of tiles as one of the parameters
         // The "mapType" argument is now given in a different casing to see if this affects "MapCreator"
-        Map map = createMap("SaFe", testTiles);
+        Map map = createMap("BaSiC", testTiles);
 
         // Check that the created map is of type BasicMap
         assertTrue(map instanceof BasicMap);
@@ -172,8 +227,8 @@ public class MapCreatorTest {
 
     @Test
     public void createMapWithTiles_returnsBasicMapWithSetTiles_ifGivenMapTypeBasic() {
-        // Create a "safe" map using "MapCreator" with an array of tiles as one of the parameters
-        Map map = createMap("safe", testTiles);
+        // Create a "BasicMap" object using "MapCreator" with an array of tiles as one of the parameters
+        Map map = createMap("basic", testTiles);
 
         // Check that the created map is of type BasicMap
         assertTrue(map instanceof BasicMap);
@@ -189,8 +244,8 @@ public class MapCreatorTest {
     @Test
     public void createMapWithTiles_returnsSameInstance_ifCalledTwice() {
         // Try to create two map instances with a pre-generated array of tiles
-        Map firstMap = createMap("safe", testTiles);
-        Map secondMap = createMap("safe", testTiles);
+        Map firstMap = createMap("Basic", testTiles);
+        Map secondMap = createMap("Basic", testTiles);
 
         // Check that the two map instances are actually the same
         assertSame(firstMap, secondMap);

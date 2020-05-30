@@ -52,10 +52,19 @@ public class MapCreator {
         if(instance == null) {
             switch (mapType) {
                 case "safe": {
-                    // Create a BasicMap with 0-10% water tiles where at leas 75% of the tiles are playable
+                    // Create a BasicMap with 0-10% water tiles where at least 75% of the tiles are playable
                     BasicMap basicMap = new BasicMap(size);
                     basicMap.setWaterTilePercentage(0, 10);
                     basicMap.setMinPlayableTilesPercentage(75);
+
+                    // Store the basic map in the singleton instance
+                    instance = basicMap;
+                } break;
+                case "hazardous": {
+                    // Create a BasicMap with 25-35% water tiles where at least 60% of the tiles are playable
+                    BasicMap basicMap = new BasicMap(size);
+                    basicMap.setWaterTilePercentage(25, 35);
+                    basicMap.setMinPlayableTilesPercentage(60);
 
                     // Store the basic map in the singleton instance
                     instance = basicMap;
@@ -92,7 +101,7 @@ public class MapCreator {
         // parameter "mapType"
         if(instance == null) {
             switch (mapType) {
-                case "safe":
+                case "basic":
                     instance = new BasicMap(tiles); break;
                 default:
                     throw new IllegalArgumentException("Invalid map type.");
