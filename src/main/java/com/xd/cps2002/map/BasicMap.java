@@ -36,9 +36,13 @@ public class BasicMap extends Map {
 
     /**
      * Defines the minimum percentage of tiles in the map from which a player needs to be able to reach the treasure.
-     * For this type of map at least 75% of tiles should be reachable
+     * By default at least 75% of tiles should be reachable.
+     *
+     * @implNote This is defined as an integer instead of a float since the user only needs to be able to set the value
+     * to whole percentages, otherwise the changes may not make much of a difference. Moreover, this also avoids any
+     * strange behaviour to due floating point arithmetic.
      */
-    private final double minimumWinnableTiles = 0.75;
+    private int minimumWinnableTiles = 75;
 
     /**
      * Constructor used to initialize an empty {@code BasicMap} object. It uses the constructor of the {@link Map} super
@@ -260,7 +264,7 @@ public class BasicMap extends Map {
         winnableTiles[treasurePos.x][treasurePos.y] = false;
 
         // Calculate the minimum number of reachable tiles needed
-        int minReachableTiles = (int) Math.floor(size * size * minimumWinnableTiles);
+        int minReachableTiles = (int) Math.floor(size * size * (minimumWinnableTiles/100.0));
 
         // Check that the minimum number of reachable tiles is met.
         return reachableCount >= minReachableTiles;
