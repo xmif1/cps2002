@@ -42,7 +42,7 @@ public class BasicMap extends Map {
      * to whole percentages, otherwise the changes may not make much of a difference. Moreover, this also avoids any
      * strange behaviour to due floating point arithmetic.
      */
-    private int minimumWinnableTiles = 75;
+    private int minWinnableTilesPercent = 75;
 
     /**
      * Constructor used to initialize an empty {@code BasicMap} object. It uses the constructor of the {@link Map} super
@@ -106,6 +106,10 @@ public class BasicMap extends Map {
         // Set the water tile to map tiles ratios to the given parameters
         this.minWaterTilePercent = minWaterTilePercent;
         this.maxWaterTilePercent = maxWaterTilePercent;
+    }
+
+    public void setMinPlayableTilesPercentage(int minPlayableTilesPercentage) {
+        this.minWinnableTilesPercent = minPlayableTilesPercentage;
     }
 
     /**
@@ -202,8 +206,11 @@ public class BasicMap extends Map {
     }
 
     /**
-     * Function to check if the player can reach the treasure starting from at least 75% of the grass tiles. The
-     * function also computes from which tiles the player can reach the treasure.
+     * This function checks if the player can reach the treasure starting from a minimum percentage of grass tiles.
+     * This percentage is specified in the member {@link BasicMap#minWinnableTilesPercent}, and can be changed using the
+     * function {@link BasicMap#setMinPlayableTilesPercentage(int)}. The function also computes from which tiles the
+     * player can reach the treasure.
+     *
      * @return true if the player can reach the treasure from at least 75% of the grass tiles and false otherwise.
      * @implNote The function carries out a Depth First Search (DFS) traversal of the map starting from the treasure
      * tile to check which grass tiles are actually connected to the treasure tile. The function also creates an array
@@ -264,7 +271,7 @@ public class BasicMap extends Map {
         winnableTiles[treasurePos.x][treasurePos.y] = false;
 
         // Calculate the minimum number of reachable tiles needed
-        int minReachableTiles = (int) Math.floor(size * size * (minimumWinnableTiles/100.0));
+        int minReachableTiles = (int) Math.floor(size * size * (minWinnableTilesPercent /100.0));
 
         // Check that the minimum number of reachable tiles is met.
         return reachableCount >= minReachableTiles;

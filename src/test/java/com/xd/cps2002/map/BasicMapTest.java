@@ -533,8 +533,9 @@ public class BasicMapTest {
     }
 
     /**
-     * This unit test simultaneously checks that the functions {@link BasicMap#generate()} and
-     * {@link BasicMap#setWaterTilePercentage(int, int)} both work as intended.
+     * This unit checks that the function {@link BasicMap#generate()} correctly adjusts the number of water tiles that
+     * it generates when the function {@link BasicMap#setWaterTilePercentage(int, int)} is used to change the minimum
+     * and maximum percentages of water tiles.
      */
     @Test
     public void generate_generatesCorrectNumberOfWaterTiles_whenWaterToTilePercentagesHaveBeenChanged() {
@@ -628,9 +629,10 @@ public class BasicMapTest {
     /**
      * This unit test is meant to show the generate still works in the absolute worst case: when you have a 5 x 5 sized
      * map and want to have 64% of the water tiles in the map be water tiles. Even with the
-     * restriction that water tiles cannot be placed next to the treasure tile, this case should always work. However, if the user could set the
-     * percentage to even 1% higher, the function might deadlock since it may not have enough space to place the
-     * remaining tile (assuming that 9 tiles are taken up bt the treasure tile and its adjacent tiles).
+     * restriction that water tiles cannot be placed next to the treasure tile, this case should always work. However,
+     * if the user could set the percentage to even 1% higher, the function might deadlock since it may not have enough
+     * space to place the remaining tile (assuming that 9 tiles are taken up by the treasure tile and its adjacent
+     * tiles).
      */
     @Test
     public void generate_generatesCorrectNumberOfWaterTiles_whenPercentagesHaveBeenSetToMaximumInASmallMap() {
@@ -739,11 +741,13 @@ public class BasicMapTest {
 
     @Test
     public void isPlayable_returnsTrue_IfTheTreasureCanBeReachedFrom75PercentOfTiles() {
-        // Create a new 10x10 map with a strip of water tiles dividing it (80% of the map is playable)
+        // Create a new 10x10 map with a strip of water tiles dividing it
+        // Note, that the water tiles dividing the map take up 10% of the map. Thus, the map has two grass sections:
+        // one which makes up 80% of the map, and one which makes up 10% of the map.
         int size = 10;
         TileType[][] tiles = new TileType[size][size];
         for(int i = 0; i < size; i++) {
-            // Create a strip of water tiles in row 8
+            // Create a strip of water tiles in row 8 (the penultimate row)
             TileType tile = (i == 8) ? TileType.Water : TileType.Grass;
             for(int j = 0; j < size; j++) {
                 tiles[i][j] = tile;
@@ -756,30 +760,69 @@ public class BasicMapTest {
         // Create a new map with the tiles created above
         basicMap = new BasicMap(tiles);
 
-        // Check that the function returns true
+        // Check that the function returns true (given that 75% of the tiles should be playable by default)
         assertTrue(basicMap.isPlayable());
     }
 
     @Test public void isPlayable_returnsFalse_IfTheTreasureCannotBeReachedFrom75PercentOfTiles() {
-        // Create a new 10x10 map with a strip of water tiles dividing it (20% of the map is playable)
+        // Create a new 10x10 map with a strip of water tiles dividing it
+        // Note, that the water tiles dividing the map take up 10% of the map. Thus, the map has two grass sections:
+        // one which makes up 80% of the map, and one which makes up 10% of the map.
         int size = 10;
         TileType[][] tiles = new TileType[size][size];
         for(int i = 0; i < size; i++) {
-            // Create a strip of water tiles in row 8
+            // Create a strip of water tiles in row 8 (the penultimate row)
             TileType tile = (i == 8) ? TileType.Water : TileType.Grass;
             for(int j = 0; j < size; j++) {
                 tiles[i][j] = tile;
             }
         }
 
-        // Put the treasure tile in the smaller (20%) section
+        // Put the treasure tile in the smaller (10%) section
         tiles[9][9] = TileType.Treasure;
 
         // Create a new map with the tiles created above
         basicMap = new BasicMap(tiles);
 
-        // Check that the function returns true
+        // Check that the function returns false (given that 75% of the tiles should be playable by default)
         assertFalse(basicMap.isPlayable());
+    }
+
+    /**
+     * This unit test is meant to check that changing the minimum percentage of playable tiles using
+     * {@link BasicMap#setWaterTilePercentage(int, int)} has an effect on the result of the function
+     * {@link BasicMap#isPlayable()}. The test case is almost exactly the same as
+     * {@link BasicMapTest#isPlayable_returnsFalse_IfTheTreasureCannotBeReachedFrom75PercentOfTiles()},
+     *  except for the fact that {@link BasicMap#setWaterTilePercentage(int, int)} is called. Thus, any
+     *  any changes in the outcome of calling {@link BasicMap#isPlayable()} should be only due to
+     *  calling this function.
+     */
+    @Test
+    public void isPlayable_correctlyAdjustsItsResult_WhenTheMinimumPercentageOfPlayableTilesIsChanged() {
+        // Create a new 10x10 map with a strip of water tiles dividing it
+        // Note, that the water tiles dividing the map take up 10% of the map. Thus, the map has two grass sections:
+        // one which makes up 80% of the map, and one which makes up 10% of the map.
+        int size = 10;
+        TileType[][] tiles = new TileType[size][size];
+        for(int i = 0; i < size; i++) {
+            // Create a strip of water tiles in row 8 (the penultimate row)
+            TileType tile = (i == 8) ? TileType.Water : TileType.Grass;
+            for(int j = 0; j < size; j++) {
+                tiles[i][j] = tile;
+            }
+        }
+
+        // Put the treasure tile in the smaller (10%) section
+        tiles[9][9] = TileType.Treasure;
+
+        // Create a new map with the tiles created above
+        basicMap = new BasicMap(tiles);
+
+        // Set the minimum number of playable tiles to 10% (just enough for the map to be considered playable)
+        basicMap.setMinPlayableTilesPercentage(10);
+
+        // Check that the function returns true (instead of of false like when the default percentage is used)
+        assertTrue(basicMap.isPlayable());
     }
 
     @Test
