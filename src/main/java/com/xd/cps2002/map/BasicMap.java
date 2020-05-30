@@ -109,6 +109,13 @@ public class BasicMap extends Map {
     }
 
     public void setMinPlayableTilesPercentage(int minPlayableTilesPercentage) {
+        // If the percentage is not in range, throw an exception
+        if(minPlayableTilesPercentage < 12 || minPlayableTilesPercentage > 100) {
+            throw new IllegalArgumentException("The percentage of playable must be in the range from 12 to 100 " +
+                    "(inclusive).");
+        }
+
+        // Set the ratio of playable tiles to the given parameter
         this.minWinnableTilesPercent = minPlayableTilesPercentage;
     }
 

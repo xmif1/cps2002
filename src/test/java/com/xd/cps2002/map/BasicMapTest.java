@@ -627,12 +627,11 @@ public class BasicMapTest {
     }
 
     /**
-     * This unit test is meant to show the generate still works in the absolute worst case: when you have a 5 x 5 sized
-     * map and want to have 64% of the water tiles in the map be water tiles. Even with the
-     * restriction that water tiles cannot be placed next to the treasure tile, this case should always work. However,
-     * if the user could set the percentage to even 1% higher, the function might deadlock since it may not have enough
-     * space to place the remaining tile (assuming that 9 tiles are taken up by the treasure tile and its adjacent
-     * tiles).
+     * This unit test is meant to show that map generate still works in the absolute worst case: when you have a 5 x 5
+     * sized map and want to have 64% of the tiles in the map be water tiles. Even with the restriction that water tiles
+     * cannot be placed next to the treasure tile, this case should always work. However, if the user could set the
+     * percentage to even 1% higher, the function might deadlock since it may not have enough space to place the
+     * remaining tile (assuming that 9 tiles are taken up by the treasure tile and its adjacent tiles).
      */
     @Test
     public void generate_generatesCorrectNumberOfWaterTiles_whenPercentagesHaveBeenSetToMaximumInASmallMap() {
@@ -640,9 +639,7 @@ public class BasicMapTest {
         int size = 5;
         basicMap = new BasicMap(size);
 
-        // Change the minimum and maximum percentages of water tiles to map tiles in the map to be both 53%
-        // A prime number was chosen to see how the function handles a number which is not an exact divisor of the
-        // number of tiles in the map
+        // Change the minimum and maximum percentages of water tiles to map tiles in the map to be both 64%
         basicMap.setWaterTilePercentage(64, 64);
 
         // Randomly generate the tiles in the map
@@ -788,6 +785,20 @@ public class BasicMapTest {
         assertFalse(basicMap.isPlayable());
     }
 
+    @Test
+    public void isPlayable_throwsANullPointerException_ifTreasurePosMemberHasNotBeenSet() {
+        // Expect the function to throw the NullPointerException
+        expectedException.expect(NullPointerException.class);
+        expectedException.expectMessage("Treasure position has not been set yet.");
+
+        // Create a new empty 8 x 8 tile map
+        int size = 8;
+        basicMap = new BasicMap(size);
+
+        // Try to check if the map is playable without generating the tiles first
+        basicMap.isPlayable();
+    }
+
     /**
      * This unit test is meant to check that changing the minimum percentage of playable tiles using
      * {@link BasicMap#setWaterTilePercentage(int, int)} has an effect on the result of the function
@@ -826,17 +837,33 @@ public class BasicMapTest {
     }
 
     @Test
-    public void isPlayable_throwsANullPointerException_ifTreasurePosMemberHasNotBeenSet() {
-        // Expect the function to throw the NullPointerException
-        expectedException.expect(NullPointerException.class);
-        expectedException.expectMessage("Treasure position has not been set yet.");
+    public void setMinPlayableTilesPercentage_throwsIllegalArgumentException_IfPercentageIsLessThan12() {
+        // Expect the function to throw the IllegalArgumentException
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("The percentage of playable must be in the range from 12 to 100 " +
+                "(inclusive).");
 
         // Create a new empty 8 x 8 tile map
         int size = 8;
         basicMap = new BasicMap(size);
 
-        // Try to check if the map is playable without generating the tiles first
-        basicMap.isPlayable();
+        // Try to set the minimum percentage of playable tiles to a percentage less than 12%
+        basicMap.setMinPlayableTilesPercentage(11);
+    }
+
+    @Test
+    public void setMaxPlayableTilesPercentage_throwsIllegalArgumentException_IfPercentageIsLargerThan100() {
+        // Expect the function to throw the IllegalArgumentException
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("The percentage of playable must be in the range from 12 to 100 " +
+                "(inclusive).");
+
+        // Create a new empty 8 x 8 tile map
+        int size = 8;
+        basicMap = new BasicMap(size);
+
+        // Try to set the minimum percentage of playable tiles to a percentage larger than 100%
+        basicMap.setMinPlayableTilesPercentage(101);
     }
 
     @Test public void isPositionWinnable_correctlyReturnsIfATileIsWinnable_ifGivenAValidPosition() {
