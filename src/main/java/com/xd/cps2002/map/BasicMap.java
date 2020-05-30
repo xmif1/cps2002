@@ -73,22 +73,25 @@ public class BasicMap extends Map {
 
     /**
      * This function is used to change the default percentages of water tiles in the entire map when generating the map.
+     * It changes the values stored in the members {@link BasicMap#minWaterTilePercent} and
+     * {@link BasicMap#maxWaterTilePercent}.
      *
-     * @param minWaterTilePercent An integer from 0 to 64 representing the minimum percentage of water tiles to
-     *                            be generated in the map.
-     * @param maxWaterTilePercent An integer from 0 to 64 representing the maximum percentage of water tiles to
-     *                            be generated in the map.
+     * @param minWaterTilePercent An integer from 0 to 64 (inclusive) representing the minimum percentage of water tiles
+     *                            to be generated in the map.
+     * @param maxWaterTilePercent An integer from 0 to 64 (inclusive) representing the maximum percentage of water tiles
+     *                            to be generated in the map.
      *
      * @apiNote Note that to allow the user to choose a single fixed percentage of water tiles, the parameters
      * {@code minWaterTilePercent} and {@code maxWaterTilePercent} can both be set to the same value.
      *
-     * @implNote The functionality for changing these percentages was not included in the constructor since changing
-     * these values is completely optional given that they already have a default value when the object is created.
+     * @implNote The functionality to change these percentages was not included in the constructor since changing
+     * these values is completely optional, given that they already have a default value when the object is created.
      *
      * Moreover, the function only allows a percentage as high as 64% since in the worst case (a 5x5 map) this is the
-     * maximum percentage of water tiles allowed. This is due to the restriction that tiles next to the treasure tile
-     * cannot be set to water tiles.
+     * maximum percentage of water tiles allowed. This is due to the restriction in the method function
+     * {@link BasicMap#generate()} which prevents tiles next to the treasure tile from being set to water tiles.
      */
+    // TODO consider adding an explanation here
     public void setWaterTilePercentage(int minWaterTilePercent, int maxWaterTilePercent) {
         // If either percentage is not in range, throw an exception
         if(minWaterTilePercent < 0 || minWaterTilePercent > 64
@@ -108,6 +111,22 @@ public class BasicMap extends Map {
         this.maxWaterTilePercent = maxWaterTilePercent;
     }
 
+    /**
+     * This function is used to change the default minimum percentage of tiles from which the player must be able to
+     * reach the treasure tile. It changes the value stored in the member {@link BasicMap#minWinnableTilesPercent}.
+     *
+     * @param minPlayableTilesPercentage An integer in the range 12 to 100 representing the percentage of tiles from
+     *                                   which the player must be able to reach the treasure.
+     *
+     * @implNote The functionality to change this value was not added in the constructor since the member
+     * {@link BasicMap#setMinPlayableTilesPercentage(int)} is given a default value when the map is initialized.
+     *
+     * In addition, the function only allows a minimum of 12% since in the worst case (a 5x5 map where the treasure is
+     * placed in a corner) this is the minimum number of tiles that are guaranteed to be playable. This is because the
+     * function {@link BasicMap#generate()} can never generate a water tile next to a treasure tile. Hence, the if the
+     * treasure tile is placed in a corner, the map must have at least from which a player can reach the treasure.
+     * Thus, 3/(5*5)=12%.
+     */
     public void setMinPlayableTilesPercentage(int minPlayableTilesPercentage) {
         // If the percentage is not in range, throw an exception
         if(minPlayableTilesPercentage < 12 || minPlayableTilesPercentage > 100) {
