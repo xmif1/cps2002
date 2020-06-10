@@ -221,7 +221,7 @@ public class GameTest {
      */
     @Test(expected = InvalidMapSizeException.class)
     public void belowMin_MapSize_genMapTest() throws InvalidMapSizeException{
-        game.genMap(4, new Player[2]);
+        game.genMap(4, "safe", new Player[2]);
     }
 
     /**
@@ -230,7 +230,7 @@ public class GameTest {
      */
     @Test(expected = InvalidMapSizeException.class)
     public void aboveMax_MapSize_genMapTest() throws InvalidMapSizeException{
-        game.genMap(51, new Player[2]);
+        game.genMap(51, "safe", new Player[2]);
     }
 
     /**
@@ -240,7 +240,7 @@ public class GameTest {
      */
     @Test(expected = InvalidMapSizeException.class)
     public void smallMap_Min5Players_genMapTest() throws InvalidMapSizeException{
-        game.genMap(5, new Player[5]);
+        game.genMap(5, "safe", new Player[5]);
     }
 
     /**
@@ -250,7 +250,7 @@ public class GameTest {
     @Test
     public void inrange_MapSize_genMapTest() throws InvalidMapSizeException{
         int map_size = 5;
-        Map map = game.genMap(map_size, new Player[2]);
+        Map map = game.genMap(map_size, "safe", new Player[2]);
 
         assertNotNull(map);
         assertEquals(map_size, map.getSize());
@@ -409,7 +409,7 @@ public class GameTest {
     public void noDirPathSpecified_writeHTMLFilesTest() throws IOException{
         game.dir = null;
 
-        game.writeHTMLFiles(new Player[2], MapCreator.createMap("basic", 5));
+        game.writeHTMLFile(new Player(), MapCreator.createMap("basic", 5));
     }
 
     /**
@@ -419,7 +419,7 @@ public class GameTest {
      */
     @Test(expected = SetupOperationPrecedenceException.class)
     public void noMapInitialized_writeHTMLFilesTest() throws IOException{
-        game.writeHTMLFiles(new Player[2], null);
+        game.writeHTMLFile(new Player(), null);
     }
 
     @After

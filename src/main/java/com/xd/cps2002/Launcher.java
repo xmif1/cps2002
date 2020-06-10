@@ -16,11 +16,12 @@ import java.util.Scanner;
  */
 public class Launcher{
     static boolean isInitialised = false;
+    static ArrayList<Integer> winners = new ArrayList<>();
 
     public static void main(String[] args){
         Game game = Game.getGame(); // get instance
         initialiseGame(game); // setup game
-        ArrayList<Integer> winners = startGame(game); // start game
+        startGame(game); // start game
 
         // print all the winners, and then exit
         System.out.println("Congratulations to the following winners!");
@@ -54,6 +55,7 @@ public class Launcher{
         int n_players;
         int n_teams;
         int map_size;
+        String map_type = null;
 
         Scanner scanner = new Scanner(System.in); // for input by user
 
@@ -82,7 +84,7 @@ public class Launcher{
 
         scanner = new Scanner(System.in); // resetting scanner to forcefully clear buffer
 
-        // repeatedly ask for integer input for the map size, until valid input is provided, and initialize map
+        // repeatedly ask for integer input for the map size, until valid input is provided
         do{
             System.out.print("Kindly enter a map size between 5 and 50, or 8 and 50 if more than 4 players: ");
 
@@ -93,6 +95,20 @@ public class Launcher{
 
             map_size = scanner.nextInt();
         }while(!game.isValidMapSize(map_size, n_players));
+
+        scanner = new Scanner(System.in); // resetting scanner to forcefully clear buffer
+
+        // repeatedly ask for char input for the map type, until valid input is provided
+        boolean valid_map_type = false;
+        do{
+            System.out.print("Kindly choose a map type, S(afe) or H(azardous), by entering the corresponding character: ");
+
+            switch(scanner.next().charAt(0)){ // test against cases to carry out necessary logic
+                case 's': map_type = "safe"; valid_map_type = true; break;
+                case 'h': map_type = "hazardous"; valid_map_type = true; break;
+            }
+
+        }while(!valid_map_type);
 
         scanner = new Scanner(System.in); // resetting scanner to forcefully clear buffer
 
@@ -144,7 +160,7 @@ public class Launcher{
 
         // attempt to setup Game instance - if fails, there is some fatal inconsistency!
         try{
-            game.initialise(n_players, n_teams, map_size);
+            game.initialise(n_players, n_teams, map_size, map_type);
 
             if(game.isInitialised()){
                 isInitialised = true;
@@ -169,6 +185,9 @@ public class Launcher{
      * (i) The move results in a position within the boundary of the map.
      * (ii) The textual input is valid, i.e. any one of the characters 'u', 'd', 'l' or 'r'.
      *
+     * Moreover the function is responsible for taking the necessary action when a player either dies by landing on a
+     * water tile, or wins by landing on the treasure tile, by means of a call to updateGameState().
+     *
      * The function consists of minimal conditional logic constructs, and is mainly composed of looping constructs. In
      * this manner, almost all logic has been encapsulated within Player.move(), Map.isValid() and Player.setPosition().
      * All of which have been extensively tested.
@@ -177,17 +196,18 @@ public class Launcher{
      * required beyond that of mocking, which is beyond the scope of this assignment specification.
      *
      * @param game is an instance of (singleton) Game which maintains the game state variables and updates them.
+     * @return ArrayList of type Integer, of the winners if any, containing their unique identifier.
      * @throws SetupOperationPrecedenceException is thrown when there is an attempted call to getMoves() before a call
      * to initializeGame()
      */
-    public static void getMoves(Game game){
+    public static ArrayList<Integer> getMoves(Game game){
         if(!isInitialised){
             throw new SetupOperationPrecedenceException("Attempted call to getMoves() before initialiseGame().");
         }
         else {
             System.out.println("------------------------------------------------------------------------\n");
 
-            for(Player player : game.getPlayers()) {
+            for(Player player : game.getPlayers()){
                 Scanner scanner = new Scanner(System.in); // resetting scanner to forcefully clear buffer
 
                 System.out.println("Player #" + player.get_pID() + ", it's your turn!\n");
@@ -214,8 +234,26 @@ public class Launcher{
                     }
                 }
 
+                updateGameState(game, player); // update game state for player
+
                 System.out.println("------------------------------------------------------------------------\n");
+
+                // for each player in the same team, update HTML maps
+                for(Player team_player : player.getTeam().players) {
+                    try { // generate HTML map for player and attempt to persist to disk
+                        game.writeHTMLFile(team_player, game.getMap());
+                    }
+                    // if persistence to disk fails, this is generally a fatal error beyond the scope of the program
+                    catch (IOException ioe) {
+                        ioe.printStackTrace();
+
+                        System.out.println("Fatal error occurred during file persistence. Sorry! Exiting...");
+                        System.exit(1);
+                    }
+                }
             }
+
+            return winners;
         }
     }
 
@@ -225,27 +263,24 @@ public class Launcher{
      * or wins by landing on the treasure tile.
      *
      * @param game is an instance of (singleton) Game which maintains the game state variables and updates them.
+     * @param player is a Player instance for which the game state is to be updated.
      * @return ArrayList of type Integer, of the winners if any, containing their unique identifier.
      * @throws SetupOperationPrecedenceException is thrown when there is an attempted call to updateGameState() before a
      * call to initializeGame()
      */
-    public static ArrayList<Integer> updateGameState(Game game){
+    public static ArrayList<Integer> updateGameState(Game game, Player player){
         if(!isInitialised){
             throw new SetupOperationPrecedenceException("Attempted call to updateGameState() when game variables have not" +
                     " been initialized.");
         }
         else {
-            ArrayList<Integer> winners = new ArrayList<>();
+            PlayerStatus status = game.getMap().getTileType(player.getPosition()).statusAfterMove; // get status of player
 
-            for(Player player : game.getPlayers()){
-                PlayerStatus status = game.getMap().getTileType(player.getPosition()).statusAfterMove; // get status of player
-
-                if (status.equals(PlayerStatus.Death)) { // if dead, reset player
-                    System.out.println("\n\u001B[34m" + "Better be careful, or you'll drown!" + "\u001B[0m");
-                    player.reset();
-                } else if (status.equals(PlayerStatus.Win)) { // else if won, break outside while loop by setting win = true
-                    winners.add(player.get_pID());
-                }
+            if (status.equals(PlayerStatus.Death)) { // if dead, reset player
+                System.out.println("\n\u001B[34m" + "Better be careful, or you'll drown!" + "\u001B[0m");
+                player.reset();
+            } else if (status.equals(PlayerStatus.Win)) { // else if won, break outside while loop by setting win = true
+                winners.add(player.get_pID());
             }
 
             return winners;
@@ -257,36 +292,32 @@ public class Launcher{
      * writeHTMLFiles().
      *
      * @param game is an instance of (singleton) Game which maintains the game state variables and updates them.
-     * @return ArrayList of type Integer, of the winners if any, containing their unique identifier.
      * @throws SetupOperationPrecedenceException is thrown when there is an attempted call to startGame() before a call
      * to initializeGame()
      */
-    public static ArrayList<Integer> startGame(Game game){
+    public static void startGame(Game game){
         if(!isInitialised){
             throw new SetupOperationPrecedenceException("Attempted call to startGame() before initialiseGame().");
         }
         else{
-            ArrayList<Integer> winners = new ArrayList<>();
-
-            // this is the main game sequence
-            while(winners.size() == 0){ // loop until a player lands on the Treasure tile
-                // generate current maps
-                try{
-                    game.writeHTMLFiles(game.getPlayers(), game.getMap());
+            // initialise maps
+            for(Player player : game.getPlayers()) {
+                try {
+                    game.writeHTMLFile(player, game.getMap());
                 }
                 // if persistence to disk fails, this is generally a fatal error beyond the scope of the program
-                catch(IOException ioe){
+                catch (IOException ioe) {
                     ioe.printStackTrace();
 
                     System.out.println("Fatal error occurred during file persistence. Sorry! Exiting...");
                     System.exit(1);
                 }
-
-                getMoves(game); // ask players to play their respective moves
-                winners = updateGameState(game); // then update the game state variables accordingly
             }
 
-            return winners;
+            // this is the main game sequence
+            while(winners.size() == 0){ // loop until a player lands on the Treasure tile
+                getMoves(game); // ask players to play their respective moves
+            }
         }
     }
 }
