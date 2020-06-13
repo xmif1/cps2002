@@ -14,7 +14,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.Random;
 
 /**
- * The MainGame class is responsible for coordinating the main logic of the game, and the primary interface for user
+ * The Game class is responsible for coordinating the main logic of the game, and the primary interface for user
  * input and provision of output to the user. It is designed to be the primary interface to the game API, providing
  * descriptive and detailed errors. Moreover, it handles the majority of setup and is designed to prevent the execution
  * of setup steps in an invalid procedural order, if done so through this class. Otherwise access to the sub-systems is

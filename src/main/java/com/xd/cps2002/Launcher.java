@@ -38,7 +38,7 @@ public class Launcher{
      * own initialisation sequence, the following may serve as a template and guide in doing so.
      *
      * The function consists of minimal conditional logic constructs, and is mainly composed of looping constructs. In
-     * this manner, all logic has been encapsulated within the MainGame methods called: setupPlayers, setupMap,
+     * this manner, all logic has been encapsulated within the Game methods called: setupPlayers, setupMap,
      * setHTMLDirectory, setPlayerPositions, and allocateTeams. All of which have been extensively tested.
      *
      * For this reason, and since this methods primarily handles input by means of the Scanner class, no testing is
@@ -103,11 +103,10 @@ public class Launcher{
         do{
             System.out.print("Kindly choose a map type, S(afe) or H(azardous), by entering the corresponding character: ");
 
-            switch(scanner.next().charAt(0)){ // test against cases to carry out necessary logic
+            switch(Character.toLowerCase(scanner.next().charAt(0))){ // test against cases to carry out necessary logic
                 case 's': map_type = "safe"; valid_map_type = true; break;
                 case 'h': map_type = "hazardous"; valid_map_type = true; break;
             }
-
         }while(!valid_map_type);
 
         scanner = new Scanner(System.in); // resetting scanner to forcefully clear buffer
@@ -125,37 +124,41 @@ public class Launcher{
             }
         }
 
-        scanner = new Scanner(System.in); // resetting scanner to forcefully clear buffer
+        if(2 < n_players){ // if more than two players, ask if players want to be grouped into teams
+            scanner = new Scanner(System.in); // resetting scanner to forcefully clear buffer
 
-        char in_char;
-        boolean valid_mode = false;
-
-        // repeatedly ask if playing in team mode or not
-        do{
-            System.out.print("Do you wish to play in team mode, Y(es) or N(o)? : ");
-
-            in_char = scanner.next().charAt(0);
-
-            switch(Character.toLowerCase(in_char)){ // test against cases to carry out necessary logic
-                case 'n': team_mode = false; valid_mode = true; break;
-                case 'y': team_mode = true; valid_mode = true; break;
-            }
-        }while(!valid_mode);
-
-        scanner = new Scanner(System.in); // resetting scanner to forcefully clear buffer
-
-        // repeatedly ask for integer input for the number of teams, until valid input is provided
-        if(team_mode){
+            boolean valid_mode = false;
+            // repeatedly ask if playing in team mode or not
             do{
-                System.out.print("Kindly enter the number of teams between 2 and " + (n_players - 1) + " : ");
+                System.out.print("Do you wish to play in team mode, Y(es) or N(o)? : ");
 
-                while(!scanner.hasNextInt()){
-                    System.out.print("Kindly enter the number of teams between 2 and " + (n_players - 1) + " : ");
-                    scanner.next();
+                switch(Character.toLowerCase(scanner.next().charAt(0))){ // test against cases to carry out necessary logic
+                    case 'n':
+                        team_mode = false;
+                        valid_mode = true;
+                        break;
+                    case 'y':
+                        team_mode = true;
+                        valid_mode = true;
+                        break;
                 }
+            }while(!valid_mode);
 
-                n_teams = scanner.nextInt();
-            }while(!game.isValidNTeams(n_teams, n_players));
+            scanner = new Scanner(System.in); // resetting scanner to forcefully clear buffer
+
+            // repeatedly ask for integer input for the number of teams, until valid input is provided
+            if(team_mode) {
+                do{
+                    System.out.print("Kindly enter the number of teams between 2 and " + (n_players - 1) + " : ");
+
+                    while(!scanner.hasNextInt()){
+                        System.out.print("Kindly enter the number of teams between 2 and " + (n_players - 1) + " : ");
+                        scanner.next();
+                    }
+
+                    n_teams = scanner.nextInt();
+                }while(!game.isValidNTeams(n_teams, n_players));
+            }
         }
 
         // attempt to setup Game instance - if fails, there is some fatal inconsistency!
@@ -279,7 +282,7 @@ public class Launcher{
             if (status.equals(PlayerStatus.Death)) { // if dead, reset player
                 System.out.println("\n\u001B[34m" + "Better be careful, or you'll drown!" + "\u001B[0m");
                 player.reset();
-            } else if (status.equals(PlayerStatus.Win)) { // else if won, break outside while loop by setting win = true
+            }else if(status.equals(PlayerStatus.Win)) { // else if won, break outside while loop by setting win = true
                 winners.add(player.get_pID());
             }
 
@@ -288,8 +291,7 @@ public class Launcher{
     }
 
     /**
-     * Define the main game game sequence, through a number of calls to getMoves() and updateGameState(), as well as
-     * writeHTMLFiles().
+     * Define the main game game sequence, through a number of calls to getMoves(), as well as writeHTMLFile().
      *
      * @param game is an instance of (singleton) Game which maintains the game state variables and updates them.
      * @throws SetupOperationPrecedenceException is thrown when there is an attempted call to startGame() before a call
