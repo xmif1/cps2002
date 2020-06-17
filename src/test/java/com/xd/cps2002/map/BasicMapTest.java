@@ -832,8 +832,91 @@ public class BasicMapTest {
         // Set the minimum number of playable tiles to 20% (just enough for the map to be considered playable)
         basicMap.setMinPlayableTilesPercentage(20);
 
-        // Check that the function returns true (instead of of false like when the default percentage is used)
+        // Check that the function returns true (instead of false like when the default percentage is used)
         assertTrue(basicMap.isPlayable());
+    }
+
+    @Test
+    public void isPlayable_returnsTrue_WhenItChecksIfAMapWithOnlyGrassTilesIs100PercentPlayable() {
+        // Create a new 10x10 map containing only grass tiles
+        int size = 10;
+        TileType[][] tiles = new TileType[size][size];
+        for(int i = 0; i < size; i++) {
+            for(int j = 0; j < size; j++) {
+                tiles[i][j] = TileType.Grass;
+            }
+        }
+
+        // Place the treasure tile
+        tiles[9][9] = TileType.Treasure;
+
+        // Create a new map with the tiles created above
+        basicMap = new BasicMap(tiles);
+
+        // Set the minimum number of playable tiles to 100%
+        basicMap.setMinPlayableTilesPercentage(100);
+
+        // Check that the function returns true
+        assertTrue(basicMap.isPlayable());
+    }
+
+    /**
+     * This test is used to test the edge case when the map is set to be 100% playable. In such a case,
+     * {@link BasicMap#isPlayable()} should only return true if the map only contains no water tiles.
+     */
+    @Test
+    public void isPlayable_returnsFalse_WhenItChecksIfAMapWithWaterTilesIs100PercentPlayable() {
+        // Create a new 10x10 map containing grass tiles and a single water tile
+        int size = 10;
+        TileType[][] tiles = new TileType[size][size];
+        for(int i = 0; i < size; i++) {
+            for(int j = 0; j < size; j++) {
+                tiles[i][j] = TileType.Grass;
+            }
+        }
+
+        // Place the treasure tile
+        tiles[9][9] = TileType.Treasure;
+
+        // Create a new map with the tiles created above
+        basicMap = new BasicMap(tiles);
+
+        // Set the minimum number of playable tiles to 100%
+        basicMap.setMinPlayableTilesPercentage(100);
+
+        // Check that the function returns true
+        assertTrue(basicMap.isPlayable());
+    }
+
+    /**
+     * This test is almost exactly the same to the
+     * {@link BasicMapTest#isPlayable_returnsTrue_WhenItChecksIfAMapWithOnlyGrassTilesIs100PercentPlayable()}. The only
+     * difference is that now a water tile was added to the map, such that it is no longer 100% playable. Hence, the
+     * function should now return false.
+     */
+    @Test
+    public void isPlayable_returnsFalse_WhenItChecksIfAMapWithSomeWaterTilesIs100PercentPlayable() {
+        // Create a new 10x10 map containing grass tiles and a single water tile
+        int size = 10;
+        TileType[][] tiles = new TileType[size][size];
+        for(int i = 0; i < size; i++) {
+            for(int j = 0; j < size; j++) {
+                tiles[i][j] = TileType.Grass;
+            }
+        }
+        tiles[0][0] = TileType.Water;
+
+        // Place the treasure tile
+        tiles[9][9] = TileType.Treasure;
+
+        // Create a new map with the tiles created above
+        basicMap = new BasicMap(tiles);
+
+        // Set the minimum number of playable tiles to 100%
+        basicMap.setMinPlayableTilesPercentage(100);
+
+        // Check that the function returns false
+        assertFalse(basicMap.isPlayable());
     }
 
     @Test
@@ -852,7 +935,7 @@ public class BasicMapTest {
     }
 
     @Test
-    public void setMaxPlayableTilesPercentage_throwsIllegalArgumentException_IfPercentageIsLargerThan100() {
+    public void setMinPlayableTilesPercentage_throwsIllegalArgumentException_IfPercentageIsLargerThan100() {
         // Expect the function to throw the IllegalArgumentException
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("The percentage of playable must be in the range from 12 to 100 " +
