@@ -27,7 +27,7 @@ public class BasicMap extends Map {
 
     /**
      * Value defining the lower bound of the percentage of map tiles which are actually water tiles. For this map type
-     * by default at least 1% of all of the map tiles are set to be water tiles.
+     * by default at most 10% of all of the map tiles are set to be water tiles.
      *
      * @implNote This is defined as an integer instead of a float since the user only needs to be able to set the value
      * to whole percentages, otherwise the changes may not make much of a difference. Moreover, this also avoids any
