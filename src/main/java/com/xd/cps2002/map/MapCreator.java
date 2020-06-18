@@ -15,8 +15,9 @@ package com.xd.cps2002.map;
  * The advantage of including the logic to limit the creation of new instances in the {@link MapCreator} rather than
  * {@link Map} is two-fold. First of all, the functionality to implement this restriction is only implemented once
  * rather than having to implement it for each and every concrete instance of the {@link Map} class. Secondly, since the
- * {@link Map} subclasses do not need to be singletons, they also become far more easy to test as a result. That being
- * said, to allow only the {@link MapCreator} class to initialize concrete implementations of the {@link Map} class, the
+ * {@link Map} subclasses do not need to be singletons, they also become far more easy to test as a result.
+ *
+ * To only allow the {@link MapCreator} class to initialize concrete implementations of the {@link Map} class, the
  * subclasses' constructors need to have {@code protected} rather {@code private} access modifiers. However, this access
  * modifier is still flexible enough to allows unit tests in the same package as the classes to reinitialize {@link Map}
  * instances between unit tests.
@@ -30,14 +31,23 @@ public class MapCreator {
      * {@link com.xd.cps2002.map} package.
      *
      * @implNote  Its access modifier is set as {@code default} instead of {@code private} to allow unit tests in the
-     * same package to easily reset the instance between tests. However, external methods still are not given direct
-     * access to this member.
+     * same package to easily reset the instance between tests. However, classes outside the package still are not given
+     * direct access to this member.
      */
      static Map instance;
 
-    /** Factory method used to create different types of {@link Map} objects.
+    /** Factory method used to create different types of {@link Map} objects. Depending on the string passed to the
+     * {@code mapType} parameter, the method can return the following map types:
+     *
+     * <ul>
+     *     <li>"safe" - creates a map where 0-10% of the tiles are water tiles, and the player can start playing from
+     *     at least 75% of the tiles </li>
+     *     <li>"hazardous" - creates a map where 25-35% of the tiles are water tiles, and the player can start playing
+     *     from at least 60% of the tiles </li>
+     * </ul>
+     *
      * @param mapType A string representing the type of map to be created.
-     * @param size size of the map to be created
+     * @param size size of the map to be created.
      * @return A Map object with the type represented by {@code mapType}
      *
      * @apiNote This method creates a new {@link Map} instance only the first time it is called. This means that the
@@ -86,12 +96,21 @@ public class MapCreator {
     }
 
     /** Factory method used to create different types of {@link Map} objects with a preset set of tiles (for testing).
+     *  Depending on the string passed to the {@code mapType} parameter, the method can return the following map types:
+     *
+     * <ul>
+     *     <li>"basic" - creates a {@link BasicMap} object.
+     * </ul>
+     *
      * @param mapType A string representing the type of map to be created.
      * @param tiles a 2D array of {@link TileType} elements which represents the placement of the tiles in the map
      * @return A Map object with the type represented by {@code mapType}
      *
      * @apiNote This method creates a new {@link Map} instance only the first time it is called. This means that the
      * method is guaranteed to return a map of the requested type only the first time it is called.
+     *
+     * @implNote Since this method does not randomly generate the map tiles, it could not be made to return "safe" and
+     * "hazardous" map types. Hence, it only returns the "basic" map type.
      * */
     public static Map createMap(String mapType, TileType[][] tiles) {
         // Change mapType to lowercase to avoid having case sensitivity

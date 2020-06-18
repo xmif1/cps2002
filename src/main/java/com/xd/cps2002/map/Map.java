@@ -14,6 +14,8 @@ import com.xd.cps2002.player.Position;
  * The {@link Map} class was implemented as an abstract class rather than an interface since the only functionality that
  * would be carried out differently by each subclass is the map generation and the way that that map is verified to be
  * playable. Hence, all other functionality was implemented in this class so that it would be common to all subclasses.
+ *
+ * @author Domenico Agius
  */
 public abstract class Map {
     /**

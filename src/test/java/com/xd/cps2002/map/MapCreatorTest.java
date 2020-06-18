@@ -7,7 +7,8 @@ import static com.xd.cps2002.map.MapCreator.createMap;
 import static org.junit.Assert.*;
 
 /**
- * This class contains unit tests used to test the methods.
+ * This class contains unit tests used to test the methods of the {@link MapCreator} class.
+ * @author Domenico Agius
  */
 public class MapCreatorTest {
 
@@ -42,7 +43,7 @@ public class MapCreatorTest {
     }
 
     /* Generic tests used to test version of the "createMap" function which take map size as an argument. The map types
-    * used in these tests does not really matter */
+     * used in these tests does not really matter */
 
     @Test
     public void createMapOfSize_throwsIllegalArgumentException_ifMapTypeDoesNotExist() {

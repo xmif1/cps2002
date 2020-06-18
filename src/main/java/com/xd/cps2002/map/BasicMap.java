@@ -9,6 +9,8 @@ import java.util.Stack;
 /**
  * The {@code BasicMap} class is a concrete implementation of the {@link} Map class, and it contains the implementations
  * of the {@link Map#generate()} and {@link Map#isPlayable()} functions particular to this type of map.
+ *
+ * @author Domenico Agius
  */
 public class BasicMap extends Map {
 
@@ -35,8 +37,9 @@ public class BasicMap extends Map {
     private int maxWaterTilePercent = 10;
 
     /**
-     * Defines the minimum percentage of tiles in the map from which a player needs to be able to reach the treasure.
-     * By default at least 75% of tiles should be reachable.
+     * Defines the minimum percentage of tiles in the map from which a player needs to be able to start from to reach
+     * the treasure tile. Note that since the player cannot start on the water this percentage does not include the
+     * treasure tile. By default at least 75% of tiles should be reachable.
      *
      * @implNote This is defined as an integer instead of a float since the user only needs to be able to set the value
      * to whole percentages, otherwise the changes may not make much of a difference. Moreover, this also avoids any
@@ -89,9 +92,10 @@ public class BasicMap extends Map {
      *
      * Moreover, the function only allows a percentage as high as 64% since in the worst case (a 5x5 map) this is the
      * maximum percentage of water tiles allowed. This is due to the restriction in the method function
-     * {@link BasicMap#generate()} which prevents tiles next to the treasure tile from being set to water tiles.
+     * {@link BasicMap#generate()} which prevents tiles next to the treasure tile from being set to water tiles. Hence,
+     * the treasure tile can have at most 8 grass tiles around it. Therefore (8 grass + 1 treasure)/25 = 36% which
+     * cannot be water tiles.
      */
-    // TODO consider adding an explanation here
     public void setWaterTilePercentage(int minWaterTilePercent, int maxWaterTilePercent) {
         // If either percentage is not in range, throw an exception
         if(minWaterTilePercent < 0 || minWaterTilePercent > 64
@@ -115,22 +119,16 @@ public class BasicMap extends Map {
      * This function is used to change the default minimum percentage of tiles from which the player must be able to
      * reach the treasure tile. It changes the value stored in the member {@link BasicMap#minWinnableTilesPercent}.
      *
-     * @param minPlayableTilesPercentage An integer in the range 12 to 100 representing the percentage of tiles from
+     * @param minPlayableTilesPercentage An integer in the range 1 to 100 representing the percentage of tiles from
      *                                   which the player must be able to reach the treasure.
      *
      * @implNote The functionality to change this value was not added in the constructor since the member
-     * {@link BasicMap#setMinPlayableTilesPercentage(int)} is given a default value when the map is initialized.
-     *
-     * In addition, the function only allows a minimum of 12% since in the worst case (a 5x5 map where the treasure is
-     * placed in a corner) this is the minimum number of tiles that are guaranteed to be playable. This is because the
-     * function {@link BasicMap#generate()} can never generate a water tile next to a treasure tile. Hence, the if the
-     * treasure tile is placed in a corner, the map must have at least from which a player can reach the treasure.
-     * Thus, 3/(5*5)=12%.
+     * {@link BasicMap#minWinnableTilesPercent} is given a default value when the map is initialized.
      */
     public void setMinPlayableTilesPercentage(int minPlayableTilesPercentage) {
         // If the percentage is not in range, throw an exception
-        if(minPlayableTilesPercentage < 12 || minPlayableTilesPercentage > 100) {
-            throw new IllegalArgumentException("The percentage of playable must be in the range from 12 to 100 " +
+        if(minPlayableTilesPercentage < 1 || minPlayableTilesPercentage > 100) {
+            throw new IllegalArgumentException("The percentage of playable must be in the range from 1 to 100 " +
                     "(inclusive).");
         }
 
@@ -237,7 +235,13 @@ public class BasicMap extends Map {
      * function {@link BasicMap#setMinPlayableTilesPercentage(int)}. The function also computes from which tiles the
      * player can reach the treasure.
      *
-     * @return true if the player can reach the treasure from at least 75% of the grass tiles and false otherwise.
+     * @return true if the player can reach the treasure starting from at least
+     * {@link BasicMap#minWinnableTilesPercent}% of the grass tiles and false otherwise.
+     *
+     * @apiNote The treasure tile does not count towards the total number of playable tiles, since the player cannot
+     * start from this tile. Also, due to rounding, this function may actually check that the map contains a percentage
+     * of playable tiles less than that specified in {@link BasicMap#minWinnableTilesPercent}.
+     *
      * @implNote The function carries out a Depth First Search (DFS) traversal of the map starting from the treasure
      * tile to check which grass tiles are actually connected to the treasure tile. The function also creates an array
      * of booleans ({@link Map#winnableTiles}) representing the tiles which are connected to the treasure tile. The
@@ -296,8 +300,11 @@ public class BasicMap extends Map {
         // Set the treasure tile to unreachable (since the player should not be able to start playing on this tile)
         winnableTiles[treasurePos.x][treasurePos.y] = false;
 
+        // Remove the treasure tile from the set of reachable (i.e. starting) tiles
+        reachableCount--;
+
         // Calculate the minimum number of reachable tiles needed
-        int minReachableTiles = (int) Math.floor(size * size * (minWinnableTilesPercent /100.0));
+        int minReachableTiles = (int) Math.floor((size * size-1) * (minWinnableTilesPercent /100.0));
 
         // Check that the minimum number of reachable tiles is met.
         return reachableCount >= minReachableTiles;
