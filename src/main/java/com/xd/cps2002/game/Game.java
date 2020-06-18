@@ -14,7 +14,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.Random;
 
 /**
- * The MainGame class is responsible for coordinating the main logic of the game, and the primary interface for user
+ * The Game class is responsible for coordinating the main logic of the game, and the primary interface for user
  * input and provision of output to the user. It is designed to be the primary interface to the game API, providing
  * descriptive and detailed errors. Moreover, it handles the majority of setup and is designed to prevent the execution
  * of setup steps in an invalid procedural order, if done so through this class. Otherwise access to the sub-systems is
@@ -88,15 +88,16 @@ public class Game{
      * @param n_players is the number of Player instances to initialise (2 <= n_players <= 8).
      * @param n_teams is the number of teams to initialise and divide the players into (2 <= n_teams <= n_players - 1).
      * @param map_size is the grid size of the map (5 <= map_size <= 50 if n_players < 5, 8 <= map_size <= 50 otherwise).
+     * @param map_type is the type of map to be initialised by the MapCreator, more or less corresponding to difficulty level.
      * @throws InvalidNumberOfPlayersException is propagated forward from genPlayers(n_players).
      * @throws InvalidMapSizeException is propagated forward from genMap(map_size, players).
      * @throws InvalidNumberOfTeamsException is propagated forward from genTeams(n_teams, players).
      */
-    public void initialise(int n_players, int n_teams, int map_size) throws InvalidNumberOfPlayersException,
+    public void initialise(int n_players, int n_teams, int map_size, String map_type) throws InvalidNumberOfPlayersException,
             InvalidMapSizeException, InvalidNumberOfTeamsException{
 
         players = genPlayers(n_players); // generate n_players Player instances
-        map = genMap(map_size, players); // generate map of size map_size, based on number of players in players
+        map = genMap(map_size, map_type, players); // generate map_type map of size map_size, based on number of players in players
         players = genPlayerPositions(players, map); // generate starting positions based on players and map
         teams = genTeams(n_teams, players); // generate n_teams Team instances
 
@@ -265,11 +266,12 @@ public class Game{
      * ii.  The map_size is not less than 5 and not greater than 50.
      * iii. If the number of players is at least 5, than the minimum map_size is at least 8.
      * @param map_size is the size of the map.
+     * @param map_type is the type of map to be initialised by the MapCreator, more or less corresponding to difficulty level.
      * @param players is an array of Player instances.
      * @return map is the initialised Map instance.
      * @throws InvalidMapSizeException is thrown if the map_size is invalid. [Criteria ii. {@literal &} iii. above]
      */
-    public Map genMap(int map_size, Player[] players) throws InvalidMapSizeException{
+    public Map genMap(int map_size, String map_type, Player[] players) throws InvalidMapSizeException{
         if(51 <= map_size || map_size <= 4){ // else if map_size is outside the global minimum and maximum size
             throw new InvalidMapSizeException(map_size);
         }
@@ -277,7 +279,7 @@ public class Game{
             throw new InvalidMapSizeException(map_size, "For 5 to 8 players, the minimum map size is 8x8.");
         }
         else{ // else initialize map
-            return MapCreator.createMap("basic", map_size);
+            return MapCreator.createMap(map_type, map_size);
         }
     }
 
@@ -377,26 +379,25 @@ public class Game{
     }
 
     /**
-     * Convenience function for generating and persisting to disk the HTML map file for each player instance in players.
-     * @param players is the array of Player instances for which an HTML map is to be generated.
+     * Convenience function for generating and persisting to disk the HTML map file for a Player instance.
+     * @param player is the Player instance for which an HTML map is to be generated.
      * @param map is a Map instance on which the HTML maps are to be built.
      * @throws IOException is thrown when there is a failure in persisting to disk [generally fatal].
      */
-    public void writeHTMLFiles(Player[] players, Map map) throws IOException{
+    public void writeHTMLFile(Player player, Map map) throws IOException{
         if(dir == null){ // if directory not set, throw a SetupOperationPrecedenceException
             throw new SetupOperationPrecedenceException("Directory to write HTML files not specified.");
         }
         else{
-            for(Player player : players){ // generate and persist to disk the HTML map for each player instance
-                FileWriter writer = new FileWriter(dir + System.getProperty("file.separator") +
-                                                   "player_" + player.get_pID() + "_map.html");
+            // generate and persist to disk the HTML map for the player instance
+            FileWriter writer = new FileWriter(dir + System.getProperty("file.separator") +
+                                               "player_" + player.get_pID() + "_map.html");
 
-                // iterate through the html ArrayList and persist
-                for(String ln : htmlGenerator.genPlayerMap(player, map)){
-                    writer.write(ln);
-                }
-                writer.close();
+            // iterate through the html ArrayList and persist
+            for(String ln : htmlGenerator.genPlayerMap(player, map)){
+                writer.write(ln);
             }
+            writer.close();
         }
     }
 }

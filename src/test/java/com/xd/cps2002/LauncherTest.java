@@ -54,7 +54,7 @@ public class LauncherTest{
      */
     @Test(expected = SetupOperationPrecedenceException.class)
     public void notInitialized_updateGameStateTest(){
-        Launcher.updateGameState(game);
+        Launcher.updateGameState(game, new Player());
     }
 
     /**
@@ -84,7 +84,11 @@ public class LauncherTest{
         // explicitly set isInitialised to true for testing
         Launcher.isInitialised = true;
 
-        ArrayList<Integer> winners = Launcher.updateGameState(game);
+        ArrayList<Integer> winners = new ArrayList<Integer>();
+        // update game state for each player
+        Launcher.updateGameState(game, players[0]);
+        Launcher.updateGameState(game, players[1]);
+        winners = Launcher.updateGameState(game, players[2]);
 
         assertEquals(2, winners.size());
         assertEquals(game.getPlayers()[0].get_pID(), (int) winners.get(0));
@@ -116,7 +120,7 @@ public class LauncherTest{
         // explicitly set isInitialised to true for testing
         Launcher.isInitialised = true;
 
-        Launcher.updateGameState(game);
+        Launcher.updateGameState(game, players[0]);
 
         assertEquals(0, game.getPlayers()[0].getPosition().x);
         assertEquals(2, game.getPlayers()[0].getPosition().y);
