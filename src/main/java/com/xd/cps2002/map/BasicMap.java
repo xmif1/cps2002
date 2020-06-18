@@ -9,6 +9,8 @@ import java.util.Stack;
 /**
  * The {@code BasicMap} class is a concrete implementation of the {@link} Map class, and it contains the implementations
  * of the {@link Map#generate()} and {@link Map#isPlayable()} functions particular to this type of map.
+ *
+ * @author Domenico Agius
  */
 public class BasicMap extends Map {
 

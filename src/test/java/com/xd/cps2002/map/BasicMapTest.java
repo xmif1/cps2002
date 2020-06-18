@@ -12,6 +12,8 @@ import static org.junit.Assert.*;
 /**
  * This class contains unit tests used to test both the methods of the abstract {@link Map} class and the concrete
  * {@link BasicMap} class.
+ *
+ * @author Domenico Agius
  */
 public class BasicMapTest {
 
