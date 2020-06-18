@@ -155,7 +155,7 @@ public class GameTest {
     }
 
     /**
-     * Tests that false is returned when the map_size is greater than 5 but less than 8, for n_player >= 5.
+     * Tests that false is returned when the map_size is greater than 5 but less than 8, for n_player {@literal >}= 5.
      */
     @Test
     public void smallMap_Min5Players_MapSize_isValidMapSizeTest(){
@@ -163,7 +163,7 @@ public class GameTest {
     }
 
     /**
-     * Tests that false is returned when n_teams < 2, for any value of n_players.
+     * Tests that false is returned when n_teams {@literal <} 2, for any value of n_players.
      */
     @Test
     public void belowMin_NoOfTeams_isValidNTeamsTest(){
@@ -171,7 +171,7 @@ public class GameTest {
     }
 
     /**
-     * Tests that false is returned when n_teams >= n_players.
+     * Tests that false is returned when n_teams {@literal >}= n_players.
      */
     @Test
     public void aboveMax_NoOfTeams_isValidNTeamsTest(){
@@ -276,7 +276,7 @@ public class GameTest {
     }
 
     /**
-     * Tests that an InvalidNumberOfTeamsException is thrown when n_teams < 2, for any length of the players array.
+     * Tests that an InvalidNumberOfTeamsException is thrown when n_teams {@literal <} 2, for any length of the players array.
      * @throws InvalidNumberOfTeamsException is thrown if n_teams is invalid (expected).
      * @throws SetupOperationPrecedenceException if player instances do not have an initialised starting position or if
      * they have already been joined to a team (not expected).
@@ -287,7 +287,7 @@ public class GameTest {
     }
 
     /**
-     * Tests that an InvalidNumberOfTeamsException is thrown when n_teams > n_players.
+     * Tests that an InvalidNumberOfTeamsException is thrown when n_teams {@literal >} n_players.
      * @throws InvalidNumberOfTeamsException is thrown if n_teams is invalid (expected).
      * @throws SetupOperationPrecedenceException if player instances do not have an initialised starting position or if
      * they have already been joined to a team (not expected).
@@ -378,7 +378,7 @@ public class GameTest {
     }
 
     /**
-     * Tests that each team a proper distribution on the number of players, when n_teams < n_players.
+     * Tests that each team a proper distribution on the number of players, when n_teams {@literal <} n_players.
      * @throws InvalidNumberOfTeamsException is thrown if n_teams is invalid (not expected).
      * @throws SetupOperationPrecedenceException if player instances do not have an initialised starting position or if
      * they have already been joined to a team (not expected).

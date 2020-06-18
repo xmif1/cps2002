@@ -85,9 +85,9 @@ public class Game{
     /**
      * Initialises the state variables of the Game instance in a consistent manner, else an exception is thrown if this
      * cannot be done.
-     * @param n_players is the number of Player instances to initialise (2 <= n_players <= 8).
-     * @param n_teams is the number of teams to initialise and divide the players into (2 <= n_teams <= n_players - 1).
-     * @param map_size is the grid size of the map (5 <= map_size <= 50 if n_players < 5, 8 <= map_size <= 50 otherwise).
+     * @param n_players is the number of Player instances to initialise (2 {@literal <}= n_players {@literal <}= 8).
+     * @param n_teams is the number of teams to initialise and divide the players into (2 {@literal <}= n_teams {@literal <}= n_players - 1).
+     * @param map_size is the grid size of the map (5 {@literal <}= map_size {@literal <}= 50 if n_players {@literal <} 5, 8 {@literal <}= map_size {@literal <}= 50 otherwise).
      * @param map_type is the type of map to be initialised by the MapCreator, more or less corresponding to difficulty level.
      * @throws InvalidNumberOfPlayersException is propagated forward from genPlayers(n_players).
      * @throws InvalidMapSizeException is propagated forward from genMap(map_size, players).
@@ -205,7 +205,7 @@ public class Game{
     // -------VALIDATION CHECKS--------
 
     /**
-     * @param n_players is an integer to be checked if it falls within the range 2 <= n_players <= 8;
+     * @param n_players is an integer to be checked if it falls within the range 2 {@literal <}= n_players {@literal <}= 8;
      * @return true if in range, false otherwise.
      */
     public boolean isValidNPlayers(int n_players){
@@ -213,7 +213,7 @@ public class Game{
     }
 
     /**
-     * If n_players < 5, and 5 <= map_size <= 50, or 5 <= n_players and 8 <= map_size <= 50, return true.
+     * If n_players {@literal <} 5, and 5 {@literal <}= map_size {@literal <}= 50, or 5 {@literal <}= n_players and 8 {@literal <}= map_size {@literal <}= 50, return true.
      * @param map_size is an integer to be checked if it falls within one of the two ranges above, given a value of n_players.
      * @param n_players is the number of players, which shall determine the minimum map size.
      * @return true if in range, false otherwise.
@@ -309,14 +309,14 @@ public class Game{
      * Initialises n_teams instances of Team and allocates players proportionally between the Team instances.
      * Allocation of the number of players per team is done greedily, by taking the floor of n_teams/players.length,
      * and the last team having the remainder.
-     * If 2*n_teams > n_players, then n_teams - 1 will contain 1 players, and the last team will contain
+     * If 2*n_teams {@literal >} n_players, then n_teams - 1 will contain 1 players, and the last team will contain
      *                                   n_players - n_teams + 1 players
      * This is not restricted since it is not (technically) an invalid case. One can add further external checks if they
-     * choose to restrict 2*n_teams <= n_players.
+     * choose to restrict 2*n_teams {@literal <}= n_players.
      * @param n_teams is the number of teams to create.
      * @param players is a Player[] array of Player instances to be grouped into n_teams teams.
      * @return teams array with n_team initialised Team instances.
-     * @throws InvalidNumberOfTeamsException if the number of teams is invalid (not in range 2 <= n_teams < players.length).
+     * @throws InvalidNumberOfTeamsException if the number of teams is invalid (not in range 2 {@literal <}= n_teams {@literal <} players.length).
      * @throws SetupOperationPrecedenceException if player instances do not have an initialised starting position or if
      * they have already been joined to a team.
      */
