@@ -2,13 +2,16 @@ package com.xd.cps2002.game;
 
 import java.util.ArrayList;
 
-import com.xd.cps2002.game.HTMLGenerator;
 import com.xd.cps2002.map.BasicMap;
 import com.xd.cps2002.map.Map;
+import com.xd.cps2002.map.MapCreator;
 import com.xd.cps2002.map.TileType;
+import com.xd.cps2002.player.Team;
 import com.xd.cps2002.player.player_exceptions.NullPositionException;
+import com.xd.cps2002.player.player_exceptions.NullTeamException;
 import com.xd.cps2002.player.Player;
 import com.xd.cps2002.player.Position;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,17 +31,19 @@ public class HTMLGeneratorTest{
                                         {TileType.Grass, TileType.Grass, TileType.Treasure, TileType.Water, TileType.Water},
                                         {TileType.Grass, TileType.Grass, TileType.Grass, TileType.Water, TileType.Water},
                                         {TileType.Grass, TileType.Grass, TileType.Grass, TileType.Grass, TileType.Water}};
-    private final Map map = new BasicMap(tiles); // initialize a BasicMap based on the tiles above
+    private final Map map = MapCreator.createMap("basic", tiles); // initialize a BasicMap based on the tiles above
     private final HTMLGenerator htmlGenerator = HTMLGenerator.getHTMLGenerator(); // get HTMLGenerator singleton instance
 
     /**
      * Initialises a Player and defines a path on the map, before every unit test.
      * @throws NullPositionException is thrown whenever the start_position is not set (unexpected).
+     * @throws NullTeamException is thrown when Team team is null, i.e. when it has not been set.
      */
     @Before
-    public void setupHTMLGeneratorTest() throws NullPositionException {
+    public void setupHTMLGeneratorTest(){
         player = new Player(); // initialising new player
         player.setStartPosition(new Position(0,0));// setting to origin
+        player.setTeam(new Team()); // initialise with a Team instance
 
         // defining simple path traversed by player on the map, to setup history of moves
         player.setPosition(new Position(1, 0));
@@ -66,6 +71,8 @@ public class HTMLGeneratorTest{
     /**
      * Testing whether the generated HTML map is coloured correctly, based on the TileType definition for each visited
      * tile, except the starting tile and the current tile.
+     * @throws IllegalArgumentException whenever the Player or Map instances passed are null (not expected).
+     * @throws NullTeamException is thrown when Team team is null, i.e. when it has not been set (not expected).
      */
     @Test
     public void visited_tilesTest(){
@@ -83,6 +90,8 @@ public class HTMLGeneratorTest{
 
     /**
      * Testing whether the generated HTML map is left uncovered for the unvisited tiles.
+     * @throws IllegalArgumentException whenever the Player or Map instances passed are null (not expected).
+     * @throws NullTeamException is thrown when Team team is null, i.e. when it has not been set (not expected).
      */
     @Test
     public void unvisited_tilesTest(){
@@ -105,6 +114,8 @@ public class HTMLGeneratorTest{
 
     /**
      * Testing whether the starting tile is marked with the correct symbol (a Torii Gate).
+     * @throws IllegalArgumentException whenever the Player or Map instances passed are null (not expected).
+     * @throws NullTeamException is thrown when Team team is null, i.e. when it has not been set (not expected).
      */
     @Test
     public void start_tileTest(){
@@ -114,11 +125,46 @@ public class HTMLGeneratorTest{
 
     /**
      * Testing whether the current tile is marked with the correct symbol (a gleaming Sun).
+     * @throws IllegalArgumentException whenever the Player or Map instances passed are null (not expected).
+     * @throws NullTeamException is thrown when Team team is null, i.e. when it has not been set (not expected).
      */
     @Test
     public void current_tileTest(){
         ArrayList<String> html = htmlGenerator.genPlayerMap(player, map);
         assertEquals("<div class=\"" + tiles[2][2].html_handle + "\">&#x1F31E;</div>\n", html.get(15));
+    }
+
+    /**
+     * Testing whether an IllegalArgumentException is raised when genPlayerMap is called with a null Player instance.
+     * @throws IllegalArgumentException whenever the Player or Map instances passed are null (expected).
+     * @throws NullTeamException is thrown when Team team is null, i.e. when it has not been set (not expected).
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void nullPlayer_genPlayerMapTest(){
+        htmlGenerator.genPlayerMap(null, map);
+    }
+
+    /**
+     * Testing whether an IllegalArgumentException is raised when genPlayerMap is called with a null Map instance.
+     * @throws IllegalArgumentException whenever the Player or Map instances passed are null (expected).
+     * @throws NullTeamException is thrown when Team team is null, i.e. when it has not been set (not expected).
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void nullMap_genPlayerMapTest(){
+        htmlGenerator.genPlayerMap(player, null);
+    }
+
+    /**
+     * Testing whether a NullTeamException is raised when genPlayerMap is called with a Player having no Team instance.
+     * @throws IllegalArgumentException whenever the Player or Map instances passed are null (not expected).
+     * @throws NullTeamException is thrown when Team team is null, i.e. when it has not been set (expected).
+     */
+    @Test(expected = NullTeamException.class)
+    public void playerNullTeam_genPlayerMapTest(){
+        Player player2 = new Player();
+        player2.setStartPosition(new Position(0, 0));
+
+        htmlGenerator.genPlayerMap(player2, map);
     }
 
     @After

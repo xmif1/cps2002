@@ -7,29 +7,56 @@ import java.util.Random;
 import java.util.Stack;
 
 /**
- * The {@code BasicMap} class is a
+ * The {@code BasicMap} class is a concrete implementation of the {@link} Map class, and it contains the implementations
+ * of the {@link Map#generate()} and {@link Map#isPlayable()} functions particular to this type of map.
+ *
+ * @author Domenico Agius
  */
 public class BasicMap extends Map {
 
     /**
-     * Constant value defining the ratio of water tiles to the total number of tiles in the map. For this map type 10%
-     * of all of the map tiles are set to be water tiles.
+     * Value defining the lower bound of the percentage of map tiles which are actually water tiles. For this map type
+     * by default at least 1% of all of the map tiles are set to be water tiles.
+     *
+     * @implNote This is defined as an integer instead of a float since the user only needs to be able to set the value
+     * to whole percentages, otherwise the changes may not make much of a difference. Moreover, this also avoids any
+     * strange behaviour to due floating point arithmetic when the upper and lower bound percentages are equal or close
+     * to one another.
      */
-    private final double waterTileRatio = 0.10;
+    private int minWaterTilePercent = 1;
 
     /**
-     * Defines the minimum percentage of tiles in the map from which a player needs to be able to reach the treasure.
-     * For this type of map at least 75% of tiles should be reachable
+     * Value defining the lower bound of the percentage of map tiles which are actually water tiles. For this map type
+     * by default at least 1% of all of the map tiles are set to be water tiles.
+     *
+     * @implNote This is defined as an integer instead of a float since the user only needs to be able to set the value
+     * to whole percentages, otherwise the changes may not make much of a difference. Moreover, this also avoids any
+     * strange behaviour to due floating point arithmetic when the upper and lower bound percentages are equal or close
+     * to one another.
      */
-    private final double minimumWinnableTiles = 0.75;
+    private int maxWaterTilePercent = 10;
+
+    /**
+     * Defines the minimum percentage of tiles in the map from which a player needs to be able to start from to reach
+     * the treasure tile. Note that since the player cannot start on the water this percentage does not include the
+     * treasure tile. By default at least 75% of tiles should be reachable.
+     *
+     * @implNote This is defined as an integer instead of a float since the user only needs to be able to set the value
+     * to whole percentages, otherwise the changes may not make much of a difference. Moreover, this also avoids any
+     * strange behaviour to due floating point arithmetic.
+     */
+    private int minWinnableTilesPercent = 75;
 
     /**
      * Constructor used to initialize an empty {@code BasicMap} object. It uses the constructor of the {@link Map} super
      * class.
      * @param n size of the {@code n} x {@code n} square map
      * @throws IllegalArgumentException if the method is given an invalid size parameter (outside of the range 5-50)
+     *
+     * @implNote This constructor has a {@code protected} access modifier to stop client code from instantiating the
+     * class directly. However, unit tests can still call the constructor normally.
      */
-    public BasicMap(int n) {
+    protected BasicMap(int n) {
         // Initialize Map object using the Map class constructor
         super(n);
     }
@@ -42,9 +69,71 @@ public class BasicMap extends Map {
      * same lengths.
      */
 
-    public BasicMap(TileType[][] tiles) {
+    protected BasicMap(TileType[][] tiles) {
         // Initialize Map object using the Map class constructor
         super(tiles);
+    }
+
+    /**
+     * This function is used to change the default percentages of water tiles in the entire map when generating the map.
+     * It changes the values stored in the members {@link BasicMap#minWaterTilePercent} and
+     * {@link BasicMap#maxWaterTilePercent}.
+     *
+     * @param minWaterTilePercent An integer from 0 to 64 (inclusive) representing the minimum percentage of water tiles
+     *                            to be generated in the map.
+     * @param maxWaterTilePercent An integer from 0 to 64 (inclusive) representing the maximum percentage of water tiles
+     *                            to be generated in the map.
+     *
+     * @apiNote Note that to allow the user to choose a single fixed percentage of water tiles, the parameters
+     * {@code minWaterTilePercent} and {@code maxWaterTilePercent} can both be set to the same value.
+     *
+     * @implNote The functionality to change these percentages was not included in the constructor since changing
+     * these values is completely optional, given that they already have a default value when the object is created.
+     *
+     * Moreover, the function only allows a percentage as high as 64% since in the worst case (a 5x5 map) this is the
+     * maximum percentage of water tiles allowed. This is due to the restriction in the method function
+     * {@link BasicMap#generate()} which prevents tiles next to the treasure tile from being set to water tiles. Hence,
+     * the treasure tile can have at most 8 grass tiles around it. Therefore (8 grass + 1 treasure)/25 = 36% which
+     * cannot be water tiles.
+     */
+    public void setWaterTilePercentage(int minWaterTilePercent, int maxWaterTilePercent) {
+        // If either percentage is not in range, throw an exception
+        if(minWaterTilePercent < 0 || minWaterTilePercent > 64
+                || maxWaterTilePercent < 0 || maxWaterTilePercent > 64) {
+            throw new IllegalArgumentException("The minimum and maximum percentage of water tiles must both be in " +
+                    "the range from 0 to 64 (inclusive).");
+        }
+
+        // If the minimum percentage is larger than the maximum, throw an exception
+        if(minWaterTilePercent > maxWaterTilePercent) {
+            throw new IllegalArgumentException("The minimum percentage of water tiles cannot be larger than the " +
+                    "maximum percentage.");
+        }
+
+        // Set the water tile to map tiles ratios to the given parameters
+        this.minWaterTilePercent = minWaterTilePercent;
+        this.maxWaterTilePercent = maxWaterTilePercent;
+    }
+
+    /**
+     * This function is used to change the default minimum percentage of tiles from which the player must be able to
+     * reach the treasure tile. It changes the value stored in the member {@link BasicMap#minWinnableTilesPercent}.
+     *
+     * @param minPlayableTilesPercentage An integer in the range 1 to 100 representing the percentage of tiles from
+     *                                   which the player must be able to reach the treasure.
+     *
+     * @implNote The functionality to change this value was not added in the constructor since the member
+     * {@link BasicMap#minWinnableTilesPercent} is given a default value when the map is initialized.
+     */
+    public void setMinPlayableTilesPercentage(int minPlayableTilesPercentage) {
+        // If the percentage is not in range, throw an exception
+        if(minPlayableTilesPercentage < 1 || minPlayableTilesPercentage > 100) {
+            throw new IllegalArgumentException("The percentage of playable must be in the range from 1 to 100 " +
+                    "(inclusive).");
+        }
+
+        // Set the ratio of playable tiles to the given parameter
+        this.minWinnableTilesPercent = minPlayableTilesPercentage;
     }
 
     /**
@@ -53,9 +142,10 @@ public class BasicMap extends Map {
      * @apiNote Note that this function should also set the {@link Map#treasurePos} member so that it can be used later
      * in the function {@link Map#isPlayable()}.
      *
-     * @implNote The function generates one treasure tile and a number of water tiles according to
-     * {@link BasicMap#waterTileRatio} and the total number of tiles in the map. It also makes sure that none of the
-     * water tiles that are generated are placed adjacent to the treasure tile.
+     * @implNote The function generates one treasure tile and randomly generates a number of water tiles. The percentage
+     * of randomly generated water tiles to maps tiles is within the lower and upper bounds specified by the members
+     * {@link BasicMap#minWaterTilePercent} and {@link BasicMap#maxWaterTilePercent}. The function also makes sure that
+     * none of the water tiles that are generated are placed adjacent to the treasure tile.
      */
     @Override
     public void generate() {
@@ -74,8 +164,16 @@ public class BasicMap extends Map {
         // Store the position of the treasure tile in the "treasurePos" member
         treasurePos = new Position(treasureX, treasureY);
 
+        // Choose percentage of water tiles to map tiles to be generated in the map
+        // Note: the percentage is chosen in the range between "minWaterTileRatio" and "maxWaterTileRatio".
+        // If the percentages are equal, it always chooses "minWaterTileRatio"
+        int percentageRange = maxWaterTilePercent - minWaterTilePercent;
+        float randWaterTilePercentage = (percentageRange > 0) ?
+                r.nextInt( maxWaterTilePercent - minWaterTilePercent) + minWaterTilePercent :
+                minWaterTilePercent;
+
         // Calculate the number of water tiles that need to be generated
-        int waterTilesQuota = (int) Math.floor(size * size * waterTileRatio);
+        int waterTilesQuota = (int) Math.ceil(size * size * (randWaterTilePercentage/100));
 
         // Try to place all of the water tiles in randomly generated positions
         while(waterTilesQuota > 0) {
@@ -132,9 +230,18 @@ public class BasicMap extends Map {
     }
 
     /**
-     * Function to check if the player can reach the treasure starting from at least 75% of the grass tiles. The
-     * function also computes from which tiles the player can reach the treasure.
-     * @return true if the player can reach the treasure from at least 75% of the grass tiles and false otherwise.
+     * This function checks if the player can reach the treasure starting from a minimum percentage of grass tiles.
+     * This percentage is specified in the member {@link BasicMap#minWinnableTilesPercent}, and can be changed using the
+     * function {@link BasicMap#setMinPlayableTilesPercentage(int)}. The function also computes from which tiles the
+     * player can reach the treasure.
+     *
+     * @return true if the player can reach the treasure starting from at least
+     * {@link BasicMap#minWinnableTilesPercent}% of the grass tiles and false otherwise.
+     *
+     * @apiNote The treasure tile does not count towards the total number of playable tiles, since the player cannot
+     * start from this tile. Also, due to rounding, this function may actually check that the map contains a percentage
+     * of playable tiles less than that specified in {@link BasicMap#minWinnableTilesPercent}.
+     *
      * @implNote The function carries out a Depth First Search (DFS) traversal of the map starting from the treasure
      * tile to check which grass tiles are actually connected to the treasure tile. The function also creates an array
      * of booleans ({@link Map#winnableTiles}) representing the tiles which are connected to the treasure tile. The
@@ -193,8 +300,11 @@ public class BasicMap extends Map {
         // Set the treasure tile to unreachable (since the player should not be able to start playing on this tile)
         winnableTiles[treasurePos.x][treasurePos.y] = false;
 
+        // Remove the treasure tile from the set of reachable (i.e. starting) tiles
+        reachableCount--;
+
         // Calculate the minimum number of reachable tiles needed
-        int minReachableTiles = (int) Math.floor(size * size * minimumWinnableTiles);
+        int minReachableTiles = (int) Math.floor((size * size-1) * (minWinnableTilesPercent /100.0));
 
         // Check that the minimum number of reachable tiles is met.
         return reachableCount >= minReachableTiles;

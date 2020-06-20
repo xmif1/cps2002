@@ -1,16 +1,21 @@
 package com.xd.cps2002.map;
 
-import com.xd.cps2002.game.MainGame;
+import com.xd.cps2002.game.Game;
 import com.xd.cps2002.player.Player;
 import com.xd.cps2002.player.Position;
 
 /**
  * The {@code Map} abstract class provides a common interface for all the different types of map types. This acts as the
- * abstract "product" class used to implement the factory design pattern.
+ * abstract "product" class used to implement the factory design pattern for Maps.
  *
- * This class was implemented as an abstract class rather than an interface since the only functionality that would be
- * carried out differently by each subclass is the map generation and the way that that map is verified to be playable.
- * Hence, all other functionality was implemented in this class so that it would be common to all subclasses.
+ * This class provides access to generic behaviour expected to be implemented by each map type. Hence, it allows client
+ * code to avoid type casting after initializing a new map instance using the {@link MapCreator} factory.
+ *
+ * The {@link Map} class was implemented as an abstract class rather than an interface since the only functionality that
+ * would be carried out differently by each subclass is the map generation and the way that that map is verified to be
+ * playable. Hence, all other functionality was implemented in this class so that it would be common to all subclasses.
+ *
+ * @author Domenico Agius
  */
 public abstract class Map {
     /**
@@ -33,7 +38,7 @@ public abstract class Map {
      * player should not start directly on a treasure tile.
      *
      * The reason why the class does not implement a function to directly return start positions for the players is so
-     * that the {@link Map} class can operate completely independently of the {@link Player} and {@link MainGame} classes.
+     * that the {@link Map} class can operate completely independently of the {@link Player} and {@link Game} classes.
      */
     protected boolean[][] winnableTiles;
 
@@ -41,8 +46,11 @@ public abstract class Map {
      * Constructor used to initialize an empty {@code Map} object.
      * @param n size of the {@code n} x {@code n} square map
      * @throws IllegalArgumentException if the method is given an invalid size parameter (outside of the range 5-50)
+     *
+     * @implNote This constructor has a {@code protected} access modifier to stop client code from instantiating the
+     * class directly. However, unit tests and subclasses can still call the constructor normally.
      */
-    public Map(int n)
+    protected Map(int n)
     {
         // If map size is invalid (not between 5-50) throw an exception
         if(n < 5 || n > 50) {
@@ -65,8 +73,11 @@ public abstract class Map {
      * @param tiles a 2D array of {@link TileType} elements which represents the placement of the tiles in the map
      * @throws IllegalArgumentException if {@code tiles} is null, empty or if the lists in the 2D array do not have the
      * same lengths.
+     *
+     * @implNote This constructor has a {@code protected} access modifier to stop client code from instantiating the
+     * class directly. However, unit tests and subclasses can still call the constructor normally.
      */
-    public Map(TileType[][] tiles) {
+    protected Map(TileType[][] tiles) {
         // If the given 2D tile array is actually null, throw an exception
         if(tiles == null) {
             throw new IllegalArgumentException("The lists in the 2D array of tiles cannot be null.");
@@ -117,7 +128,7 @@ public abstract class Map {
         // Store the given 2D tile array in the "tiles" member
         this.tiles = tiles;
 
-        // Initialize "reachableTiles" to null
+        // Initialize "winnableTiles" to null
         winnableTiles = null;
     }
 
